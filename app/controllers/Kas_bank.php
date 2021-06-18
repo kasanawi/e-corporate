@@ -34,8 +34,9 @@ class Kas_bank extends User_Controller
     public function index_datatable() {
         $perusahaan = $this->session->idperusahaan;
         $this->load->library('Datatables');
-        $this->datatables->select('tkasbank.*, mperusahaan.nama_perusahaan');
+        $this->datatables->select('tkasbank.*, mperusahaan.nama_perusahaan, ab.penerimaan, ab.pengeluaran');
         $this->datatables->join('mperusahaan', 'tkasbank.perusahaan = mperusahaan.idperusahaan');
+        $this->datatables->join('(select aa.idkasbank, sum(aa.penerimaan) as penerimaan, sum(aa.pengeluaran) as pengeluaran from tkasbankdetail aa left join mnoakun ON aa.noakun = mnoakun.idakun left join mrekening ON aa.sumberdana = mrekening.id left join tSetupJurnal ON aa.idSetupJurnal = tSetupJurnal.idSetupJurnal group BY aa.idkasbank) ab', 'ab.idkasbank = tkasbank.id', 'left');
         $this->datatables->where('tkasbank.stdel', '0');
         if ($perusahaan) {
             $this->datatables->where('tkasbank.perusahaan', $perusahaan);

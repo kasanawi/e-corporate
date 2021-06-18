@@ -48,7 +48,8 @@
                         <th><?php echo lang('warehouse') ?></th>
                         <th><?php echo lang('total') ?></th>
                         <th><?php echo lang('status') ?></th>
-                        <th>Setup Jurnal</th>
+                        <th><?php echo lang('Ref KasBank') ?></th>
+                        <th><?php echo lang('Setup Jurnal') ?></th>
                         <th><?php echo lang('Aksi') ?></th>
                       </tr>
                     </thead>
@@ -120,6 +121,7 @@
           else if(data == '1') return '<span class="badge badge-danger"><?php echo lang('pending') ?></sapan>';
         }
       },
+      {data : 'nomor_kas_bank'},
       {
         data      : 'kodeJurnal',
         className : 'text-center'
@@ -250,6 +252,44 @@
 		.then((value) => {
 			if (value == 'pdf' || value == 'excel') {
 				redirect(base_url + 'print/' + value + '/' + id);
+			}
+		});
+	}
+
+	function deleteData(id) {
+		swal("Anda yakin akan menghapus data?", {
+			buttons: {
+				cancel: "Batal",
+				catch: {
+				text: "Ya, Yakin",
+				value: "ya",
+				},
+			},
+		})
+		.then((value) => {
+			switch (value) {
+				case "ya":
+				$.ajax({
+					url: base_url + 'delete/' + id,
+					beforeSend: function() {
+					pageBlock();
+					},
+					afterSend: function() {
+					unpageBlock();
+					},
+					success: function(data) {
+					if(data.status == 'success') {
+						swal("Berhasil!", "Data Berhasil Dihapus!", "success");
+						setTimeout(function() { table.ajax.reload() }, 100);
+					} else {
+						swal("Gagal!", "Pikachu was caught!", "error");
+					}
+					},
+					error: function() {
+					swal("Gagal!", "Internal Server Error!", "error");
+					}
+				})
+				break;
 			}
 		});
 	}

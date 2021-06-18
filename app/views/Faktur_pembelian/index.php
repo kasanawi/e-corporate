@@ -41,6 +41,7 @@
 											<th>Pajak</th>
 											<th><?php echo lang('total') ?></th>
 											<th><?php echo lang('status') ?></th>
+                        					<th><?php echo lang('Ref KasBank') ?></th>
 											<th>Setup Jurnal</th>
 											<th>Aksi</th>
 										</tr>
@@ -48,7 +49,7 @@
 									<tbody></tbody>
 									<tfoot>
 										<tr>
-											<th colspan="6" class="text-right">Total</th>
+											<th colspan="7" class="text-right">Total</th>
 											<th></th>
 											<th></th>
 											<th></th>
@@ -115,6 +116,7 @@
 					return formatRupiah(String(data)) + ',00';
 				}
 			},
+			{data: 'notrans'},
 			{
 				data: 'status', className: 'text-center',
 				render: function(data) {

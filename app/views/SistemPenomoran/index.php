@@ -30,6 +30,7 @@
 										<tr class="table-active">
 											<th>Formulir</th>
 											<th>Format Penomoran</th>
+											<th><?php echo lang('Nomor Awal') ?></th>
 											<th><?php echo lang('Aksi') ?></th>
 										</tr>
 									</thead>
@@ -102,6 +103,7 @@
         }
       },
 			{data	: 'formatPenomoran'},
+			{data	: 'awalNomor'},
 			{
 				data	: 'idPenomoran',
 				render	: function (data, type, row) {

@@ -6,6 +6,7 @@ class SistemPenomoran extends User_Controller {
 	private $formulir;
 	private $formatPenomoran;
 	private $idPenomoran;
+	private $awalNomor;
 
 	public function __construct() {
 		parent::__construct();
@@ -16,6 +17,7 @@ class SistemPenomoran extends User_Controller {
 		}
 		$this->formatPenomoran	= $this->input->post('formatPenomoran');
 		$this->idPenomoran		= $this->input->post('idPenomoran');
+		$this->awalNomor		= $this->input->post('awalNomor');
 	}
 
 	public function index()
@@ -48,6 +50,7 @@ class SistemPenomoran extends User_Controller {
 		}
 		$this->SistemPenomoranModel->set('formulir', $this->formulir);
 		$this->SistemPenomoranModel->set('formatPenomoran', $this->formatPenomoran);
+		$this->SistemPenomoranModel->set('awalNomor', $this->awalNomor);
 		$this->SistemPenomoranModel->save();
 		$data['status']		= 'success';
 		return $this->output->set_content_type('application/json')->set_output(json_encode($data));

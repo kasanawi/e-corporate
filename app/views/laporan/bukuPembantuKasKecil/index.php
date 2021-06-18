@@ -66,10 +66,10 @@
                                 </div>
                                 <div class="row mt-2">
                                     <div class="form-group col-md-6">
-                                        <button type="submit" name="jenis" value="pdf" class="btn-block btn bg-danger"><i class="fas fa-file-pdf" aria-hidden="true"></i> <?php echo lang('pdf') ?></button>
+                                        <button type="submit" name="jenis" value="pdf" class="btn-block btn bg-danger" <?=($laporan !== null) ? '' : 'disabled="disabled"';?>><i class="fas fa-file-pdf" aria-hidden="true"></i> <?php echo lang('pdf') ?></button>
                                     </div>
                                     <div class="form-group col-md-6">
-                                        <button type="submit" name="jenis" value="excel" class="btn-block btn bg-success exportxls"><i class="fas fa-file-excel" aria-hidden="true"></i> <?php echo lang('xls') ?></button>
+                                        <button type="submit" name="jenis" value="excel" class="btn-block btn bg-success" <?=($laporan !== null) ? '' : 'disabled="disabled"';?>><i class="fas fa-file-excel" aria-hidden="true"></i> <?php echo lang('xls') ?></button>
                                     </div>
                                 </div>
                             </div>
@@ -121,7 +121,7 @@
                                                 </tr>
                                                 <?php foreach ($laporan as $key) {
                                                     foreach ($key as $value) {
-                                                        if($value['keterangan']=="Kas bank" || strpos($value['keterangan'], 'Kas Kecil Tgl') !== false) {
+                                                        if($value['keterangan']=="Kas bank" || $value['keterangan']=="kas Bank" || strpos($value['keterangan'], 'Kas Kecil Tgl') !== false) {
                                                             $value['debet'] = $value['kredit'];
                                                             $value['kredit'] = "0";
                                                         }

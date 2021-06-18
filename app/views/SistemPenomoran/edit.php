@@ -46,6 +46,10 @@
                         <label>Format Penomoran :</label>
                         <input type="text" class="form-control" name="formatPenomoran" required value="{formatPenomoran}">
                     </div>
+                    <div class="form-group">
+                        <label>Awal Nomor :</label>
+                        <input type="text" class="form-control" name="awalNomor" value="{awalNomor}">
+                    </div>
                     <div class="text-right">
                         <a href="{site_url}SistemPenomoran" class="btn bg-danger"><?php echo lang('cancel') ?></a>
                         <button type="submit" class="btn bg-success"><?php echo lang('save') ?></button>

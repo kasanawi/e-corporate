@@ -7,6 +7,7 @@ class SistemPenomoranModel extends CI_Model {
     private $formatPenomoran;
     private $table  = 'sistemPenomoran';
     private $idPenomoran;
+    private $awalNomor;
     
     public function set($jenis, $isi)
 	{
@@ -19,13 +20,15 @@ class SistemPenomoranModel extends CI_Model {
             $this->db->where('idPenomoran', $this->idPenomoran);
             $this->db->update('sistemPenomoran', [
                 'formulir'          => $this->formulir,
-                'formatPenomoran'   => $this->formatPenomoran
+                'formatPenomoran'   => $this->formatPenomoran,
+                'awalNomor'   => $this->awalNomor
             ]);
         } else {
             $this->db->insert('sistemPenomoran', [
                 'idPenomoran'       => uniqid(),
                 'formulir'          => $this->formulir,
-                'formatPenomoran'   => $this->formatPenomoran
+                'formatPenomoran'   => $this->formatPenomoran,
+                'awalNomor'   => $this->awalNomor
             ]);
         }
     }
