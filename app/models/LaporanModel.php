@@ -120,9 +120,11 @@ class LaporanModel extends CI_Model {
 
     public function getOutstandingInvoice()
     {
-        $this->db->select('tfakturpenjualan.nomorsuratjalan, tfakturpenjualan.tanggal, tfakturpenjualan.tanggaltempo, tfakturpenjualan.total, tfakturpenjualan.sisatagihan, mperusahaan.nama_perusahaan');
+        $this->db->select('tfakturpenjualan.nomorsuratjalan, tfakturpenjualan.tanggal, tfakturpenjualan.tanggaltempo, tfakturpenjualan.total, tfakturpenjualan.sisatagihan, mperusahaan.nama_perusahaan, mkontak.nama as nama_kontak');
         $this->db->join('mperusahaan', 'tfakturpenjualan.idperusahaan = mperusahaan.idperusahaan');
-        $this->db->where('tanggal = ', $this->tanggal);
+        $this->db->join('mkontak', 'tfakturpenjualan.kontakid = mkontak.id', 'LEFT');
+        $this->db->where('tanggal', $this->tanggal);
+        $this->db->order_by('notrans', 'ASC');
         return $this->db->get_where('tfakturpenjualan', [
             'tfakturpenjualan.idperusahaan' => $this->perusahaan
         ])->result_array();
@@ -131,8 +133,9 @@ class LaporanModel extends CI_Model {
     public function getOutstandingPayable()
     {
         $laporan    = [];
-        $this->db->select('tfaktur.noFaktur, tfaktur.tanggal, tfaktur.tanggaltempo, tfaktur.total, tfaktur.sisatagihan, mperusahaan.nama_perusahaan');
+        $this->db->select('tfaktur.noFaktur, tfaktur.tanggal, tfaktur.tanggaltempo, tfaktur.total, tfaktur.sisatagihan, mperusahaan.nama_perusahaan, mkontak.nama as nama_kontak');
         $this->db->join('mperusahaan', 'tfaktur.perusahaanid = mperusahaan.idperusahaan');
+        $this->db->join('mkontak', 'tfaktur.kontakid = mkontak.id', 'LEFT');
         $fakturBeli = $this->db->get_where('tfaktur', [
             'tfaktur.perusahaanid'    => $this->perusahaan,
             'tfaktur.tanggal'       => $this->tanggal

@@ -103,6 +103,7 @@ class Laporan extends User_Controller {
 			$data['laporan']	= $this->LaporanModel->getOutstandingInvoice();
 			$data['tanggal']	= $this->tgl_indo($this->tanggal);
 			$data['perusahaan']	= $this->Perusahaan_model->get_by_id($this->perusahaan);
+
 			switch ($this->input->get('jenis')) {
 				case 'pdf':
 					$this->load->library('pdf');

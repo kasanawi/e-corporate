@@ -18,6 +18,7 @@
             <thead>
                 <tr class="table-active">
                     <th class="text-center">Invoice No.</th>
+                    <th class="text-center">Pelanggan</th>
                     <th class="text-center">Invoice Date</th>
                     <th class="text-center">Due Date</th>
                     <th class="text-center">Invoice Amount</th>
@@ -32,8 +33,8 @@
                         foreach ($laporan as $key) {?>
                             <tr>
                                 <td class="text-center"><?= $key['nomorsuratjalan']; ?></td>
+                                <td class="text-center"><?= $key['nama_kontak'] ?></td>
                                 <td class="text-center">
-                                    <strong><?= $key['nama_perusahaan']; ?></strong><br/>
                                     <?= $key['tanggal']; ?>
                                 </td>
                                 <td class="text-center"><?= $key['tanggaltempo']; ?></td>

@@ -18,6 +18,7 @@
             <thead>
                 <tr class="table-active">
                     <th class="text-center">Invoice No.</th>
+                    <th class="text-center">Vendor</th>
                     <th class="text-center">Invoice Date</th>
                     <th class="text-center">Due Date</th>
                     <th class="text-center">Invoice Amount</th>
@@ -33,8 +34,12 @@
                             foreach ($key as $value) { ?>
                                 <tr>
                                     <td class="text-center"><?= $value['noFaktur']; ?></td>
+                                    <?php if(is_null($vendor = $value['nama_kontak'])): ?>
+                                        <td class="text-center">-</td>
+                                    <?php else: ?>
+                                        <td class="text-center"><?= $vendor ?></td>
+                                    <?php endif; ?>
                                     <td class="text-center">
-                                        <strong><?= $value['nama_perusahaan']; ?></strong><br/>
                                         <?= $value['tanggal']; ?>
                                     </td>
                                     <td class="text-center"><?= $value['tanggaltempo']; ?></td>
