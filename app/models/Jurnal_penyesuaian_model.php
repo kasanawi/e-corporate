@@ -66,8 +66,10 @@ class Jurnal_penyesuaian_model extends CI_Model {
 				$insertHead	+= $this->db->insert('tjurnaldetail', [
 					'idjurnal'		=> $this->get('idJurnalPenyesuaian'),
 					'noakun'		=> $this->get('noAkun')[$i],
-					'debet'			=> preg_replace("/(Rp. |,00|[^0-9])/", "", $this->get('debit')[$i]),
-					'kredit'		=> preg_replace("/(Rp. |,00|[^0-9])/", "", $this->get('kredit')[$i]),
+					//'debet'			=> preg_replace("/(Rp. |,00|[^0-9])/", "", $this->get('debit')[$i]),
+					//'kredit'		=> preg_replace("/(Rp. |,00|[^0-9])/", "", $this->get('kredit')[$i]),
+					'debet'         => str_replace(",", ".", $this->get('debit')[$i]),
+					'kredit'        => str_replace(",", ".", $this->get('kredit')[$i]),
 					'keterangan'	=> '-'
 				]);
 			}
@@ -85,7 +87,8 @@ class Jurnal_penyesuaian_model extends CI_Model {
 			case 'debit':
 				$this->totalDebit	= 0;
 				foreach ($data as $key) {
-					$this->totalDebit	+= (integer) preg_replace("/(Rp. |,00|[^0-9])/", "", $key);
+					//$this->totalDebit	+= (integer) preg_replace("/(Rp. |,00|[^0-9])/", "", $key);
+					$this->totalDebit += (float) str_replace(',', '.', $key);
 				}
 				return $this->totalDebit;
 				break;
@@ -93,9 +96,10 @@ class Jurnal_penyesuaian_model extends CI_Model {
 			case 'kredit':
 				$this->totalKredit	= 0;
 				foreach ($data as $key) {
-					$this->totalKredit	+= (integer) preg_replace("/(Rp. |,00|[^0-9])/", "", $key);
+					//$this->totalKredit	+= (integer) preg_replace("/(Rp. |,00|[^0-9])/", "", $key);
+					$this->totalKredit += (float) str_replace(',', '.', $key);
 				}
-				return $this->totalDebit;
+				return $this->totalKredit;
 				break;
 			
 			default:

@@ -80,13 +80,15 @@
             {
                 data    : "totaldebet",
                 render: function(data,type,row) {
-                return formatRupiah(String(data)) + ',00';
+                //return formatRupiah(String(data)) + ',00';
+                return rupiah(parseFloat(data)).format();
                 }
             },
             {
                 data    : "totalkredit",
                 render: function(data,type,row) {
-                return formatRupiah(String(data)) + ',00';
+                //return formatRupiah(String(data)) + ',00';
+                return rupiah(parseFloat(data)).format();
                 }
             },
             {
@@ -137,10 +139,12 @@
 
             // Update footer
             $( api.column( 4 ).footer() ).html(
-                formatRupiah(String(totalDebit))+',00'
+                //formatRupiah(String(totalDebit))+',00'
+                rupiah(totalDebit).format()
             );
             $( api.column( 5 ).footer() ).html(
-                formatRupiah(String(totalKredit))+',00'
+                //formatRupiah(String(totalKredit))+',00'
+                rupiah(totalKredit).format()
             );
         }
     });

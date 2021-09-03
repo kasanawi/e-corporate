@@ -226,7 +226,7 @@
 
     function nilai(elemen) {
         var nilai   = $(elemen).val();
-        $(elemen).val(formatRupiah(String(nilai), 'Rp. '));
+        //$(elemen).val(formatRupiah(String(nilai), 'Rp. '));
     }
 
     function hitung(jenis) {
@@ -236,18 +236,25 @@
                 data0   = data.getAll('debit[]');
                 data1   = 0;
                 data0.forEach(element => {
-                    data1   += element.replace(/[^,\d]/g, '')*1;
+                    //data1   += element.replace(/[^,\d]/g, '')*1;
+                    data1 = rupiah(data1).add(element);
                 });
-                $('#totalDebit').html(formatRupiah(String(data1), 'Rp. ') + ',00');
+                
+                //$('#totalDebit').html(formatRupiah(String(data1), 'Rp. ') + ',00');
+                $('#totalDebit').html(rupiah(data1).format());
+                
                 break;
             case 'kredit':
                 data    = new FormData($('#formSaldoAwal')[0]);
                 data0   = data.getAll('kredit[]');
                 data1   = 0;
                 data0.forEach(element => {
-                    data1   += element.replace(/[^,\d]/g, '')*1;
+                    //data1   += element.replace(/[^,\d]/g, '')*1;
+                    data1 = rupiah(data1).add(element);
                 });
-                $('#totalKredit').html(formatRupiah(String(data1), 'Rp. ') + ',00');
+                
+                //$('#totalKredit').html(formatRupiah(String(data1), 'Rp. ') + ',00');
+                $('#totalKredit').html(rupiah(data1).format());
                 break;
         
             default:

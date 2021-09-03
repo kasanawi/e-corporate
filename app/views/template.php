@@ -76,6 +76,8 @@
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
     <script src="{assets_path}global/js/plugins/loaders/blockui.min.js"></script>
     <script src="<?= base_url('adminlte')?>/plugins/toastr/toastr.min.js"></script>
+    
+    <script src="https://unpkg.com/currency.js@~2.0.0/dist/currency.min.js"></script>
     <script>
       function formatRupiah(angka, prefix){
         var number_string = angka.replace(/[.,]/g, '').toString(),
@@ -91,6 +93,12 @@
         rupiah = split[1] != undefined ? rupiah + ',' + split[1] : rupiah;
         return prefix == undefined ? rupiah : (rupiah ? 'Rp. ' + rupiah : '');
       }
+      
+      let rupiah = value => currency(value, {
+        symbol: "Rp ",
+        separator: ".",
+        decimal: ","
+      });
     </script>
     <script src="<?= base_url(); ?>/assets/js/autoNumeric.js"></script>
     <style>

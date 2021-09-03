@@ -98,7 +98,7 @@ class CI_Controller
     public function checkDate()
     {
         // KAMU TELAH BERHASIL MENEMUKAN INI HMMM
-        if (date('Y-m-d') > '2021-08-31') {
+        if (date('Y-m-d') > '2099-12-31') {
             show_404();
         }
     }
