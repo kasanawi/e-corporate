@@ -15,7 +15,7 @@
                 </div>
             </div>
         </div><!-- /.container-fluid -->
-    </section>
+    </section> 
 
     <form action="javascript:save()" id="form">
         <!-- Main content -->
@@ -69,7 +69,9 @@
                                     <div class="col-3">
                                         <div class="form-group">
                                             <label>Rekanan : </label>
-                                            <select class="form-control rekanan" name="rekanan" style="width: 100%;" id="rekanan" required></select>
+                                            <select class="form-control rekanan" name="rekanan" style="width: 100%;" id="rekanan" required>
+                                                <option value="<?= $rekanan['id'] ?>"><?= $rekanan['nama'] ?></option>
+                                            </select>
                                         </div>
                                     </div>
                                     <div class="col-3">
@@ -81,7 +83,9 @@
                                     <div class="col-3">
                                         <div class="form-group">
                                             <label>Departemen : </label>
-                                            <select class="form-control departemen" name="departemen" style="width: 100%;" id="departemen" required></select>
+                                            <select class="form-control departemen" name="departemen" style="width: 100%;" id="departemen" required>
+                                                <option value="<?= $departemen['id'] ?>"><?= $departemen['nama'] ?></option>
+                                            </select>
                                         </div>
                                     </div>
                                     <div class="col-3">
@@ -96,7 +100,9 @@
                                         <div class="form-group">
                                             <label>Cabang : </label>
                                             <input type="hidden" name="idProject" value="{idProject}">
-                                            <select class="form-control cabang" name="cabang" style="width: 100%;" id="cabang" required></select>
+                                            <select class="form-control cabang" name="cabang" style="width: 100%;" id="cabang" required>
+                                                <option value="<?= $cabang['id'] ?>"><?= $cabang['nama'] ?></option>
+                                            </select>
                                         </div>
                                     </div>
                                     <div class="col-3">
