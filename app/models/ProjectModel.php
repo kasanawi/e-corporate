@@ -35,7 +35,8 @@ class ProjectModel extends CI_Model {
                         'harga'     => $this->input->post('harga')[$i],
                         'jumlah'    => $this->input->post('jumlah')[$i],
                         'subtotal'  => $this->input->post('subtotal')[$i],
-                        'total'     => $this->input->post('total')[$i]
+                        'total'     => $this->input->post('total')[$i],
+                        'tipe'      => $this->input->post('tipe')[$i]
                     ]);
                 }
             }
@@ -66,7 +67,8 @@ class ProjectModel extends CI_Model {
                         'harga'     => $this->input->post('harga')[$i],
                         'jumlah'    => $this->input->post('jumlah')[$i],
                         'subtotal'  => $this->input->post('subtotal')[$i],
-                        'total'     => $this->input->post('total')[$i]
+                        'total'     => $this->input->post('total')[$i],
+                        'tipe'      => $this->input->post('tipe')[$i]
                     ]);
                 }
             }

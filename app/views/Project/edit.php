@@ -171,6 +171,7 @@
                                                         $totalPendapatan    = 0;
                                                         foreach ($detail as $key) { 
                                                             if ($key['tipe'] == 'pendapatan') { ?>
+                                                                <?php $key['harga'] = $key['harga'] * 1000; ?>
                                                                 <tr>
                                                                     <td>
                                                                         <input type="hidden" name="noAkun[]" value="<?= $key['noAkun']; ?>">
