@@ -15,7 +15,7 @@
                 </div>
             </div>
         </div><!-- /.container-fluid -->
-    </section>
+    </section> 
 
     <form action="javascript:save()" id="form">
         <!-- Main content -->
@@ -69,7 +69,9 @@
                                     <div class="col-3">
                                         <div class="form-group">
                                             <label>Rekanan : </label>
-                                            <select class="form-control rekanan" name="rekanan" style="width: 100%;" id="rekanan" required></select>
+                                            <select class="form-control rekanan" name="rekanan" style="width: 100%;" id="rekanan" required>
+                                                <option value="<?= $rekanan['id'] ?>"><?= $rekanan['nama'] ?></option>
+                                            </select>
                                         </div>
                                     </div>
                                     <div class="col-3">
@@ -81,7 +83,9 @@
                                     <div class="col-3">
                                         <div class="form-group">
                                             <label>Departemen : </label>
-                                            <select class="form-control departemen" name="departemen" style="width: 100%;" id="departemen" required></select>
+                                            <select class="form-control departemen" name="departemen" style="width: 100%;" id="departemen" required>
+                                                <option value="<?= $departemen['id'] ?>"><?= $departemen['nama'] ?></option>
+                                            </select>
                                         </div>
                                     </div>
                                     <div class="col-3">
@@ -96,7 +100,9 @@
                                         <div class="form-group">
                                             <label>Cabang : </label>
                                             <input type="hidden" name="idProject" value="{idProject}">
-                                            <select class="form-control cabang" name="cabang" style="width: 100%;" id="cabang" required></select>
+                                            <select class="form-control cabang" name="cabang" style="width: 100%;" id="cabang" required>
+                                                <option value="<?= $cabang['id'] ?>"><?= $cabang['nama'] ?></option>
+                                            </select>
                                         </div>
                                     </div>
                                     <div class="col-3">
@@ -165,27 +171,28 @@
                                                         $totalPendapatan    = 0;
                                                         foreach ($detail as $key) { 
                                                             if ($key['tipe'] == 'pendapatan') { ?>
+                                                                <?php $key['harga'] = $key['harga'] * 1000; ?>
                                                                 <tr>
                                                                     <td>
                                                                         <input type="hidden" name="noAkun[]" value="<?= $key['noAkun']; ?>">
                                                                         <?= $key['noAkun1']; ?>
                                                                     </td>
                                                                     <td>
-                                                                        <input type="text" onkeyup="nominal(this), hitung('<?= $key['noAkun']; ?>')" name="harga[]" class="form-control" id="harga<?= $key['noAkun']; ?>" value="<?= number_format($key['harga'], 2, ',', '.'); ?>">
+                                                                        <input type="text" onkeyup="nominal(this), hitung('<?= $key['noAkun']; ?>')" name="harga[]" class="form-control" id="harga<?= $key['noAkun']; ?>" value="<?= number_format($key['harga'], 0, ',', '.'); ?>">
                                                                     </td>
                                                                     <td>
                                                                         <input type="text" onkeyup="nominal(this), hitung('<?= $key['noAkun']; ?>')" name="jumlah[]" class="form-control" id="jumlah<?= $key['noAkun']; ?>" value="<?= $key['jumlah']; ?>">
                                                                     </td>
                                                                     <td>
                                                                         <input type="hidden" name="subtotal[]" id="subtotal<?= $key['noAkun']; ?>" value="<?= $key['subtotal']; ?>">
-                                                                        <input type="text" name="subtotal" required class="form-control subtotal<?= $key['noAkun']; ?>" disabled value="<?= number_format($key['subtotal'], 2, ',', '.'); ?>">
+                                                                        <input type="text" name="subtotal" required class="form-control subtotal<?= $key['noAkun']; ?>" disabled value="<?= number_format($key['subtotal'], 0, ',', '.'); ?>">
                                                                     </td>
                                                                     <td>
                                                                         <input type="hidden" name="tipe[]" value="pendapatan">
                                                                         <input type="hidden" name="total[]" id="total<?= $key['noAkun']; ?>" value="<?= $key['total']; ?>">
                                                                         <?php
                                                                             $totalPendapatan    += $key['total']; ?>
-                                                                            <input type="text" name="totalPendapatan1" class="form-control total<?= $key['noAkun']; ?>" readonly value="<?= number_format($key['total'], 2, ',', '.'); ?>">
+                                                                            <input type="text" name="totalPendapatan1" class="form-control total<?= $key['noAkun']; ?>" readonly value="<?= number_format($key['total'], 0, ',', '.'); ?>">
                                                                     </td>
                                                                     <td>
                                                                         <a href="javascript:hapusDetail(this)" class="text-danger"><i class="fas fa-trash"></i></a>
@@ -217,27 +224,28 @@
                                                     $totalHPP    = 0;
                                                     foreach ($detail as $key) { 
                                                         if ($key['tipe'] == 'HPP') { ?>
+                                                            <?php $key['harga'] = $key['harga'] * 1000; ?>
                                                             <tr>
                                                                 <td>
                                                                     <input type="hidden" name="noAkun[]" value="<?= $key['noAkun']; ?>">
                                                                     <?= $key['noAkun1']; ?>
                                                                 </td>
                                                                 <td>
-                                                                    <input type="text" onkeyup="nominal(this), hitung('<?= $key['noAkun']; ?>')" name="harga[]" class="form-control" id="harga<?= $key['noAkun']; ?>" value="<?= number_format($key['harga'], 2, ',', '.'); ?>">
+                                                                    <input type="text" onkeyup="nominal(this), hitung('<?= $key['noAkun']; ?>')" name="harga[]" class="form-control" id="harga<?= $key['noAkun']; ?>" value="<?= number_format($key['harga'], 0, ',', '.'); ?>">
                                                                 </td>
                                                                 <td>
                                                                     <input type="text" onkeyup="nominal(this), hitung('<?= $key['noAkun']; ?>')" name="jumlah[]" class="form-control" id="jumlah<?= $key['noAkun']; ?>" value="<?= $key['jumlah']; ?>">
                                                                 </td>
                                                                 <td>
                                                                     <input type="hidden" name="subtotal[]" id="subtotal<?= $key['noAkun']; ?>" value="<?= $key['subtotal']; ?>">
-                                                                    <input type="text" name="subtotal" required class="form-control subtotal<?= $key['noAkun']; ?>" disabled value="<?= number_format($key['subtotal'], 2, ',', '.'); ?>">
+                                                                    <input type="text" name="subtotal" required class="form-control subtotal<?= $key['noAkun']; ?>" disabled value="<?= number_format($key['subtotal'], 0, ',', '.'); ?>">
                                                                 </td>
                                                                 <td>
                                                                     <input type="hidden" name="tipe[]" value="HPP">
                                                                     <input type="hidden" name="total[]" id="total<?= $key['noAkun']; ?>" value="<?= $key['total']; ?>">
                                                                     <?php
                                                                         $totalHPP    += $key['total']; ?>
-                                                                        <input type="text" name="totalHPP1" class="form-control total<?= $key['noAkun']; ?>" readonly value="<?= number_format($key['total'], 2, ',', '.'); ?>">
+                                                                        <input type="text" name="totalHPP1" class="form-control total<?= $key['noAkun']; ?>" readonly value="<?= number_format($key['total'], 0, ',', '.'); ?>">
                                                                 </td>
                                                                 <td>
                                                                     <a href="javascript:hapusDetail(this)" class="text-danger"><i class="fas fa-trash"></i></a>
