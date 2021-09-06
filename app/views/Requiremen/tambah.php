@@ -34,7 +34,7 @@
                       <label><?php echo lang('notrans') ?>:</label>
                       <input type="text" class="form-control"readonly name="notrans" placeholder="AUTO">
                     </div>
-                    <div class="form-group" id="gudang">
+                    <div class="form-group" id="project">
                       <label>Project :</label>
                       <select class="form-control project" name="project"></select>
                     </div>
@@ -570,6 +570,28 @@
 
         getListPajak();
     })
+
+    // Automate change select data when project field is changed
+    $('select[name=project]').on('change', function() {
+        const projectID = $(this).val();
+        // Request ajax to get project JSON
+        $.ajax({
+            url: `{site_url}project/getById/`,
+            method: 'post',
+            data: {
+                idProject: projectID
+            },
+            dataType: 'json',
+            success: function(data) {
+                $('select[name=gudangid]').html(`<option value="${data.gudang.id}" selected>${data.gudang.nama}</option>`);
+                $('select[name=dept]').html(`<option value="${data.departemen.id}">${data.departemen.nama}</option>`);
+                $('select[name=kontakid]').html(`<option value="${data.rekanan.id}">${data.rekanan.nama}</option>`);
+            },
+            erro: function(data) {
+                alert('Maaf, terjadi masalah dalam pengambilan data');
+            }
+        });
+    });
 
     $(document).on('change','.jenis_pembelian',function(){
         if ($(this).val() == 'jasa') {
