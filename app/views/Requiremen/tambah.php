@@ -34,9 +34,9 @@
                       <label><?php echo lang('notrans') ?>:</label>
                       <input type="text" class="form-control"readonly name="notrans" placeholder="AUTO">
                     </div>
-                    <div class="form-group" id="rekanan">
-                      <label><?php echo lang('rekanan') ?>:</label>
-                      <select class="form-control kontakid" name="kontakid" disabled></select>
+                    <div class="form-group" id="gudang">
+                      <label>Project :</label>
+                      <select class="form-control project" name="project"></select>
                     </div>
                   </div>
                   <div class="col-md-3">
@@ -50,9 +50,9 @@
                       <label><?php echo lang('gudang') ?>:</label>
                       <select class="form-control gudangid" name="gudangid"></select>
                     </div>
-                    <div class="form-group" id="gudang">
-                      <label>Project :</label>
-                      <select class="form-control project" name="project"></select>
+                    <div class="form-group" id="rekanan">
+                      <label><?php echo lang('rekanan') ?>:</label>
+                      <select class="form-control kontakid" name="kontakid" disabled></select>
                     </div>
                   </div>
                   <div class="col-md-3">
