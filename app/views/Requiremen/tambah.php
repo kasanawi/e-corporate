@@ -485,6 +485,7 @@
                 $('select[name=dept]').html(`<option value="${data.departemen.id}">${data.departemen.nama}</option>`);
                 $('select[name=kontakid]').html(`<option value="${data.rekanan.id}">${data.rekanan.nama}</option>`);
                 $('input[name=totalhpp]').val(data.totalHPP);
+                $('#department').trigger('change');
             },
             erro: function(data) {
                 alert('Maaf, terjadi masalah dalam pengambilan data');
