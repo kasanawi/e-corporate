@@ -38,6 +38,10 @@
                       <label>Project :</label>
                       <select class="form-control project" name="project"></select>
                     </div>
+                    <div class="form-group" id="rekanan">
+                      <label>Pelanggan:</label>
+                      <select class="form-control kontakid" name="kontakid" disabled></select>
+                    </div>
                   </div>
                   <div class="col-md-3">
                     <div class="form-group">
@@ -50,9 +54,9 @@
                       <label><?php echo lang('gudang') ?>:</label>
                       <select class="form-control gudangid" name="gudangid"></select>
                     </div>
-                    <div class="form-group" id="rekanan">
-                      <label><?php echo lang('rekanan') ?>:</label>
-                      <select class="form-control kontakid" name="kontakid" disabled></select>
+                    <div class="form-group" id="totalHPP">
+                        <label>HPP Project</label>
+                        <input type="text" class="form-control" name="totalhpp" readonly>
                     </div>
                   </div>
                   <div class="col-md-3">
@@ -75,12 +79,6 @@
                         <select id="department" class="form-control department" name="dept" required></select>
                       </div>
                     </div>
-                    <div class="form-group">
-                      <label><?php echo lang('PIC') ?>:</label>
-                      <div class="input-group"> 
-                        <select id="pejabat" class="form-control pejabat" name="pejabat" required></select>
-                      </div>
-                    </div>
                   </div>
                   <div class="col-md-2">
                     <div class="form-group">
@@ -100,11 +98,10 @@
                       </select>
                     </div>
                     <div class="form-group">
-                      <label><?php echo lang('Cara Pembayaran') ?>:</label>
-                      <select class="form-control cara_pembayaran" name="cara_pembayaran" required>
-                        <option value="cash">Cash</option>
-                        <option value="credit">Credit</option>                                   
-                      </select>
+                      <label><?php echo lang('PIC') ?>:</label>
+                      <div class="input-group"> 
+                        <select id="pejabat" class="form-control pejabat" name="pejabat" required></select>
+                      </div>
                     </div>
                   </div>
                   <div class="col-md-6">
@@ -546,6 +543,7 @@
                 $('select[name=gudangid]').html(`<option value="${data.gudang.id}" selected>${data.gudang.nama}</option>`);
                 $('select[name=dept]').html(`<option value="${data.departemen.id}">${data.departemen.nama}</option>`);
                 $('select[name=kontakid]').html(`<option value="${data.rekanan.id}">${data.rekanan.nama}</option>`);
+                $('input[name=totalhpp]').val(data.totalHPP);
             },
             erro: function(data) {
                 alert('Maaf, terjadi masalah dalam pengambilan data');
@@ -562,7 +560,7 @@
         } else if($(this).val() == 'barang') {
             $('.jenis_barang').attr("disabled", false);
             $('#rekanan').html(`
-                <label><?php echo lang('rekanan') ?>:</label>
+                <label>Pelanggan:</label>
                 <select class="form-control kontakid" name="kontakid" disabled></select>
             `);
             $('#gudang').html(`
