@@ -27,6 +27,7 @@
               <h3 class="card-title"><?= $title; ?></h3>
             </div>
             <form id="form1" action="javascript:save()">
+                <input type="hidden" name="is_create" value="true">
               <div class="card-body">
                 <div class="row">
                   <div class="col-md-3">

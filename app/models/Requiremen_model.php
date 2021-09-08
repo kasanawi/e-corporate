@@ -14,21 +14,25 @@ class Requiremen_model extends CI_Model {
 		$diskon				= 0;
 		$subtotal			= 0;
 		$biayapengiriman	= 0;
-		foreach ($this->input->post('total') as $key) {
-			$total	+= (integer) preg_replace("/(Rp. |,00|[^0-9])/", "", $key);
+
+		if(!$this->input->post('is_create')) {
+			foreach ($this->input->post('total') as $key) {
+				$total	+= (integer) preg_replace("/(Rp. |,00|[^0-9])/", "", $key);
+			}
+			foreach ($this->input->post('total_pajak') as $key) {
+				$pajak	+= (integer) preg_replace("/(Rp. |,00|[^0-9])/", "", $key);
+			}
+			foreach ($this->input->post('diskon') as $key) {
+				$diskon	+= (integer) preg_replace("/(Rp. |,00|[^0-9])/", "", $key);
+			}
+			foreach ($this->input->post('subtotal') as $key) {
+				$subtotal	+= (integer) preg_replace("/(Rp. |,00|[^0-9])/", "", $key);
+			}
+			foreach ($this->input->post('biayapengiriman') as $key) {
+				$subtotal	+= (integer) preg_replace("/(Rp. |,00|[^0-9])/", "", $key);
+			}
 		}
-		foreach ($this->input->post('total_pajak') as $key) {
-			$pajak	+= (integer) preg_replace("/(Rp. |,00|[^0-9])/", "", $key);
-		}
-		foreach ($this->input->post('diskon') as $key) {
-			$diskon	+= (integer) preg_replace("/(Rp. |,00|[^0-9])/", "", $key);
-		}
-		foreach ($this->input->post('subtotal') as $key) {
-			$subtotal	+= (integer) preg_replace("/(Rp. |,00|[^0-9])/", "", $key);
-		}
-		foreach ($this->input->post('biayapengiriman') as $key) {
-			$subtotal	+= (integer) preg_replace("/(Rp. |,00|[^0-9])/", "", $key);
-		}
+		
 		$jenis_pembelian  = $this->input->post('jenis_pembelian');
 		$jenis_barang 		= $this->input->post('jenis_barang');
 		$noakun1 			    = $this->input->post('noAkun1');
@@ -53,7 +57,7 @@ class Requiremen_model extends CI_Model {
 				'pejabat'			    => $this->input->post('pejabat'),
 				'jenis_pembelian' => $this->input->post('jenis_pembelian'),
 				'jenis_barang'		=> $this->input->post('jenis_barang'),
-				'cara_pembayaran'	=> $this->input->post('cara_pembayaran'),
+				'cara_pembayaran'	=> $this->input->post('cara_pembayaran') ?? 'cash',
 				'catatan'			    => $this->input->post('catatan'),
 				'tipe'				    => '2',
 				'status'			    => '4',
@@ -110,7 +114,7 @@ class Requiremen_model extends CI_Model {
 					'subtotal'		=> $this->input->post('subtotal')[$no],
 					'total'			=> preg_replace("/(Rp. |,00|[^0-9])/", "", $this->input->post('total')[$no]),
 					'jumlahsisa'	=> $this->input->post('jumlah')[$no],
-					'biayapengiriman'	=> $this->input->post('biayapengiriman')[$no],
+					'biayapengiriman'	=> $this->input->post('biayapengiriman')[$no] ?? '0',
 				]);
 				$idPajak			= explode(',', $this->input->post('idPajak')[$no]);
 				$nominal			= explode(',', $this->input->post('pajak')[$no]);

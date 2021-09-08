@@ -31,7 +31,7 @@ class Requiremen extends User_Controller {
 		$data['subtitle'] = lang('add_new');
 		$data['tanggal'] = date('Y-m-d');
 		$data['content'] = 'Requiremen/tambah';
-		$data = array_merge($data,path_info());
+		$data = array_merge($data,path_info()); 
 		$this->parser->parse('template',$data);
 	}
 
