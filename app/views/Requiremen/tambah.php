@@ -127,30 +127,13 @@
                       <tr class="table-active">
                           <th>ID</th>
                           <th><?php echo lang('item') ?></th>
-                          <th class="text-right"><?php echo lang('price') ?></th>
-                          <th class="text-right" style="width:50px;"><?php echo lang('qty') ?></th>
-                          <th class="text-right"><?php echo lang('subtotal') ?></th>
-                          <th class="text-right" style="width:50px;"><?php echo lang('discount') ?></th>
-                          <th class="text-right" style="width:50px;">Pajak</th>
-                          <th class="text-right" style="width:50px;">Biaya Pengiriman</th>
-                          <th class="text-right" style="width:50px;"><?php echo lang('no akun') ?></th>
-                          <th class="text-right"><?php echo lang('total') ?></th>
-                          <th class="text-right"><?php echo lang('sisa pagu item') ?></th>
-                          <th class="text-center" style="width:50px;"><?php echo lang('action') ?></th>
+                          <th><?php echo lang('qty') ?></th>
+                          <th><?php echo lang('no akun') ?></th>
+                          <th><?php echo lang('sisa pagu item') ?></th>
+                          <th><?php echo lang('action') ?></th>
                       </tr>
                     </thead>
                     <tbody></tbody>
-                    <tfoot class="bg-light">
-                      <tr>
-                        <th>ID</th>
-                        <th colspan="7">&nbsp;</th>
-                        <th class="text-right"><?php echo lang('total') ?></th>
-                        <th class="text-center" id="total_total">
-                        <th></th>
-                        <th></th>
-                        </th>
-                      </tr>
-                    </tfoot>
                   </table>
                 </div>
               </div>
@@ -484,32 +467,9 @@
     columnDefs  : [
       {
         targets : [0], 
-        visible : false},
-      {
-        targets   : [2,3,4,5,6,7,8,9], 
-        className : 'text-right'
-      }
-    ],
-    footerCallback  : function ( row, data, start, end, display ) {
-      var api     = this.api(), data;
-      var intVal  = function ( i ) {
-        return typeof i === 'string' ?
-          i.replace(/[\Rp.]/g, '').replace(/,00/g)*1 :
-          typeof i === 'number' ?
-              i : 0;
-      };
-
-      total = api.column( 9 ).data().reduce( function (a, b) {
-        return intVal(a) + intVal(b); 
-      }, 0 );
-
-      $( api.column( 9 ).footer() ).html(
-        formatRupiah(String(total))+',00'
-      );
-
-      $('.subtotalhead').val( numeral(total).format() )
-      $('.totalhead').val( numeral(total).format() )
-    }
+        visible : false
+      },
+    ]
   })
 
   $(document).ready(function(){
@@ -733,20 +693,8 @@
             table_detail.row.add([
                 barang[index].value,
                 `<input type="hidden" name="item[]" id="" value="${item}">` + item,
-                `<input type="text" class="form-control" onkeyup="sum('${index}${no}', '${no}', '${jenis}');" name="harga[]" id="harga${index}${no}">`,
                 `<input type="text" class="form-control" onkeyup="sum('${index}${no}', '${no}', '${jenis}');" name="jumlah[]" id="jumlah${index}${no}">`,
-                `<input type="text" class="form-control" id="subtotal${index}${no}" readonly><input type="hidden" name="subtotal[]" id="subtotal_asli${index}${no}" readonly>`,
-                `<input type="text" class="form-control" onkeyup="sum_total('${index}${no}', '${no}', '${jenis}');" name="diskon[]" id="diskon${index}${no}">`,
-                `<input type="hidden" name="total_pajak[]" id="total_pajak${index}${no}" onchange="sum_total('${index}${no}', '${no}', '${jenis}');">
-                <button type="button" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#modal_pajak${index}${no}" title="Tambah Pajak">
-                    <i class="fas fa-balance-scale"></i>
-                </button>`,
-                `<input type="hidden" name="biayapengiriman[]" id="biaya_pengiriman${index}${no}">
-                <button type="button" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#modal_pengiriman${index}${no}" title="Tambah Biaya Pengiriman">
-                    <i class="fas fa-shipping-fast"></i>
-                </button>`,
                 `<input type="hidden" name="noAkun1[]" id="idakun${index}${no}" value="${idakun}"><input type="hidden" name="noakun[]" id="" value="${noakun}">` + noakun,
-                `<input type="text" class="form-control" name="total[]" id="total${index}${no}" readonly onchange="sum_total('${index}${no}', '${no}', '${jenis}');">`,
                 `<input type="hidden" name="sisapaguitem[]" id="sisapaguitem_lama${index}${no}" value="${sisapaguitem}"><input type="text" class="form-control" id="sisapaguitem_baru${index}${no}" value="${formatRupiah(String(sisapaguitem))+',00'}" readonly>`,
                 `<a href="javascript:void(0)" class="edit_detail" id_barang="${barang[index].value}"><i class="fas fa-pencil-alt"></i></a>&nbsp;
                 <a href="javascript:void(0)" class="delete_detail text-danger"><i class="fas fa-trash"></i></a>`
