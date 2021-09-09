@@ -58,6 +58,7 @@ class Requiremen_model extends CI_Model {
 				'jenis_pembelian' => $this->input->post('jenis_pembelian'),
 				'jenis_barang'		=> $this->input->post('jenis_barang'),
 				'cara_pembayaran'	=> $this->input->post('cara_pembayaran') ?? 'cash',
+				'project'			=> $this->input->post('project'),
 				'catatan'			    => $this->input->post('catatan'),
 				'tipe'				    => '2',
 				'status'			    => '4',

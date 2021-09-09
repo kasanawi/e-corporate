@@ -37,7 +37,7 @@
 											<th><?php echo lang('supplier') ?></th>
 											<th>Perusahaan</th>
 											<th>Departement</th>
-											<th>Nominal Total</th>
+											<th>Project</th>
 											<th><?php echo lang('warehouse') ?></th>
 											<th><?php echo lang('status') ?></th>
 											<th><?php echo lang('Action') ?></th>
@@ -90,13 +90,7 @@
 			{data: 'supplier'},
 			{data: 'nama_perusahaan'},
 			{data: 'namaDepartemen'},
-			{
-				data: 'total',
-				render: function(data,type,row) {
-					var total=`<div class="text-right">`+formatRupiah(data)+`,00</div>`;
-					return total;
-				}
-			},
+			{data: 'project'},
 			{data: 'gudang'},
 			{
 				data: 'status',
