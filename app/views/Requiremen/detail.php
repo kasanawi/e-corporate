@@ -218,7 +218,7 @@
                                         </div>
                                         <input type="hidden" name="grandtotal" readonly value="<?= $grandtotal; ?>">
                                         <input type="hidden" name="id_angsuran" readonly value="<?= $angsuran['id']; ?>">
-                                        <input class="form-control tum" name="tum" readonly value="<?= number_format($angsuran['total'],2,',','.'); ?>">
+                                        <input class="form-control tum" name="tum" readonly value="<?= number_format(intval($angsuran['total']),2,',','.'); ?>">
                                     </div>
                                 </div> 
                                 <div class="col-md-3">                       
