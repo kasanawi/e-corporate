@@ -496,11 +496,13 @@
 
     $(document).on('change','.jenis_pembelian',function(){
         if ($(this).val() == 'jasa') {
+            $('.jenis_barang').val('barang_dan_jasa');
             $('.jenis_barang').attr("disabled", true);
             $('#rekanan').empty();
             $('#gudang').empty();
             $('#form2').attr("action", "javascript:save_detail(0, 'jasa')");
         } else if($(this).val() == 'barang') {
+            $('.jenis_barang').val('barang_dagangan');
             $('.jenis_barang').attr("disabled", false);
             $('#rekanan').html(`
                 <label>Pelanggan:</label>
@@ -514,6 +516,7 @@
             $('#tombol_jasa').css('display', 'none');
             $('#form2').attr("action", "javascript:save_detail(0, 'barang')");
         } else {
+            $('.jenis_barang').val('barang_dan_jasa');
             $('.gudangid').attr("disabled", true);
             $('#tombol_jasa').css('display', 'block');
             $('#form2').attr("action", "javascript:save_detail(0, 'barang')");
