@@ -97,9 +97,9 @@
                   <thead>
                     <tr class="table-active">
                       <th><?php echo lang('item') ?></th>
-                      <th class="text-right"><?php echo lang('price') ?></th>
-                      <th class="text-right"><?php echo lang('qty') ?></th>
-                      <th class="text-right"><?php echo lang('subtotal') ?></th>
+                      <th class=""><?php echo lang('price') ?></th>
+                      <th class=""><?php echo lang('qty') ?></th>
+                      <th class=""><?php echo lang('subtotal') ?></th>
                       <th class="text-right"><?php echo lang('discount') ?></th>
                       <th class="text-right">Pajak</th>
                       <th class="text-right">Biaya Pengiriman</th>
@@ -113,10 +113,21 @@
                       <?php $grandtotal = $row['total'] + $grandtotal ?>
                       <tr>
                         <td><?php echo $row['item'] ?></td>
-                        <td class="text-right"><?= number_format($row['harga'],2,',','.'); ?></td>
-                        <td class="text-right"><?php echo number_format($row['jumlah']) ?></td>
-                        <td class="text-right"><?= number_format($row['subtotal'],2,',','.'); ?></td>
-                        <td class="text-right"><?php echo number_format($row['diskon']) ?>%</td>
+                        <td class="text-right">
+                          <input type="text" name="" data-row="<?= $row['id'] ?>" class="form-control harga" value="<?= number_format($row['harga'],0,',','.'); ?>">
+                        </td>
+                        <td class="text-right">
+                          <input type="text" name="" data-row="<?= $row['id'] ?>" class="form-control jumlah" value="<?= number_format($row['jumlah']) ?>">
+                        </td>
+                        <td class="text-right">
+                          <input type="text" class="form-control subtotal" data-row="<?= $row['id'] ?>" value="<?= number_format($row['subtotal'],0,',','.'); ?>" readonly>
+                        </td>
+                        <td class="text-right">
+                          <div class="input-group">
+                            <input type="number" name="" data-row="<?= $row['id'] ?>" class="form-control diskon" value="<?= number_format($row['diskon']) ?>" style="width: 5rem;">
+                            <div class="input-group-append p-1">%</div>
+                          </div>
+                        </td>
                         <td class="text-right">
                           <button type="button" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#modalPajak<?= $row['id']; ?>" title="Detail Pajak">
                               <i class="fas fa-balance-scale"></i>
@@ -181,14 +192,16 @@
                         </td>
                         <td class="text-right"><?= number_format($row['biayapengiriman'],2,',','.'); ?></td>
                         <td class="text-right"><?= $row['akunno']; ?></td>
-                        <td class="text-right"><?= number_format($row['total'],2,',','.'); ?></td>
+                        <td class="text-right">
+                          <input type="text" class="form-control total" data-row="<?= $row['id'] ?>" value="<?= number_format($row['total'],0,',','.'); ?>" readonly>
+                        </td>
                       </tr>
                     <?php endforeach ?>
                   </tbody>
                     <tfoot>
                       <tr class="table-active">
                         <td class="font-weight-bold text-right" colspan="8"><?php echo lang('grand_total') ?></td>
-                        <td class="font-weight-bold text-right"><?= number_format($grandtotal,2,',','.'); ?></td>
+                        <td class="font-weight-bold text-right" class="total"><?= number_format($grandtotal,0,',','.'); ?></td>
                       </tr>
                     </tfoot>
                 </table>
@@ -278,119 +291,166 @@
   </section>
 
 <script>
-        var base_url    = '{site_url}requiremen/';
-        var kontak      = '<?= $kontakid; ?>'
+  // Fungsi generate subtotal
+    function sum_subtotal(row) {
+      const harga = parseInt($(`.harga[data-row=${row}]`).val().replace(/[^,\d]/g, '').toString());
+      const jumlah = parseInt($(`.jumlah[data-row=${row}]`).val().replace(/[^,\d]/g, '').toString());
+      const subtotal = harga * jumlah;
 
-        $(document).ready(function(){
-            ajax_select({ 
-                id          : '.kontakid', 
-                url         : base_url + 'select2_kontak', 
-                selected    : { 
-                    id  : kontak 
-                    } 
-            });
+      $(`.subtotal[data-row=${row}]`).val(formatRupiah(String(subtotal)));
+    }
+
+    // Fungsi generate total
+    function sum_total(row) {
+      const harga = parseInt($(`.harga[data-row=${row}]`).val().replace(/[^,\d]/g, '').toString());
+      const jumlah = parseInt($(`.jumlah[data-row=${row}]`).val().replace(/[^,\d]/g, '').toString());
+      const diskon = parseInt($(`.diskon[data-row=${row}]`).val().replace(/[^,\d]/g, '').toString());
+
+      let total = harga * jumlah;
+      const disc = (total * diskon) / 100;
+      total = total - disc;
+      
+      $(`.total[data-row=${row}]`).val(formatRupiah(String(total)));
+    }
+
+  // Saat harga diubah
+    $('.harga').on('keyup', function() {
+      const row = $(this).data('row');
+      sum_subtotal(row);
+      sum_total(row);
+
+      $(this).val(formatRupiah($(this).val()));
+    });
+
+    // Saat jumlah dirubah
+    $('.jumlah').on('keyup', function() {
+      const row = $(this).data('row');
+      sum_subtotal(row);
+      sum_total(row);
+
+      $(this).val(formatRupiah($(this).val()));
+    });
+
+    // Saat diskon dirubah
+    $('.diskon').on('keyup', function() {
+      const row = $(this).data('row');
+      sum_subtotal(row);
+      sum_total(row);
+    });
+
+    var base_url    = '{site_url}requiremen/';
+    var kontak      = '<?= $kontakid; ?>'
+
+    $(document).ready(function(){
+        ajax_select({ 
+            id          : '.kontakid', 
+            url         : base_url + 'select2_kontak', 
+            selected    : { 
+                id  : kontak 
+                } 
         });
+    });
 
-        $(document).on('select2:select','.kontakid',function(e){
-            var kontakid    = e.params.data.id;
-            var idpemesanan = '<?= $this->uri->segment(3); ?>';
-            $.ajax({
-                url: base_url + 'update_kontakid/' + idpemesanan,
-                method: 'post',
-                datatype: 'json',
-                data: {
-                    kontakid: kontakid
-                }
-            })
+    $(document).on('select2:select','.kontakid',function(e){
+        var kontakid    = e.params.data.id;
+        var idpemesanan = '<?= $this->uri->segment(3); ?>';
+        $.ajax({
+            url: base_url + 'update_kontakid/' + idpemesanan,
+            method: 'post',
+            datatype: 'json',
+            data: {
+                kontakid: kontakid
+            }
         })
+    })
 
-        function save() {
-            var form = $('#form')[0];
-            var formData = new FormData(form);
-            $.ajax({
-                url: base_url + 'tambah_angsuran',
-                dataType: 'json',
-                method: 'post',
-                data: formData,
-                contentType: false,
-                processData: false,
-                beforeSend: function() {
-                    pageBlock();
-                },
-                afterSend: function() {
-                    unpageBlock();
-                },
-                success: function(data) {
-                    if(data.status == 'success') {
-                        swal("Berhasil!", "Berhasil Mengupdate Data", "success");
-                        redirect('{site_url}pemesanan_pembelian');
-                    } else {
-                        swal("Gagal!", data.message, "error");
-                    }
-                },
-                error: function() {
-                    swal("Gagal!", "Internal Server Error", "error");
+    function save() {
+        var form = $('#form')[0];
+        var formData = new FormData(form);
+        $.ajax({
+            url: base_url + 'tambah_angsuran',
+            dataType: 'json',
+            method: 'post',
+            data: formData,
+            contentType: false,
+            processData: false,
+            beforeSend: function() {
+                pageBlock();
+            },
+            afterSend: function() {
+                unpageBlock();
+            },
+            success: function(data) {
+                if(data.status == 'success') {
+                    swal("Berhasil!", "Berhasil Mengupdate Data", "success");
+                    redirect('{site_url}pemesanan_pembelian');
+                } else {
+                    swal("Gagal!", data.message, "error");
                 }
-            })
-        }
+            },
+            error: function() {
+                swal("Gagal!", "Internal Server Error", "error");
+            }
+        })
+    }
 
-        function format(id) {
-          var angka   = $('#'+id).val()
-          $('#'+id).val(formatRupiah(String(angka)));
-        }
+    function format(id) {
+      var angka   = $('#'+id).val()
+      $('#'+id).val(formatRupiah(String(angka)));
+    }
 
-        function hitungtum() {
-          var um      = parseInt($('#um').val().replace(/[Rp. ]/g, ''));
-          var jtem    = parseInt($('.jtem').val().replace(/[Rp. ]/g, ''));
-          if (isNaN(jtem)) {
-              jtem = 0;
-          }
-          if (isNaN(um)) {
-              um = 0;
-          }
-          tum = um + jtem;
-          $('.tum').val(formatRupiah(String(tum)) + ',00');
-          if (tum !== <?= $grandtotal; ?>) {
-              $('#alertjumlah').css('display', 'block');
-          } else {
-              $('#alertjumlah').css('display', 'none');
-          }
-        }
+    function hitungtum() {
+      var um      = parseInt($('#um').val().replace(/[Rp. ]/g, ''));
+      var jtem    = parseInt($('.jtem').val().replace(/[Rp. ]/g, ''));
+      if (isNaN(jtem)) {
+          jtem = 0;
+      }
+      if (isNaN(um)) {
+          um = 0;
+      }
+      tum = um + jtem;
+      $('.tum').val(formatRupiah(String(tum)) + ',00');
+      if (tum !== <?= $grandtotal; ?>) {
+          $('#alertjumlah').css('display', 'block');
+      } else {
+          $('#alertjumlah').css('display', 'none');
+      }
+    }
 
-        function hitungterm() {
-          var a1  = parseInt($('#a1').val().replace(/[Rp. ]/g, ''));
-          var a2  = parseInt($('#a2').val().replace(/[Rp. ]/g, ''));
-          var a3  = parseInt($('#a3').val().replace(/[Rp. ]/g, ''));
-          var a4  = parseInt($('#a4').val().replace(/[Rp. ]/g, ''));
-          var a5  = parseInt($('#a5').val().replace(/[Rp. ]/g, ''));
-          var a6  = parseInt($('#a6').val().replace(/[Rp. ]/g, ''));
-          var a7  = parseInt($('#a7').val().replace(/[Rp. ]/g, ''));
-          var a8  = parseInt($('#a8').val().replace(/[Rp. ]/g, ''));
-          if (isNaN(a1)) {
-            a1 = 0;
-          }
-          if (isNaN(a2)) {
-            a2 = 0;
-          }
-          if (isNaN(a3)) {
-            a3 = 0;
-          }
-          if (isNaN(a4)) {
-            a4 = 0;
-          }
-          if (isNaN(a5)) {
-            a5 = 0;
-          }
-          if (isNaN(a6)) {
-            a6 = 0;
-          }
-          if (isNaN(a7)) {
-            a7 = 0;
-          }
-          if (isNaN(a8)) {
-            a8 = 0;
-          }
-          jtem  = a1 + a2 + a3 + a4 + a5 + a6 + a7 + a8;
-          $('.jtem').val(formatRupiah(String(jtem)) + ',00');
-        }
-    </script>
+    function hitungterm() {
+      var a1  = parseInt($('#a1').val().replace(/[Rp. ]/g, ''));
+      var a2  = parseInt($('#a2').val().replace(/[Rp. ]/g, ''));
+      var a3  = parseInt($('#a3').val().replace(/[Rp. ]/g, ''));
+      var a4  = parseInt($('#a4').val().replace(/[Rp. ]/g, ''));
+      var a5  = parseInt($('#a5').val().replace(/[Rp. ]/g, ''));
+      var a6  = parseInt($('#a6').val().replace(/[Rp. ]/g, ''));
+      var a7  = parseInt($('#a7').val().replace(/[Rp. ]/g, ''));
+      var a8  = parseInt($('#a8').val().replace(/[Rp. ]/g, ''));
+      if (isNaN(a1)) {
+        a1 = 0;
+      }
+      if (isNaN(a2)) {
+        a2 = 0;
+      }
+      if (isNaN(a3)) {
+        a3 = 0;
+      }
+      if (isNaN(a4)) {
+        a4 = 0;
+      }
+      if (isNaN(a5)) {
+        a5 = 0;
+      }
+      if (isNaN(a6)) {
+        a6 = 0;
+      }
+      if (isNaN(a7)) {
+        a7 = 0;
+      }
+      if (isNaN(a8)) {
+        a8 = 0;
+      }
+      jtem  = a1 + a2 + a3 + a4 + a5 + a6 + a7 + a8;
+      $('.jtem').val(formatRupiah(String(jtem)) + ',00');
+    }
+</script>
