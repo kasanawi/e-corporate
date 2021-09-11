@@ -132,6 +132,7 @@
                           <button type="button" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#modalPajak<?= $row['id']; ?>" title="Detail Pajak">
                               <i class="fas fa-balance-scale"></i>
                           </button>
+                          <input type="hidden" id="pajak<?= $row['id'] ?>" value="[]" data-row="<?= $row['id'] ?>">
                           <div class="modal fade" id="modalPajak<?= $row['id']; ?>">
                             <div class="modal-dialog modal-xl">
                               <div class="modal-content">
@@ -143,6 +144,11 @@
                                 </div>
                                 <form id="form_pajak" action="javascript:total_pajak('', '${no}')" enctype="multipart/form-data" method="POST">
                                   <div class="modal-body">
+                                    <div class="d-flex justify-content-start">
+                                      <button class="btn btn-sm btn-primary mb-2" data-toggle="modal" data-target="#modalPilihPajak<?= $row['id'] ?>">
+                                        <i class="fas fa-plus"></i> Pilih pajak
+                                      </button>
+                                    </div>
                                     <div class="table-responsive">
                                       <table class="table table-xs table-striped table-borderless table-hover index_datatable" style="width:100%" id="pajak">
                                         <thead>
@@ -153,7 +159,7 @@
                                             <th>Nominal</th>
                                           </tr>
                                         </thead>
-                                        <tbody id="isi_tbody_pajak">
+                                        <tbody class="table-list-pajak" data-row="<?= $row['id'] ?>">
                                           <?php
                                             if ($row['pajak']) {
                                               foreach ($row['pajak'] as $key) { ?>
@@ -189,10 +195,56 @@
                               </div>
                             </div>
                           </div>
+                          <div class="modal fade" class="modal-pilih-pajak" data-row="<?= $row['id'] ?>" id="modalPilihPajak<?= $row['id'] ?>">
+                          <div class="modal-dialog modal-xl">
+                              <div class="modal-content">
+                                <div class="modal-header">
+                                  <h4 class="modal-title">Pilih Pajak</h4>
+                                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                      <span aria-hidden="true">&times;</span>
+                                  </button>
+                                </div>
+                                <div class="modal-body">
+                                  <div class="table-responsive">
+                                    <table class="table table-striped table-hover text-center">
+                                      <thead>
+                                        <tr>
+                                          <th></th>
+                                          <th>Kode Pajak</th>
+                                          <th>Nama Pajak</th>
+                                          <th>Kode Akun</th>
+                                          <th>Nama Akun</th>
+                                          <th>Tarif %</th>
+                                        </tr>
+                                      </thead>
+                                      <tbody>
+                                        <?php foreach($pajak as $pjk): ?>
+                                          <tr>
+                                            <td>
+                                              <input type="checkbox" class="check-pajak" data-row="<?= $row['id'] ?>" value='<?= json_encode($pjk) ?>'>
+                                            </td>
+                                            <td><?= $pjk['kode_pajak'] ?></td>
+                                            <td><?= $pjk['nama_pajak'] ?></td>
+                                            <td><?= $pjk['akunno'] ?></td>
+                                            <td><?= $pjk['namaakun'] ?></td>
+                                            <td><?= $pjk['persen'] ?></td>
+                                          </tr>
+                                        <?php endforeach; ?>
+                                      </tbody>
+                                    </table>
+                                  </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-primary" data-dismiss="modal">Oke</button>
+                                </div>
+                              </div>
+                            </div>  
+                          </div>
                         </td>
                         <td class="text-right"><?= number_format($row['biayapengiriman'],2,',','.'); ?></td>
                         <td class="text-right"><?= $row['akunno']; ?></td>
                         <td class="text-right">
+                          <input type="hidden" class="totalasli" data-row="<?= $row['id'] ?>">
                           <input type="text" class="form-control total" data-row="<?= $row['id'] ?>" value="<?= number_format($row['total'],0,',','.'); ?>" readonly>
                         </td>
                       </tr>
@@ -298,25 +350,75 @@
       const subtotal = harga * jumlah;
 
       $(`.subtotal[data-row=${row}]`).val(formatRupiah(String(subtotal)));
+      return subtotal;
+    }
+
+    // Fungsi untuk mengembalikan diskon
+    function sum_discount(row, total)
+    {
+      const diskon = parseInt($(`.diskon[data-row=${row}]`).val().replace(/[^,\d]/g, '').toString());
+      return (total * diskon) / 100;
+    }
+
+    // Fungsi untuk menampilkan list pajak
+    function sum_pajak(row, total)
+    {
+      const pajaks = JSON.parse($(`#pajak${row}`).val());
+      let totalPajak = 0;
+
+      $(`.table-list-pajak[data-row=${row}]`).html('');
+
+      pajaks.forEach(pajak => {
+        let nominal = (total * pajak.persen) / 100;
+        
+        if(isNaN(nominal)) nominal = 0;
+        totalPajak += nominal;
+
+        $(`.table-list-pajak[data-row=${row}]`).prepend(`
+        <tr>
+          <td>${pajak.nama_pajak}</td>
+          <td>${pajak.akunno}</td>
+          <td>${pajak.namaakun}</td>
+          <td>${formatRupiah(String(nominal))}</td>
+        </tr>
+        `);
+      });
+
+      return totalPajak;
     }
 
     // Fungsi generate total
     function sum_total(row) {
-      const harga = parseInt($(`.harga[data-row=${row}]`).val().replace(/[^,\d]/g, '').toString());
-      const jumlah = parseInt($(`.jumlah[data-row=${row}]`).val().replace(/[^,\d]/g, '').toString());
-      const diskon = parseInt($(`.diskon[data-row=${row}]`).val().replace(/[^,\d]/g, '').toString());
+      const subtotal = sum_subtotal(row);
+      const diskon = sum_discount(row, subtotal);
 
-      let total = harga * jumlah;
-      const disc = (total * diskon) / 100;
-      total = total - disc;
+      let total = subtotal - diskon;
+
+      const pajak = sum_pajak(row, total);
+      total = total + pajak;
       
       $(`.total[data-row=${row}]`).val(formatRupiah(String(total)));
+      $(`.totalasli[data-row=${row}]`).val(formatRupiah(String(total)));
+    }
+
+    // Fungsi untuk memanage pajak
+    function manage_pajak(row, pajak, isRemove) {
+      const pajaks = JSON.parse($(`#pajak${row}`).val());
+      const total = parseInt($(`.total[data-row=${row}]`).val().replace(/[^,\d]/g, '').toString());
+
+      if(isRemove) {
+        const index = pajaks.findIndex(pjk => pjk.id_pajak == pajak.id_pajak);
+        pajaks.splice(index, 1);
+      } else {
+        pajaks.push(pajak);
+      }
+
+      $(`#pajak${row}`).val(JSON.stringify(pajaks));
     }
 
   // Saat harga diubah
     $('.harga').on('keyup', function() {
       const row = $(this).data('row');
-      sum_subtotal(row);
       sum_total(row);
 
       $(this).val(formatRupiah($(this).val()));
@@ -325,7 +427,6 @@
     // Saat jumlah dirubah
     $('.jumlah').on('keyup', function() {
       const row = $(this).data('row');
-      sum_subtotal(row);
       sum_total(row);
 
       $(this).val(formatRupiah($(this).val()));
@@ -334,7 +435,17 @@
     // Saat diskon dirubah
     $('.diskon').on('keyup', function() {
       const row = $(this).data('row');
-      sum_subtotal(row);
+      sum_total(row);
+    });
+
+    // Saat checkbox pajak diklik
+    $('.check-pajak').on('click', function() {
+      const row = $(this).data('row');
+      const val = $(this).val();
+      const pajak = JSON.parse(val);
+      const isRemove = $(this).is(':checked');
+
+      manage_pajak(row, pajak, !isRemove);
       sum_total(row);
     });
 
