@@ -241,7 +241,50 @@
                             </div>  
                           </div>
                         </td>
-                        <td class="text-right"><?= number_format($row['biayapengiriman'],2,',','.'); ?></td>
+                        <td class="text-right">
+                          <input type="hidden" id="ongkir<?= $row['id'] ?>" value="[]">
+                          <input type="hidden" id="totalOngkir<?= $row['id'] ?>" value="0" name="ongkir[]">
+                          <button class="btn btn-sm btn-primary" data-toggle="modal" data-target="#modalPilihOngkir<?= $row['id'] ?>">
+                            <i class="fas fa-shipping-fast"></i>
+                          </button>
+                          <div class="modal fade modal-pilih-ongkir" id="modalPilihOngkir<?= $row['id'] ?>">
+                            <div class="modal-dialog modal-xl">
+                              <div class="modal-content">
+                                <div class="modal-header">
+                                    <h4 class="modal-title">Biaya Pengiriman</h4>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <form class="form-ongkir" data-row="<?= $row['id'] ?>">
+                                  <div class="modal-body">
+                                    <div class="mb-3 mt-3 table-responsive">
+                                      <div class="mt-3 mb-3">
+                                        <select class="form-control pilih_akun select-ongkir" name="noakun" data-row="<?= $row['id'] ?>" multiple></select>
+                                      </div>
+                                      <table class="table table-bordered" style="width:100%" id="pengiriman">
+                                        <thead class="{bg_header}">
+                                          <tr>
+                                            <th class="text-right">Kode Akun</th>
+                                            <th class="text-right">Nama Akun</th>
+                                            <th class="text-right">Nominal</th>
+                                          </tr>
+                                        </thead>
+                                        <tbody class="table-ongkir" id="table-ongkir<?= $row['id'] ?>">
+                                            
+                                        </tbody>
+                                      </table>
+                                    </div>
+                                  </div>
+                                  <div class="modal-footer justify-content-between">
+                                      <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                      <button type="submit" class="btn btn-primary">Save changes</button>
+                                  </div>
+                                </form>
+                              </div>
+                            </div>
+                          </div>
+                        </td>
                         <td class="text-right"><?= $row['akunno']; ?></td>
                         <td class="text-right">
                           <input type="hidden" class="totalasli" data-row="<?= $row['id'] ?>">
@@ -385,17 +428,18 @@
       });
 
       return totalPajak;
-    }
+    } 
 
     // Fungsi generate total
     function sum_total(row) {
       const subtotal = sum_subtotal(row);
       const diskon = sum_discount(row, subtotal);
+      const ongkir = parseInt($(`#totalOngkir${row}`).val());
 
       let total = subtotal - diskon;
 
       const pajak = sum_pajak(row, total);
-      total = total + pajak;
+      total = total + pajak + ongkir;
       
       $(`.total[data-row=${row}]`).val(formatRupiah(String(total)));
       $(`.totalasli[data-row=${row}]`).val(formatRupiah(String(total)));
@@ -415,6 +459,29 @@
 
       $(`#pajak${row}`).val(JSON.stringify(pajaks));
     }
+
+    function manage_ongkir(row, akun) {
+      const ongkirs = JSON.parse($(`#ongkir${row}`).val());
+      const ongkir = {
+        no: akun.akunno,
+        nama: akun.namaakun
+      }
+
+      ongkirs.push(ongkir);
+      $(`#ongkir${row}`).val(JSON.stringify(ongkirs));
+
+      $(`#table-ongkir${row}`).append(`
+        <tr>
+          <td>${ongkir.no}</td>
+          <td>${ongkir.nama}</td>
+          <td>
+            <input class="form-control input-ongkir float-right" type="text" style="width: 15rem;" data-row="${row}">
+          </td>
+        </tr>
+      `);
+    }
+
+    /* ======== Batas area fungsi ============= */
 
   // Saat harga diubah
     $('.harga').on('keyup', function() {
@@ -448,6 +515,64 @@
       manage_pajak(row, pajak, !isRemove);
       sum_total(row);
     });
+
+    /* =========== ONGKIR SECTION ========
+      ======================================
+    */
+
+    ajax_select({
+      id: '.select-ongkir',
+      url: "{site_url}pajak/select2_noakun"
+    });
+
+    $('.select-ongkir').on('change', function(e) {
+      const ids = $(this).val();
+      const row = $(this).data('row');
+
+      $(`#ongkir${row}`).val('[]');
+      $(`#table-ongkir${row}`).html('');
+      $(`#totalOngkir${row}`).val('0');
+      sum_total(row);
+
+      ids.map(async (id) => {
+        await $.ajax({
+          url: '{site_url}noakun/get',
+          method: 'post',
+          dataType: 'json',
+          data: {
+            id: id
+          },
+          success: function(data) {
+            manage_ongkir(row, data);
+          }
+        });
+      });
+    });
+
+    $('.table-ongkir').on('keyup', '.input-ongkir', function(e) {
+      const value = $(this).val().replace(/[^,\d]/g, '').toString();
+
+      $(this).val(formatRupiah(value));
+    });
+
+    $('.form-ongkir').on('submit', function(e) {
+      let total = 0;
+      const row = $(this).data('row');
+      e.preventDefault();
+
+      $(`.input-ongkir[data-row=${row}`).map((i, el) => {
+        const val = parseInt($(el).val().replace(/[^,\d]/g, '').toString());
+        total += val;
+      });
+
+      $(`#totalOngkir${row}`).val(total);
+      sum_total(row);
+
+      $(`#modalPilihOngkir${row}`).modal('toggle');
+    });
+
+
+    /* ========================= */
 
     var base_url    = '{site_url}requiremen/';
     var kontak      = '<?= $kontakid; ?>'
