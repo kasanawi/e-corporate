@@ -93,7 +93,7 @@
           <div class="row">
             <div class="col-md-12">
               <div class="table-responsive">
-                <table class="table table-xs table-striped table-borderless table-hover">
+                <table class="table table-xs table-striped table-borderless table-hover" id="table-detail">
                   <thead>
                     <tr class="table-active">
                       <th><?php echo lang('item') ?></th>
@@ -287,7 +287,6 @@
                         </td>
                         <td class="text-right"><?= $row['akunno']; ?></td>
                         <td class="text-right">
-                          <input type="hidden" class="totalasli" data-row="<?= $row['id'] ?>">
                           <input type="text" class="form-control total" data-row="<?= $row['id'] ?>" value="<?= number_format($row['total'],0,',','.'); ?>" readonly>
                         </td>
                       </tr>
@@ -296,7 +295,7 @@
                     <tfoot>
                       <tr class="table-active">
                         <td class="font-weight-bold text-right" colspan="8"><?php echo lang('grand_total') ?></td>
-                        <td class="font-weight-bold text-right" class="total"><?= number_format($grandtotal,0,',','.'); ?></td>
+                        <td class="font-weight-bold text-right" id="grandTotal"><?= number_format($grandtotal,0,',','.'); ?></td>
                       </tr>
                     </tfoot>
                 </table>
@@ -386,6 +385,29 @@
   </section>
 
 <script>
+  // Datatable
+  var table_detail = $('#table-detail').DataTable({
+    sort: false,
+    info: false,
+    searching: false,
+    paging: false,
+    footerCallback: function(row, data, start, end, display) {
+      var api = this.api(), data;
+
+      var intVal  = function (i) {
+        const row = $($.parseHTML(i)).data('row');
+        return parseInt($(`.total[data-row=${row}]`).val().replace(/[^,\d]/g, '').toString());
+      };
+      
+      total = api.column(8).data().reduce( function (a, b) {
+        return intVal(b) + a;
+      }, 0 );
+
+
+      $('#grandTotal').text(total);
+    }
+  });
+
   // Fungsi generate subtotal
     function sum_subtotal(row) {
       const harga = parseInt($(`.harga[data-row=${row}]`).val().replace(/[^,\d]/g, '').toString());
@@ -443,6 +465,19 @@
       
       $(`.total[data-row=${row}]`).val(formatRupiah(String(total)));
       $(`.totalasli[data-row=${row}]`).val(formatRupiah(String(total)));
+      sum_grandtotal();
+    }
+
+    function sum_grandtotal()
+    {
+      let grandTotal = 0;
+
+      $('.total').map((i, e) => {
+        const total = parseInt($(e).val().replace(/[^,\d]/g, '').toString())
+        grandTotal += total;
+      });
+
+      $('#grandTotal').text(formatRupiah(String(grandTotal)));
     }
 
     // Fungsi untuk memanage pajak
