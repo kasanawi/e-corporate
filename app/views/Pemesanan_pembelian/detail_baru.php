@@ -466,6 +466,7 @@
       $(`.total[data-row=${row}]`).val(formatRupiah(String(total)));
       $(`.totalasli[data-row=${row}]`).val(formatRupiah(String(total)));
       sum_grandtotal();
+      hitungtum();
     }
 
     function sum_grandtotal()
@@ -673,6 +674,7 @@
     function hitungtum() {
       var um      = parseInt($('#um').val().replace(/[Rp. ]/g, ''));
       var jtem    = parseInt($('.jtem').val().replace(/[Rp. ]/g, ''));
+      const grandTotal = parseInt($('#grandTotal').text().replace(/[^,\d]/g, '').toString());
       if (isNaN(jtem)) {
           jtem = 0;
       }
@@ -680,8 +682,9 @@
           um = 0;
       }
       tum = um + jtem;
-      $('.tum').val(formatRupiah(String(tum)) + ',00');
-      if (tum !== <?= $grandtotal; ?>) {
+      $('.tum').val(formatRupiah(String(tum)));
+
+      if (tum !== grandTotal) {
           $('#alertjumlah').css('display', 'block');
       } else {
           $('#alertjumlah').css('display', 'none');
@@ -722,6 +725,6 @@
         a8 = 0;
       }
       jtem  = a1 + a2 + a3 + a4 + a5 + a6 + a7 + a8;
-      $('.jtem').val(formatRupiah(String(jtem)) + ',00');
+      $('.jtem').val(formatRupiah(String(jtem)));
     }
 </script>
