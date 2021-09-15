@@ -72,7 +72,7 @@
                     <tbody>
                         <tr>
                             <td><?php echo lang('subtotal') ?></td>
-                            <td class="text-right font-weight-bold"><?= number_format($subtotal,2,',','.'); ?></td>
+                            <td class="text-right font-weight-bold"><?= number_format($subtotal,0,',','.'); ?></td>
                         </tr>
                         <tr>
                             <td><?php echo lang('discount') ?></td>
@@ -80,16 +80,17 @@
                         </tr>
                         <tr>
                             <td><?php echo lang('ppn') ?></td>
-                            <td class="text-right font-weight-bold"><?= number_format($ppn,2,',','.'); ?></td>
+                            <td class="text-right font-weight-bold"><?= number_format($ppn,0,',','.'); ?></td>
                         </tr>
                         <tr class="bg-light">
                             <td><?php echo lang('total') ?></td>
-                            <td class="text-right font-weight-bold"><?= number_format($total,2,',','.'); ?></td>
+                            <td class="text-right font-weight-bold"><?= number_format($total,0,',','.'); ?></td>
                         </tr>
                     </tbody>
                 </table>
             </div>
           </div>
+          <form id="form-detail">
           <div class="row">
             <div class="col-md-12">
               <div class="table-responsive">
@@ -112,19 +113,24 @@
                     <?php foreach ($pemesanandetail as $row): ?>
                       <?php $grandtotal = $row['total'] + $grandtotal ?>
                       <tr>
-                        <td><?php echo $row['item'] ?></td>
-                        <td class="text-right">
-                          <input type="text" name="" data-row="<?= $row['id'] ?>" class="form-control harga" value="<?= number_format($row['harga'],0,',','.'); ?>">
+                        <td>
+                          <input type="hidden" name="row[]" value="<?= $row['id'] ?>">
+                          <input type="hidden" name="item[]" value="<?= $row['itemid'] ?>">
+                          <input type="hidden" name="akunno[]" value="<?= $row['akunno'] ?>">
+                          <?php echo $row['item'] ?>
                         </td>
                         <td class="text-right">
-                          <input type="text" name="" data-row="<?= $row['id'] ?>" class="form-control jumlah" value="<?= number_format($row['jumlah']) ?>">
+                          <input type="text" name="harga[]" data-row="<?= $row['id'] ?>" class="form-control harga" value="<?= number_format($row['harga'],0,',','.'); ?>">
                         </td>
                         <td class="text-right">
-                          <input type="text" class="form-control subtotal" data-row="<?= $row['id'] ?>" value="<?= number_format($row['subtotal'],0,',','.'); ?>" readonly>
+                          <input type="text" name="jumlah[]" data-row="<?= $row['id'] ?>" class="form-control jumlah" value="<?= number_format($row['jumlah']) ?>">
+                        </td>
+                        <td class="text-right">
+                          <input type="text" class="form-control subtotal" data-row="<?= $row['id'] ?>" name="subtotal[]" value="<?= number_format($row['subtotal'],0,',','.'); ?>" readonly>
                         </td>
                         <td class="text-right">
                           <div class="input-group">
-                            <input type="number" name="" data-row="<?= $row['id'] ?>" class="form-control diskon" value="<?= number_format($row['diskon']) ?>" style="width: 5rem;">
+                            <input type="number" name="diskon[]" data-row="<?= $row['id'] ?>" class="form-control diskon" value="<?= number_format($row['diskon']) ?>" style="width: 5rem;">
                             <div class="input-group-append p-1">%</div>
                           </div>
                         </td>
@@ -132,7 +138,7 @@
                           <button type="button" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#modalPajak<?= $row['id']; ?>" title="Detail Pajak">
                               <i class="fas fa-balance-scale"></i>
                           </button>
-                          <input type="hidden" id="pajak<?= $row['id'] ?>" value="[]" data-row="<?= $row['id'] ?>">
+                          <input type="hidden" id="pajak<?= $row['id'] ?>" value="[]" data-row="<?= $row['id'] ?>" name="pajak[]">
                           <div class="modal fade" id="modalPajak<?= $row['id']; ?>">
                             <div class="modal-dialog modal-xl">
                               <div class="modal-content">
@@ -145,7 +151,7 @@
                                 <form id="form_pajak" action="javascript:total_pajak('', '${no}')" enctype="multipart/form-data" method="POST">
                                   <div class="modal-body">
                                     <div class="d-flex justify-content-start">
-                                      <button class="btn btn-sm btn-primary mb-2" data-toggle="modal" data-target="#modalPilihPajak<?= $row['id'] ?>">
+                                      <button type="button" class="btn btn-sm btn-primary mb-2" data-toggle="modal" data-target="#modalPilihPajak<?= $row['id'] ?>">
                                         <i class="fas fa-plus"></i> Pilih pajak
                                       </button>
                                     </div>
@@ -171,10 +177,10 @@
                                                     <?php 
                                                       switch ($key['pengurangan']) {
                                                         case '0':
-                                                          echo number_format($key['nominal'],2,',','.');
+                                                          echo number_format($key['nominal'],0,',','.');
                                                           break;
                                                         case '1':
-                                                          echo '-' . number_format($key['nominal'],2,',','.');
+                                                          echo '-' . number_format($key['nominal'],0,',','.');
                                                           break;
                                                         
                                                         default:
@@ -244,7 +250,7 @@
                         <td class="text-right">
                           <input type="hidden" id="ongkir<?= $row['id'] ?>" value="[]">
                           <input type="hidden" id="totalOngkir<?= $row['id'] ?>" value="0" name="ongkir[]">
-                          <button class="btn btn-sm btn-primary" data-toggle="modal" data-target="#modalPilihOngkir<?= $row['id'] ?>">
+                          <button type="button" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#modalPilihOngkir<?= $row['id'] ?>">
                             <i class="fas fa-shipping-fast"></i>
                           </button>
                           <div class="modal fade modal-pilih-ongkir" id="modalPilihOngkir<?= $row['id'] ?>">
@@ -287,7 +293,7 @@
                         </td>
                         <td class="text-right"><?= $row['akunno']; ?></td>
                         <td class="text-right">
-                          <input type="text" class="form-control total" data-row="<?= $row['id'] ?>" value="<?= number_format($row['total'],0,',','.'); ?>" readonly>
+                          <input type="text" class="form-control total" data-row="<?= $row['id'] ?>" value="<?= number_format($row['total'],0,',','.'); ?>" name="total[]" readonly>
                         </td>
                       </tr>
                     <?php endforeach ?>
@@ -302,13 +308,14 @@
               </div>
             </div>
           </div>
+          </form>
           <form action="javascript:save()" id="form">
             <div class="row mb-3">
               <div class="col-md-6">
                 <div class="form-group">
                   <label><?php echo lang('Uang Muka') ?>:</label>
                   <input type="hidden" value="<?= $this->uri->segment(3); ?>" name="idpemesanan">
-                  <input class="form-control um" name="um" id="um" onkeyup="format('um'), hitungtum()" value="<?= $angsuran['uangmuka'] !== '' ? number_format($angsuran['uangmuka'],2,',','.') : "" ; ?>">
+                  <input class="form-control um" name="um" id="um" onkeyup="format('um'), hitungtum()" value="<?= $angsuran['uangmuka'] !== '' ? number_format($angsuran['uangmuka'],0,',','.') : "" ; ?>">
                 </div>
                 <div class="row mb-3">                            
                   <div class="col-md-6">
@@ -318,15 +325,14 @@
                         <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
                         Jumlah Total dan Jumlah Uang Muka tidak sama
                       </div>
-                      <input type="hidden" name="grandtotal" readonly value="<?= $grandtotal; ?>">
                       <input type="hidden" name="id_angsuran" readonly value="<?= $angsuran['id']; ?>">
-                      <input class="form-control tum" name="tum" readonly value="<?= number_format($angsuran['total'],2,',','.'); ?>">
+                      <input class="form-control tum" name="tum" readonly value="<?= number_format($angsuran['total'],0,',','.'); ?>">
                     </div>
                   </div> 
                   <div class="col-md-3">                       
                     <div class="form-group">
                       <label><?php echo lang('Jumlah Term') ?>:</label>
-                      <input class="form-control jtem" name="jtem" readonly value="<?= $angsuran['jumlahterm'] !== '' ? number_format($angsuran['jumlahterm'],2,',','.') : "" ; ?>">
+                      <input class="form-control jtem" name="jtem" readonly value="<?= $angsuran['jumlahterm'] !== '' ? number_format($angsuran['jumlahterm'],0,',','.') : "" ; ?>">
                     </div>
                   </div>
                 </div>
@@ -338,37 +344,37 @@
               <div class="col-md-3">
                 <div class="form-group">
                   <label><?php echo lang('Term 1') ?>:</label>
-                  <input type="text" class="form-control" name="a1" placeholder="Angsuran 1" id="a1" onkeyup="format('a1'), hitungterm(), hitungtum()" value="<?= $angsuran['a1'] !== '' ? number_format($angsuran['a1'],2,',','.') : "" ; ?>">
+                  <input type="text" class="form-control" name="a1" placeholder="Angsuran 1" id="a1" onkeyup="format('a1'), hitungterm(), hitungtum()" value="<?= $angsuran['a1'] !== '' ? number_format($angsuran['a1'],0,',','.') : "" ; ?>">
                 </div>
                 <div class="form-group">
                   <label><?php echo lang('Term 2') ?>:</label>
-                  <input type="text" class="form-control" name="a2" placeholder="Angsuran 2" id="a2" onkeyup="format('a2'), hitungterm(), hitungtum()" value="<?= $angsuran['a2'] !== '' ? number_format($angsuran['a2'],2,',','.') : "" ; ?>">
+                  <input type="text" class="form-control" name="a2" placeholder="Angsuran 2" id="a2" onkeyup="format('a2'), hitungterm(), hitungtum()" value="<?= $angsuran['a2'] !== '' ? number_format($angsuran['a2'],0,',','.') : "" ; ?>">
                 </div>
                 <div class="form-group">
                   <label><?php echo lang('Term 3') ?>:</label>
-                  <input type="text" class="form-control" name="a3" placeholder="Angsuran 3" id="a3" onkeyup="format('a3'), hitungterm(), hitungtum()" value="<?= $angsuran['a3'] !== '' ? number_format($angsuran['a3'],2,',','.') : "" ; ?>">
+                  <input type="text" class="form-control" name="a3" placeholder="Angsuran 3" id="a3" onkeyup="format('a3'), hitungterm(), hitungtum()" value="<?= $angsuran['a3'] !== '' ? number_format($angsuran['a3'],0,',','.') : "" ; ?>">
                 </div>
                 <div class="form-group">
                   <label><?php echo lang('Term 4') ?>:</label>
-                  <input type="text" class="form-control" name="a4" placeholder="Angsuran 4" id="a4" onkeyup="format('a4'), hitungterm(), hitungtum()" value="<?= $angsuran['a4'] !== '' ? number_format($angsuran['a4'],2,',','.') : "" ; ?>">
+                  <input type="text" class="form-control" name="a4" placeholder="Angsuran 4" id="a4" onkeyup="format('a4'), hitungterm(), hitungtum()" value="<?= $angsuran['a4'] !== '' ? number_format($angsuran['a4'],0,',','.') : "" ; ?>">
                 </div>
               </div>
               <div class="col-md-3">
                 <div class="form-group">
                   <label><?php echo lang('Term 5') ?>:</label>
-                  <input type="text" class="form-control" name="a5" placeholder="Angsuran 5" id="a5" onkeyup="format('a5'), hitungterm(), hitungtum()" value="<?= $angsuran['a5'] !== '' ? number_format($angsuran['a5'],2,',','.') : "" ; ?>">
+                  <input type="text" class="form-control" name="a5" placeholder="Angsuran 5" id="a5" onkeyup="format('a5'), hitungterm(), hitungtum()" value="<?= $angsuran['a5'] !== '' ? number_format($angsuran['a5'],0,',','.') : "" ; ?>">
                 </div>
                 <div class="form-group">
                   <label><?php echo lang('Term 6') ?>:</label>
-                  <input type="text" class="form-control" name="a6" placeholder="Angsuran 6" id="a6" onkeyup="format('a6'), hitungterm(), hitungtum()" value="<?= $angsuran['a6'] !== '' ? number_format($angsuran['a6'],2,',','.') : "" ; ?>">
+                  <input type="text" class="form-control" name="a6" placeholder="Angsuran 6" id="a6" onkeyup="format('a6'), hitungterm(), hitungtum()" value="<?= $angsuran['a6'] !== '' ? number_format($angsuran['a6'],0,',','.') : "" ; ?>">
                 </div>
                 <div class="form-group">
                   <label><?php echo lang('Term 7') ?>:</label>
-                  <input type="text" class="form-control" name="a7" placeholder="Angsuran 7" id="a7" onkeyup="format('a7'), hitungterm(), hitungtum()" value="<?= $angsuran['a7'] !== '' ? number_format($angsuran['a7'],2,',','.') : "" ; ?>">
+                  <input type="text" class="form-control" name="a7" placeholder="Angsuran 7" id="a7" onkeyup="format('a7'), hitungterm(), hitungtum()" value="<?= $angsuran['a7'] !== '' ? number_format($angsuran['a7'],0,',','.') : "" ; ?>">
                 </div>
                 <div class="form-group">
                   <label><?php echo lang('Term 8') ?>:</label>
-                  <input type="text" class="form-control" name="a8" placeholder="Angsuran 8" id="a8" onkeyup="format('a8'), hitungterm(), hitungtum()" value="<?= $angsuran['a8'] !== '' ? number_format($angsuran['a8'],2,',','.') : "" ; ?>">
+                  <input type="text" class="form-control" name="a8" placeholder="Angsuran 8" id="a8" onkeyup="format('a8'), hitungterm(), hitungtum()" value="<?= $angsuran['a8'] !== '' ? number_format($angsuran['a8'],0,',','.') : "" ; ?>">
                 </div>
               </div>
             </div>
@@ -404,7 +410,7 @@
       }, 0 );
 
 
-      $('#grandTotal').text(total);
+      $('#grandTotal').text(formatRupiah(String(total)));
     }
   });
 
@@ -433,8 +439,9 @@
 
       $(`.table-list-pajak[data-row=${row}]`).html('');
 
-      pajaks.forEach(pajak => {
+      pajaks.forEach((pajak, index) => {
         let nominal = (total * pajak.persen) / 100;
+        pajaks[0].nominal = nominal;
         
         if(isNaN(nominal)) nominal = 0;
         totalPajak += nominal;
@@ -449,6 +456,7 @@
         `);
       });
 
+      $(`#pajak${row}`).val(JSON.stringify(pajaks));
       return totalPajak;
     } 
 
@@ -485,6 +493,8 @@
     function manage_pajak(row, pajak, isRemove) {
       const pajaks = JSON.parse($(`#pajak${row}`).val());
       const total = parseInt($(`.total[data-row=${row}]`).val().replace(/[^,\d]/g, '').toString());
+
+      pajak.nominal = total * parseInt(pajak.persen) / 100;
 
       if(isRemove) {
         const index = pajaks.findIndex(pjk => pjk.id_pajak == pajak.id_pajak);
@@ -637,15 +647,15 @@
     })
 
     function save() {
-        var form = $('#form')[0];
-        var formData = new FormData(form);
+        const form = $('#form').serialize();
+        const detail = $('#form-detail').serialize();
+        const grandTotal = $('#grandTotal').text();
+
         $.ajax({
             url: base_url + 'tambah_angsuran',
             dataType: 'json',
             method: 'post',
-            data: formData,
-            contentType: false,
-            processData: false,
+            data: `${form}&${detail}&grandtotal=${grandTotal}`,
             beforeSend: function() {
                 pageBlock();
             },
