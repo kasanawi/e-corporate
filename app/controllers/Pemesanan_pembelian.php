@@ -6,6 +6,7 @@ class Pemesanan_pembelian extends User_Controller {
 	public function __construct() {
 		parent::__construct();
 		$this->load->model('Pemesanan_pembelian_model','model');
+		$this->load->model('Pajak_model', 'mpajak');
 	}
 
 	public function index() {
@@ -48,6 +49,7 @@ class Pemesanan_pembelian extends User_Controller {
 				$data['title']				    = 'Detail Pemesanan Pembelian';
 				$data['content']			    = 'Pemesanan_pembelian/detail_baru';
 				$data['angsuran']			    = $this->model->get_angsuran($data['id']);
+				$data['pajak']					= $this->mpajak->get();
 				$data                     = array_merge($data,path_info());
 				$this->parser->parse('template',$data);
 			} else {

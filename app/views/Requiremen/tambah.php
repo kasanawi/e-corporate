@@ -27,6 +27,7 @@
               <h3 class="card-title"><?= $title; ?></h3>
             </div>
             <form id="form1" action="javascript:save()">
+                <input type="hidden" name="is_create" value="true">
               <div class="card-body">
                 <div class="row">
                   <div class="col-md-3">
@@ -34,8 +35,12 @@
                       <label><?php echo lang('notrans') ?>:</label>
                       <input type="text" class="form-control"readonly name="notrans" placeholder="AUTO">
                     </div>
+                    <div class="form-group" id="project">
+                      <label>Project :</label>
+                      <select class="form-control project" name="project"></select>
+                    </div>
                     <div class="form-group" id="rekanan">
-                      <label><?php echo lang('rekanan') ?>:</label>
+                      <label>Pelanggan:</label>
                       <select class="form-control kontakid" name="kontakid" disabled></select>
                     </div>
                   </div>
@@ -50,9 +55,9 @@
                       <label><?php echo lang('gudang') ?>:</label>
                       <select class="form-control gudangid" name="gudangid"></select>
                     </div>
-                    <div class="form-group" id="gudang">
-                      <label>Project :</label>
-                      <select class="form-control project" name="project"></select>
+                    <div class="form-group" id="totalHPP">
+                        <label>HPP Project</label>
+                        <input type="text" class="form-control" name="totalhpp" readonly>
                     </div>
                   </div>
                   <div class="col-md-3">
@@ -75,12 +80,6 @@
                         <select id="department" class="form-control department" name="dept" required></select>
                       </div>
                     </div>
-                    <div class="form-group">
-                      <label><?php echo lang('PIC') ?>:</label>
-                      <div class="input-group"> 
-                        <select id="pejabat" class="form-control pejabat" name="pejabat" required></select>
-                      </div>
-                    </div>
                   </div>
                   <div class="col-md-2">
                     <div class="form-group">
@@ -100,11 +99,10 @@
                       </select>
                     </div>
                     <div class="form-group">
-                      <label><?php echo lang('Cara Pembayaran') ?>:</label>
-                      <select class="form-control cara_pembayaran" name="cara_pembayaran" required>
-                        <option value="cash">Cash</option>
-                        <option value="credit">Credit</option>                                   
-                      </select>
+                      <label><?php echo lang('PIC') ?>:</label>
+                      <div class="input-group"> 
+                        <select id="pejabat" class="form-control pejabat" name="pejabat" required></select>
+                      </div>
                     </div>
                   </div>
                   <div class="col-md-6">
@@ -127,100 +125,24 @@
                       <tr class="table-active">
                           <th>ID</th>
                           <th><?php echo lang('item') ?></th>
-                          <th class="text-right"><?php echo lang('price') ?></th>
-                          <th class="text-right" style="width:50px;"><?php echo lang('qty') ?></th>
-                          <th class="text-right"><?php echo lang('subtotal') ?></th>
-                          <th class="text-right" style="width:50px;"><?php echo lang('discount') ?></th>
-                          <th class="text-right" style="width:50px;">Pajak</th>
-                          <th class="text-right" style="width:50px;">Biaya Pengiriman</th>
-                          <th class="text-right" style="width:50px;"><?php echo lang('no akun') ?></th>
-                          <th class="text-right"><?php echo lang('total') ?></th>
-                          <th class="text-right"><?php echo lang('sisa pagu item') ?></th>
-                          <th class="text-center" style="width:50px;"><?php echo lang('action') ?></th>
+                          <th><?php echo lang('qty') ?></th>
+                          <th><?php echo lang('no akun') ?></th>
+                          <th><?php echo lang('sisa pagu item') ?></th>
+                          <th><?php echo lang('action') ?></th>
                       </tr>
                     </thead>
                     <tbody></tbody>
-                    <tfoot class="bg-light">
-                      <tr>
-                        <th>ID</th>
-                        <th colspan="7">&nbsp;</th>
-                        <th class="text-right"><?php echo lang('total') ?></th>
-                        <th class="text-center" id="total_total">
-                        <th></th>
-                        <th></th>
-                        </th>
-                      </tr>
-                    </tfoot>
                   </table>
                 </div>
               </div>
               <div class="row mb-3">
                 <div class="col-md-6">
                   <div class="form-group">
-                    <label><?php echo lang('Uang Muka') ?>:</label>
-                    <input class="form-control um" name="um" id="um" onkeyup="format('um'), hitungtum()">
-                  </div>
-                  <div class="row mb-3">                            
-                    <div class="col-md-6">
-                      <div class="form-group">
-                        <label><?php echo lang('Total Uang Muka + Term') ?>:</label>
-                        <div class="alert alert-danger alert-dismissible" style="display:none" id="alertjumlah">
-                          <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                          Jumlah Total dan Jumlah Uang Muka tidak sama
-                        </div>
-                        <input type="hidden" name="grandtotal" readonly id="grandtotal">
-                        <input class="form-control tum" name="tum" readonly>
-                      </div>
-                    </div> 
-                    <div class="col-md-3">                       
-                      <div class="form-group">
-                        <label><?php echo lang('Jumlah Term') ?>:</label>
-                        <input class="form-control jtem" name="jtem">
-                      </div>
-                    </div>
-                  </div>  
-                  <div class="form-group">
                     <label><?php echo lang('note') ?>:</label>
                     <textarea class="form-control catatan" name="catatan" rows="6"></textarea>
                   </div>                       
                 </div>
-                <div class="col-md-3">
-                  <div class="form-group">
-                    <label><?php echo lang('Term 1') ?>:</label>
-                    <input type="text" class="form-control" name="a1" placeholder="Angsuran 1" id="a1" onkeyup="format('a1'), hitungterm(), hitungtum()">
-                  </div>
-                  <div class="form-group">
-                    <label><?php echo lang('Term 2') ?>:</label>
-                    <input type="text" class="form-control" name="a2" placeholder="Angsuran 2" id="a2" onkeyup="format('a2'), hitungterm(), hitungtum()">
-                  </div>
-                  <div class="form-group">
-                    <label><?php echo lang('Term 3') ?>:</label>
-                    <input type="text" class="form-control" name="a3" placeholder="Angsuran 3" id="a3" onkeyup="format('a3'), hitungterm(), hitungtum()">
-                  </div>
-                  <div class="form-group">
-                    <label><?php echo lang('Term 4') ?>:</label>
-                    <input type="text" class="form-control" name="a4" placeholder="Angsuran 4" id="a4" onkeyup="format('a4'), hitungterm(), hitungtum()">
-                  </div>
-                </div>
-                <div class="col-md-3">
-                  <div class="form-group">
-                    <label><?php echo lang('Term 5') ?>:</label>
-                    <input type="text" class="form-control" name="a5" placeholder="Angsuran 5" id="a5" onkeyup="format('a5'), hitungterm(), hitungtum()">
-                  </div>
-                  <div class="form-group">
-                    <label><?php echo lang('Term 6') ?>:</label>
-                    <input type="text" class="form-control" name="a6" placeholder="Angsuran 6" id="a6" onkeyup="format('a6'), hitungterm(), hitungtum()">
-                  </div>
-                  <div class="form-group">
-                    <label><?php echo lang('Term 7') ?>:</label>
-                    <input type="text" class="form-control" name="a7" placeholder="Angsuran 7" id="a7" onkeyup="format('a7'), hitungterm(), hitungtum()">
-                  </div>
-                  <div class="form-group">
-                    <label><?php echo lang('Term 8') ?>:</label>
-                    <input type="text" class="form-control" name="a8" placeholder="Angsuran 8" id="a8" onkeyup="format('a8'), hitungterm(), hitungtum()">
-                    </div>
-                  </div>
-                </div>
+              </div>
                 <input type="hidden" name="detail_array" id="detail_array">
                 <div id="detailPajak"></div>
               </div>
@@ -484,32 +406,9 @@
     columnDefs  : [
       {
         targets : [0], 
-        visible : false},
-      {
-        targets   : [2,3,4,5,6,7,8,9], 
-        className : 'text-right'
-      }
-    ],
-    footerCallback  : function ( row, data, start, end, display ) {
-      var api     = this.api(), data;
-      var intVal  = function ( i ) {
-        return typeof i === 'string' ?
-          i.replace(/[\Rp.]/g, '').replace(/,00/g)*1 :
-          typeof i === 'number' ?
-              i : 0;
-      };
-
-      total = api.column( 9 ).data().reduce( function (a, b) {
-        return intVal(a) + intVal(b); 
-      }, 0 );
-
-      $( api.column( 9 ).footer() ).html(
-        formatRupiah(String(total))+',00'
-      );
-
-      $('.subtotalhead').val( numeral(total).format() )
-      $('.totalhead').val( numeral(total).format() )
-    }
+        visible : false
+      },
+    ]
   })
 
   $(document).ready(function(){
@@ -571,16 +470,42 @@
         getListPajak();
     })
 
+    // Automate change select data when project field is changed
+    $('select[name=project]').on('change', function() {
+        const projectID = $(this).val();
+        // Request ajax to get project JSON
+        $.ajax({
+            url: `{site_url}project/getById/`,
+            method: 'post',
+            data: {
+                idProject: projectID
+            },
+            dataType: 'json',
+            success: function(data) {
+                $('select[name=gudangid]').html(`<option value="${data.gudang.id}" selected>${data.gudang.nama}</option>`);
+                $('select[name=dept]').html(`<option value="${data.departemen.id}">${data.departemen.nama}</option>`);
+                $('select[name=kontakid]').html(`<option value="${data.rekanan.id}">${data.rekanan.nama}</option>`);
+                $('input[name=totalhpp]').val(data.totalHPP);
+                $('#department').trigger('change');
+            },
+            erro: function(data) {
+                alert('Maaf, terjadi masalah dalam pengambilan data');
+            }
+        });
+    });
+
     $(document).on('change','.jenis_pembelian',function(){
         if ($(this).val() == 'jasa') {
+            $('.jenis_barang').val('barang_dan_jasa');
             $('.jenis_barang').attr("disabled", true);
             $('#rekanan').empty();
             $('#gudang').empty();
             $('#form2').attr("action", "javascript:save_detail(0, 'jasa')");
         } else if($(this).val() == 'barang') {
+            $('.jenis_barang').val('barang_dagangan');
             $('.jenis_barang').attr("disabled", false);
             $('#rekanan').html(`
-                <label><?php echo lang('rekanan') ?>:</label>
+                <label>Pelanggan:</label>
                 <select class="form-control kontakid" name="kontakid" disabled></select>
             `);
             $('#gudang').html(`
@@ -591,6 +516,7 @@
             $('#tombol_jasa').css('display', 'none');
             $('#form2').attr("action", "javascript:save_detail(0, 'barang')");
         } else {
+            $('.jenis_barang').val('barang_dan_jasa');
             $('.gudangid').attr("disabled", true);
             $('#tombol_jasa').css('display', 'block');
             $('#form2').attr("action", "javascript:save_detail(0, 'barang')");
@@ -711,20 +637,8 @@
             table_detail.row.add([
                 barang[index].value,
                 `<input type="hidden" name="item[]" id="" value="${item}">` + item,
-                `<input type="text" class="form-control" onkeyup="sum('${index}${no}', '${no}', '${jenis}');" name="harga[]" id="harga${index}${no}">`,
                 `<input type="text" class="form-control" onkeyup="sum('${index}${no}', '${no}', '${jenis}');" name="jumlah[]" id="jumlah${index}${no}">`,
-                `<input type="text" class="form-control" id="subtotal${index}${no}" readonly><input type="hidden" name="subtotal[]" id="subtotal_asli${index}${no}" readonly>`,
-                `<input type="text" class="form-control" onkeyup="sum_total('${index}${no}', '${no}', '${jenis}');" name="diskon[]" id="diskon${index}${no}">`,
-                `<input type="hidden" name="total_pajak[]" id="total_pajak${index}${no}" onchange="sum_total('${index}${no}', '${no}', '${jenis}');">
-                <button type="button" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#modal_pajak${index}${no}" title="Tambah Pajak">
-                    <i class="fas fa-balance-scale"></i>
-                </button>`,
-                `<input type="hidden" name="biayapengiriman[]" id="biaya_pengiriman${index}${no}">
-                <button type="button" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#modal_pengiriman${index}${no}" title="Tambah Biaya Pengiriman">
-                    <i class="fas fa-shipping-fast"></i>
-                </button>`,
                 `<input type="hidden" name="noAkun1[]" id="idakun${index}${no}" value="${idakun}"><input type="hidden" name="noakun[]" id="" value="${noakun}">` + noakun,
-                `<input type="text" class="form-control" name="total[]" id="total${index}${no}" readonly onchange="sum_total('${index}${no}', '${no}', '${jenis}');">`,
                 `<input type="hidden" name="sisapaguitem[]" id="sisapaguitem_lama${index}${no}" value="${sisapaguitem}"><input type="text" class="form-control" id="sisapaguitem_baru${index}${no}" value="${formatRupiah(String(sisapaguitem))+',00'}" readonly>`,
                 `<a href="javascript:void(0)" class="edit_detail" id_barang="${barang[index].value}"><i class="fas fa-pencil-alt"></i></a>&nbsp;
                 <a href="javascript:void(0)" class="delete_detail text-danger"><i class="fas fa-trash"></i></a>`

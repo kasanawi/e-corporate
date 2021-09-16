@@ -37,7 +37,7 @@
 											<th><?php echo lang('supplier') ?></th>
 											<th>Perusahaan</th>
 											<th>Departement</th>
-											<th>Nominal Total</th>
+											<th>Project</th>
 											<th><?php echo lang('warehouse') ?></th>
 											<th><?php echo lang('status') ?></th>
 											<th><?php echo lang('Action') ?></th>
@@ -82,7 +82,7 @@
 			{
 				data: 'notrans',
 				render: function(data,type,row) {
-					var link = base_url + 'detail/' + row.id;
+					var link = '{site_url}pemesanan_pembelian/detail/' + row.id;
 					return '<a href="'+link+'" class="btn btn-sm btn-info">'+data+'</a>';
 				}
 			},
@@ -90,13 +90,7 @@
 			{data: 'supplier'},
 			{data: 'nama_perusahaan'},
 			{data: 'namaDepartemen'},
-			{
-				data: 'total',
-				render: function(data,type,row) {
-					var total=`<div class="text-right">`+formatRupiah(data)+`,00</div>`;
-					return total;
-				}
-			},
+			{data: 'project'},
 			{data: 'gudang'},
 			{
 				data: 'status',

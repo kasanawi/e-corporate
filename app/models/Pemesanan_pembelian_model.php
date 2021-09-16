@@ -51,7 +51,7 @@ class Pemesanan_pembelian_model extends CI_Model {
 		$this->db->where('tpemesanandetail.idpemesanan', $idpemesanan);
 		$data	= $this->db->get('tpemesanandetail')->result_array();
 		for ($i=0; $i < count($data); $i++) { 
-			$this->db->select('mpajak.nama_pajak, mnoakun.akunno, mnoakun.namaakun, pajakPembelian.nominal, pajakPembelian.pengurangan');
+			$this->db->select('mpajak.nama_pajak, mnoakun.akunno, mnoakun.namaakun, pajakPembelian.idPajak, pajakPembelian.nominal, pajakPembelian.pengurangan');
 			$this->db->join('mpajak', 'pajakPembelian.idPajak = mpajak.id_pajak');
 			$this->db->join('mnoakun', 'mpajak.akun = mnoakun.idakun');
 			$data[$i]['pajak']	= $this->db->get_where('pajakPembelian', [

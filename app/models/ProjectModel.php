@@ -124,6 +124,10 @@ class ProjectModel extends CI_Model {
     $data['cabang'] = $this->db->get_where('mcabang', [
         'id' => $data['cabang']
     ])->row_array();
+
+    $data['gudang'] = $this->db->get_where('mgudang', [
+        'id' => $data['gudang']
+    ])->row_array();
     
     $data['departemen'] = $this->db->get_where('mdepartemen', [
         'id' => $data['departemen']

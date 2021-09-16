@@ -14,21 +14,25 @@ class Requiremen_model extends CI_Model {
 		$diskon				= 0;
 		$subtotal			= 0;
 		$biayapengiriman	= 0;
-		foreach ($this->input->post('total') as $key) {
-			$total	+= (integer) preg_replace("/(Rp. |,00|[^0-9])/", "", $key);
+
+		if(!$this->input->post('is_create')) {
+			foreach ($this->input->post('total') as $key) {
+				$total	+= (integer) preg_replace("/(Rp. |,00|[^0-9])/", "", $key);
+			}
+			foreach ($this->input->post('total_pajak') as $key) {
+				$pajak	+= (integer) preg_replace("/(Rp. |,00|[^0-9])/", "", $key);
+			}
+			foreach ($this->input->post('diskon') as $key) {
+				$diskon	+= (integer) preg_replace("/(Rp. |,00|[^0-9])/", "", $key);
+			}
+			foreach ($this->input->post('subtotal') as $key) {
+				$subtotal	+= (integer) preg_replace("/(Rp. |,00|[^0-9])/", "", $key);
+			}
+			foreach ($this->input->post('biayapengiriman') as $key) {
+				$subtotal	+= (integer) preg_replace("/(Rp. |,00|[^0-9])/", "", $key);
+			}
 		}
-		foreach ($this->input->post('total_pajak') as $key) {
-			$pajak	+= (integer) preg_replace("/(Rp. |,00|[^0-9])/", "", $key);
-		}
-		foreach ($this->input->post('diskon') as $key) {
-			$diskon	+= (integer) preg_replace("/(Rp. |,00|[^0-9])/", "", $key);
-		}
-		foreach ($this->input->post('subtotal') as $key) {
-			$subtotal	+= (integer) preg_replace("/(Rp. |,00|[^0-9])/", "", $key);
-		}
-		foreach ($this->input->post('biayapengiriman') as $key) {
-			$subtotal	+= (integer) preg_replace("/(Rp. |,00|[^0-9])/", "", $key);
-		}
+		
 		$jenis_pembelian  = $this->input->post('jenis_pembelian');
 		$jenis_barang 		= $this->input->post('jenis_barang');
 		$noakun1 			    = $this->input->post('noAkun1');
@@ -53,7 +57,8 @@ class Requiremen_model extends CI_Model {
 				'pejabat'			    => $this->input->post('pejabat'),
 				'jenis_pembelian' => $this->input->post('jenis_pembelian'),
 				'jenis_barang'		=> $this->input->post('jenis_barang'),
-				'cara_pembayaran'	=> $this->input->post('cara_pembayaran'),
+				'cara_pembayaran'	=> $this->input->post('cara_pembayaran') ?? 'cash',
+				'project'			=> $this->input->post('project'),
 				'catatan'			    => $this->input->post('catatan'),
 				'tipe'				    => '2',
 				'status'			    => '4',
@@ -110,7 +115,7 @@ class Requiremen_model extends CI_Model {
 					'subtotal'		=> $this->input->post('subtotal')[$no],
 					'total'			=> preg_replace("/(Rp. |,00|[^0-9])/", "", $this->input->post('total')[$no]),
 					'jumlahsisa'	=> $this->input->post('jumlah')[$no],
-					'biayapengiriman'	=> $this->input->post('biayapengiriman')[$no],
+					'biayapengiriman'	=> $this->input->post('biayapengiriman')[$no] ?? '0',
 				]);
 				$idPajak			= explode(',', $this->input->post('idPajak')[$no]);
 				$nominal			= explode(',', $this->input->post('pajak')[$no]);
@@ -191,25 +196,95 @@ class Requiremen_model extends CI_Model {
 	}
 
 	public function tambah_angsuran() {
-		if (preg_replace("/(Rp. |,00|[^0-9])/", "", $this->input->post('tum')) == $this->input->post('grandtotal')) {
-			$this->db->where('id', $this->input->post('id_angsuran'));
+		$id = $this->input->post('idpemesanan', true);
+		$pemesanan = $this->db->get_where('tpemesanan', [
+			'id' => $id
+		])->row_array();
+
+		if($this->input->post('tum') == $this->input->post('grandtotal')) {
+			$ongkir = array_reduce($this->input->post('ongkir'), function($curr, $val) {
+				return $curr + $this->parseInt($val);
+			}, 0);
+
+			$subtotal = array_reduce($this->input->post('subtotal'), function($curr, $val) {
+				return $curr + $this->parseInt($val);
+			}, 0);
+
+			$pemesanan = [
+				'catatan' => $this->input->post('catatan'),
+				'biayapengiriman' => $ongkir,
+				'diskon' => '0',
+				'subtotal' => $subtotal,
+				'total' => $this->parseInt($this->input->post('grandtotal')),
+				'diskon' => $this->getTotalPercentage(),
+				'status' => 6
+			];
+			
+			$this->db->update('tpemesanan', $pemesanan, ['id' => $id]);
+			$this->db->delete('tpemesanandetail', [
+				'idpemesanan' => $id
+			]);
+
+			$i = 0;
+			foreach($this->input->post('item') as $itemid) {
+				$idDetail = uniqid('PEM-DET');
+				$harga = $this->input->post('harga');
+				$jumlah = $this->input->post('jumlah');
+				$subtotal = $this->input->post('subtotal');
+				$diskon = $this->input->post('diskon');
+				$ongkir = $this->input->post('ongkir');
+				$total = $this->input->post('total');
+				$akunno = $this->input->post('akunno');
+
+				$detail = [
+					'id' => $idDetail,
+					'idpemesanan' => $id,
+					'itemid' => $itemid,
+					'harga' => $this->parseInt($harga[$i]),
+					'jumlah' => $this->parseInt($jumlah[$i]),
+					'subtotal' => $this->parseInt($subtotal[$i]),
+					'diskon' => $this->parseInt($diskon[$i]),
+					'biayapengiriman' => $this->parseInt($ongkir[$i]),
+					'total' => $this->parseInt($total[$i]),
+					'akunno' => $akunno[$i],
+					'status' => 4
+				];
+
+				$this->db->insert('tpemesanandetail', $detail);
+				$this->db->delete('pajakPembelian', [
+					'idPemesananDetail' => $this->input->post('row')[$i]
+				]);
+
+				$pajak = json_decode($this->input->post('pajak')[$i]);
+
+				foreach($pajak as $pjk) {
+					$dataPajak = [
+						'idPemesananDetail' => $idDetail,
+						'idPajak' => $pjk->id_pajak,
+						'nominal' => $this->parseInt($pjk->nominal),
+						'pengurangan' => '0'
+					];
+
+					$this->db->insert('pajakPembelian', $dataPajak);
+				}
+
+				$i++;
+			}
+
 			$this->db->update('tpemesananangsuran', [
-				'uangmuka'		=> preg_replace("/(Rp. |,00|[^0-9])/", "", $this->input->post('um')),
-				'jumlahterm'	=> preg_replace("/(Rp. |,00|[^0-9])/", "", $this->input->post('jtem')),
-				'total'			=> preg_replace("/(Rp. |,00|[^0-9])/", "", $this->input->post('tum')),
-				'a1'			=> preg_replace("/(Rp. |,00|[^0-9])/", "", $this->input->post('a1')),
-				'a2'			=> preg_replace("/(Rp. |,00|[^0-9])/", "", $this->input->post('a2')),
-				'a3'			=> preg_replace("/(Rp. |,00|[^0-9])/", "", $this->input->post('a3')),
-				'a4'			=> preg_replace("/(Rp. |,00|[^0-9])/", "", $this->input->post('a4')),
-				'a5'			=> preg_replace("/(Rp. |,00|[^0-9])/", "", $this->input->post('a5')),
-				'a6'			=> preg_replace("/(Rp. |,00|[^0-9])/", "", $this->input->post('a6')),
-				'a7'			=> preg_replace("/(Rp. |,00|[^0-9])/", "", $this->input->post('a7')),
-				'a8'			=> preg_replace("/(Rp. |,00|[^0-9])/", "", $this->input->post('a8')),
+				'uangmuka'		=> $this->parseInt($this->input->post('um')),
+				'jumlahterm'	=> $this->parseInt($this->input->post('jtem')),
+				'total'			=> $this->parseInt($this->input->post('tum')),
+				'a1'			=> $this->parseInt($this->input->post('a1')),
+				'a2'			=> $this->parseInt($this->input->post('a2')),
+				'a3'			=> $this->parseInt($this->input->post('a3')),
+				'a4'			=> $this->parseInt($this->input->post('a4')),
+				'a5'			=> $this->parseInt($this->input->post('a5')),
+				'a6'			=> $this->parseInt($this->input->post('a6')),
+				'a7'			=> $this->parseInt($this->input->post('a7')),
+				'a8'			=> $this->parseInt($this->input->post('a8')),
 			]);
-			$this->db->where('id', $this->input->post('idpemesanan'));
-			$this->db->update('tpemesanan', [
-				'status'	=> '6'
-			]);
+			
 			$data['status'] = 'success';
 			$data['message'] = lang('update_success_message');
 			return $this->output->set_content_type('application/json')->set_output(json_encode($data));
@@ -313,6 +388,38 @@ class Requiremen_model extends CI_Model {
 			'idpemesanan'	=> $id
 		])->result_array();
 		return $data;
+	}
+
+	private function parseInt($str)
+	{
+		return intval(str_replace('.', '', $str));
+	}
+
+	private function getTotalPercentage()
+	{
+		$i = 0;
+		$totalAsli = 0;
+		$total = 0;
+		$harga = $this->input->post('harga');
+		$jumlah = $this->input->post('jumlah');
+		$diskon = $this->input->post('diskon');
+
+		foreach($this->input->post('item') as $item) {
+			$sum = $this->parseInt($harga[$i]) * $this->parseInt($jumlah[$i]);
+			$totalAsli += $sum;
+
+			if($diskon[$i] != '0') {
+				$total += $sum * $this->parseInt($diskon[$i]) / 100;
+			} else {
+				$total += $sum;
+			}
+
+			$i++;
+		}
+
+		if($total == 0 && $totalAsli == 0) return 0;
+
+		return 100 - (($total / $totalAsli) * 100);
 	}
 }
 
