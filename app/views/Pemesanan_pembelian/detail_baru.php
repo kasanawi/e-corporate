@@ -138,7 +138,30 @@
                           <button type="button" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#modalPajak<?= $row['id']; ?>" title="Detail Pajak">
                               <i class="fas fa-balance-scale"></i>
                           </button>
-                          <input type="hidden" id="pajak<?= $row['id'] ?>" value="[]" data-row="<?= $row['id'] ?>" name="pajak[]">
+                          <?php
+                            $uses = [];
+
+                            foreach($pajak as $pjk) {
+                              $uses[$pjk['id_pajak']] = $pjk;
+                            }
+
+                            $pajakVal = array_map(function($pjk) use($uses) {
+                              $pajak = $uses[$pjk['idPajak']];
+                              
+                              return [
+                                'id_pajak' => $pajak['id_pajak'],
+                                'kode_pajak' => $pajak['kode_pajak'],
+                                'nama_pajak' => $pajak['nama_pajak'],
+                                'akun' => $pajak['akun'],
+                                'persen' => $pajak['persen'],
+                                'idakun' => $pajak['idakun'],
+                                'akunno' => $pajak['akunno'],
+                                'namaakun' => $pajak['namaakun'],
+                                'nominal' => $pjk['nominal']
+                              ];
+                            }, $row['pajak']);
+                          ?>
+                          <input type="hidden" id="pajak<?= $row['id'] ?>" value='<?= json_encode($pajakVal) ?>' data-row="<?= $row['id'] ?>" name="pajak[]">
                           <div class="modal fade" id="modalPajak<?= $row['id']; ?>">
                             <div class="modal-dialog modal-xl">
                               <div class="modal-content">
@@ -224,10 +247,15 @@
                                         </tr>
                                       </thead>
                                       <tbody>
-                                        <?php foreach($pajak as $pjk): ?>
+                                        <?php foreach($pajak as $pjk):
+                                          $list = array_map(function($pjk1) {
+                                            return $pjk1['idPajak'];
+                                          }, $row['pajak']);
+                                          $isExist = in_array($pjk['id_pajak'], $list);
+                                          ?>
                                           <tr>
                                             <td>
-                                              <input type="checkbox" class="check-pajak" data-row="<?= $row['id'] ?>" value='<?= json_encode($pjk) ?>'>
+                                              <input type="checkbox" class="check-pajak" data-row="<?= $row['id'] ?>" value='<?= json_encode($pjk) ?>' <?= ($isExist) ? 'checked' : '' ?>>
                                             </td>
                                             <td><?= $pjk['kode_pajak'] ?></td>
                                             <td><?= $pjk['nama_pajak'] ?></td>
