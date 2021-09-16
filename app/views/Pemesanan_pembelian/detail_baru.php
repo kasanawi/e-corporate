@@ -277,7 +277,7 @@
                         </td>
                         <td class="text-right">
                           <input type="hidden" id="ongkir<?= $row['id'] ?>" value="[]">
-                          <input type="hidden" id="totalOngkir<?= $row['id'] ?>" value="0" name="ongkir[]">
+                          <input type="hidden" id="totalOngkir<?= $row['id'] ?>" value="<?= $row['biayapengiriman'] ?>" name="ongkir[]">
                           <button type="button" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#modalPilihOngkir<?= $row['id'] ?>">
                             <i class="fas fa-shipping-fast"></i>
                           </button>
@@ -292,6 +292,9 @@
                                 </div>
                                 <form class="form-ongkir" data-row="<?= $row['id'] ?>">
                                   <div class="modal-body">
+                                    <div class="d-flex justify-content-start">
+                                      <h2>Total: <span id="totalD<?= $row['id'] ?>"><?= number_format($row['biayapengiriman'],0,',','.'); ?></span></h2>
+                                    </div>
                                     <div class="mb-3 mt-3 table-responsive">
                                       <div class="mt-3 mb-3">
                                         <select class="form-control pilih_akun select-ongkir" name="noakun" data-row="<?= $row['id'] ?>" multiple></select>
@@ -640,6 +643,7 @@
       });
 
       $(`#totalOngkir${row}`).val(total);
+      $(`#totalD${row}`).text(formatRupiah(String(total)));
       sum_total(row);
 
       $(`#modalPilihOngkir${row}`).modal('toggle');
