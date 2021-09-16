@@ -217,6 +217,8 @@ class Requiremen_model extends CI_Model {
 				'subtotal' => $subtotal,
 				'total' => $this->parseInt($this->input->post('grandtotal')),
 				'diskon' => $this->getTotalPercentage(),
+				'kontakid' => $this->input->post('kontakid'),
+				'cara_pembayaran' => $this->input->post('cara_pembayaran'),
 				'status' => 6
 			];
 			
