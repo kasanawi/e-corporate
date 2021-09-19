@@ -38,6 +38,7 @@
               <?php endif ?>
             </div>
           </div>
+          <form id="common-form">
           <div class="row">
             <div class="col-md-6">
               <table class="table">
@@ -86,10 +87,21 @@
                             <td><?php echo lang('total') ?></td>
                             <td class="text-right font-weight-bold"><?= number_format($total,0,',','.'); ?></td>
                         </tr>
+                        <tr>
+                          <td>Pembayaran</td>
+                          <td>
+                            <select name="cara_pembayaran" id="cara_pembayaran" class="form-control">
+                              <option value=""></option>
+                              <option value="cash" <?= ($cara_pembayaran == 'cash') ? 'selected' : '' ?>>Cash</option>
+                              <option value="credit" <?= ($cara_pembayaran == 'credit') ? 'selected' : '' ?>>Credit</option>
+                            </select>
+                          </td>
+                        </tr>
                     </tbody>
                 </table>
             </div>
           </div>
+          </form>
           <form id="form-detail">
           <div class="row">
             <div class="col-md-12">
@@ -357,19 +369,19 @@
                         Jumlah Total dan Jumlah Uang Muka tidak sama
                       </div>
                       <input type="hidden" name="id_angsuran" readonly value="<?= $angsuran['id']; ?>">
-                      <input class="form-control tum" name="tum" readonly value="<?= number_format($angsuran['total'],0,',','.'); ?>">
+                      <input class="form-control tum" name="tum" readonly value="<?= number_format(intval($angsuran['total']),0,',','.'); ?>">
                     </div>
                   </div> 
                   <div class="col-md-3">                       
                     <div class="form-group">
                       <label><?php echo lang('Jumlah Term') ?>:</label>
-                      <input class="form-control jtem" name="jtem" readonly value="<?= $angsuran['jumlahterm'] !== '' ? number_format($angsuran['jumlahterm'],0,',','.') : "" ; ?>">
+                      <input class="form-control jtem" name="jtem" readonly value="<?= $angsuran['jumlahterm'] !== '' ? number_format(intval($angsuran['jumlahterm']),0,',','.') : "" ; ?>">
                     </div>
                   </div>
                 </div>
                 <div class="form-group">
                   <label><?php echo lang('note') ?>:</label>
-                  <textarea class="form-control catatan" name="catatan" rows="6"></textarea>
+                  <textarea class="form-control catatan" name="catatan" rows="6"><?= $catatan ?></textarea>
                 </div>                       
               </div>
               <div class="col-md-3">
@@ -682,12 +694,13 @@
         const form = $('#form').serialize();
         const detail = $('#form-detail').serialize();
         const grandTotal = $('#grandTotal').text();
+        const common = $('#common-form').serialize();
 
         $.ajax({
             url: base_url + 'tambah_angsuran',
-            dataType: 'json',
+            // dataType: 'json',
             method: 'post',
-            data: `${form}&${detail}&grandtotal=${grandTotal}`,
+            data: `${form}&${detail}&grandtotal=${grandTotal}&${common}`,
             beforeSend: function() {
                 pageBlock();
             },
@@ -695,6 +708,7 @@
                 unpageBlock();
             },
             success: function(data) {
+              console.log(data);
                 if(data.status == 'success') {
                     swal("Berhasil!", "Berhasil Mengupdate Data", "success");
                     redirect('{site_url}pemesanan_pembelian');
