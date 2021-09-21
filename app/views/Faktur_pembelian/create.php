@@ -160,8 +160,8 @@
                                                 <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
                                                 Jumlah Total dan Jumlah Uang Muka tidak sama
                                             </div>
-                                            <input type="hidden" name="grandtotal" readonly id="grandtotal">
-                                            <input class="form-control tum" name="tum" readonly id="a2">
+                                            <input type="hidden" name="grandtotal" id="grandtotal">
+                                            <input class="form-control tum" name="tum" id="a2">
                                         </div>
                                     </div> 
                                     <div class="col-md-3">                       
