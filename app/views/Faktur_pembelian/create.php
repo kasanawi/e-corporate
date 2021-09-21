@@ -150,7 +150,7 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                         <label><?php echo lang('Uang Muka') ?>:</label>
-                                        <input class="form-control um" name="um" id="a0" onkeyup="format('um'), hitungtum()" readonly>
+                                        <input class="form-control um" name="um" id="a0" onkeyup="format('um'), hitungtum()">
                                     </div>
                                     <div class="row mb-3">                            
                                     <div class="col-md-6">
@@ -160,57 +160,57 @@
                                                 <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
                                                 Jumlah Total dan Jumlah Uang Muka tidak sama
                                             </div>
-                                            <input type="hidden" name="grandtotal" readonly id="grandtotal">
-                                            <input class="form-control tum" name="tum" readonly id="a2">
+                                            <input type="hidden" name="grandtotal" id="grandtotal">
+                                            <input class="form-control tum" name="tum" id="a2">
                                         </div>
                                     </div> 
                                     <div class="col-md-3">                       
                                         <div class="form-group">
                                             <label><?php echo lang('Jumlah Term') ?>:</label>
-                                            <input class="form-control jtem" name="jtem" id="a1" readonly>
+                                            <input class="form-control jtem" name="jtem" id="a1">
                                         </div>
                                     </div>
                                     </div>
                                     
                                     <div class="form-group">
                                         <label><?php echo lang('note') ?>:</label>
-                                        <textarea class="form-control catatan" name="catatan" rows="6" readonly></textarea>
+                                        <textarea class="form-control catatan" name="catatan" rows="6"></textarea>
                                     </div>                       
                                 </div>
                                 <div class="col-md-3">
                                     <div class="form-group">
                                         <label><?php echo lang('Term 1') ?>:</label>
-                                        <input type="text" class="form-control" name="a1" placeholder="Angsuran 1" id="a3" onkeyup="format('a3'), hitungterm(), hitungtum()" readonly>
+                                        <input type="text" class="form-control" name="a1" placeholder="Angsuran 1" id="a3" onkeyup="format('a3'), hitungterm(), hitungtum()">
                                     </div>
                                     <div class="form-group">
                                         <label><?php echo lang('Term 2') ?>:</label>
-                                        <input type="text" class="form-control" name="a2" placeholder="Angsuran 2" id="a4" onkeyup="format('a4'), hitungterm(), hitungtum()" readonly>
+                                        <input type="text" class="form-control" name="a2" placeholder="Angsuran 2" id="a4" onkeyup="format('a4'), hitungterm(), hitungtum()">
                                     </div>
                                     <div class="form-group">
                                         <label><?php echo lang('Term 3') ?>:</label>
-                                        <input type="text" class="form-control" name="a3" placeholder="Angsuran 3" id="a5" onkeyup="format('a5'), hitungterm(), hitungtum()" readonly>
+                                        <input type="text" class="form-control" name="a3" placeholder="Angsuran 3" id="a5" onkeyup="format('a5'), hitungterm(), hitungtum()">
                                     </div>
                                     <div class="form-group">
                                         <label><?php echo lang('Term 4') ?>:</label>
-                                        <input type="text" class="form-control" name="a4" placeholder="Angsuran 4" id="a6" onkeyup="format('a6'), hitungterm(), hitungtum()" readonly>
+                                        <input type="text" class="form-control" name="a4" placeholder="Angsuran 4" id="a6" onkeyup="format('a6'), hitungterm(), hitungtum()">
                                     </div>
                                 </div>
                                 <div class="col-md-3">
                                     <div class="form-group">
                                         <label><?php echo lang('Term 5') ?>:</label>
-                                        <input type="text" class="form-control" name="a5" placeholder="Angsuran 5" id="a7" onkeyup="format('a7'), hitungterm(), hitungtum()" readonly>
+                                        <input type="text" class="form-control" name="a5" placeholder="Angsuran 5" id="a7" onkeyup="format('a7'), hitungterm(), hitungtum()">
                                     </div>
                                     <div class="form-group">
                                         <label><?php echo lang('Term 6') ?>:</label>
-                                        <input type="text" class="form-control" name="a6" placeholder="Angsuran 6" id="a8" onkeyup="format('a8'), hitungterm(), hitungtum()" readonly>
+                                        <input type="text" class="form-control" name="a6" placeholder="Angsuran 6" id="a8" onkeyup="format('a8'), hitungterm(), hitungtum()">
                                     </div>
                                     <div class="form-group">
                                         <label><?php echo lang('Term 7') ?>:</label>
-                                        <input type="text" class="form-control" name="a7" placeholder="Angsuran 7" id="a9" onkeyup="format('a9'), hitungterm(), hitungtum()" readonly>
+                                        <input type="text" class="form-control" name="a7" placeholder="Angsuran 7" id="a9" onkeyup="format('a9'), hitungterm(), hitungtum()">
                                     </div>
                                     <div class="form-group">
                                         <label><?php echo lang('Term 8') ?>:</label>
-                                        <input type="text" class="form-control" name="a8" placeholder="Angsuran 8" id="a10" onkeyup="format('a10'), hitungterm(), hitungtum()" readonly>
+                                        <input type="text" class="form-control" name="a8" placeholder="Angsuran 8" id="a10" onkeyup="format('a10'), hitungterm(), hitungtum()">
                                     </div>
                                 </div>
                             </div>
