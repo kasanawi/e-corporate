@@ -80,6 +80,12 @@
                         <select id="department" class="form-control department" name="dept" required></select>
                       </div>
                     </div>
+                    <div class="form-group">
+                      <label for="">Sisa HPP</label>
+                      <div class="input-group">
+                        <input type="text" class="form-control" name="sisaHPP" readonly>
+                      </div>
+                    </div>
                   </div>
                   <div class="col-md-2">
                     <div class="form-group">
@@ -394,6 +400,22 @@
 		});
 	}
 
+  function updateSisaHpp(id, total)
+  {
+    $.ajax({
+      url: '{site_url}project/getTotalHpp',
+      method: 'post',
+      data: {
+        id: id
+      },
+      dataType: 'json',
+      success: function(data) {
+        const sisa = parseInt(data.total) - parseInt(total);
+        $('input[name=sisaHPP]').val(sisa);
+      }
+    });
+  }
+
   $.fn.dataTable.Api.register( 'hasValue()' , function(value) {
     return this .data() .toArray() .toString() .toLowerCase() .split(',') .indexOf(value.toString().toLowerCase())>-1
   })
@@ -487,6 +509,7 @@
                 $('select[name=kontakid]').html(`<option value="${data.rekanan.id}">${data.rekanan.nama}</option>`);
                 $('input[name=totalhpp]').val(data.totalHPP);
                 $('#department').trigger('change');
+                updateSisaHpp(projectID, data.totalHPP);
             },
             erro: function(data) {
                 alert('Maaf, terjadi masalah dalam pengambilan data');

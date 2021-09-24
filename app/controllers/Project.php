@@ -102,4 +102,23 @@ class Project extends User_Controller {
     $data = $this->model->get();
     $this->output->set_content_type('application/json')->set_output(json_encode($data));
   }
+
+  public function getTotalHpp()
+  {
+    $this->db->select('SUM(totalHPP) as total');
+    $this->db->from('project');
+    $result = $this->db->get()->row();
+    
+    if($result) {
+      echo json_encode([
+        'status' => 'ok',
+        'total' => $result->total
+      ]);
+    } else {
+      echo json_encode([
+        'status' => 'error'
+      ]);
+    }
+
+  }
 }
