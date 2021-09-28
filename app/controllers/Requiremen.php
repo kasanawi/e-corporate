@@ -6,6 +6,8 @@ class Requiremen extends User_Controller {
 	public function __construct() {
 		parent::__construct();
 		$this->load->model('Requiremen_model','model');
+		$this->load->model('Pemesanan_pembelian_model','pemesanan');
+		$this->load->model('Pajak_model', 'mpajak');
 	}
 
 	public function index() {
@@ -37,17 +39,17 @@ class Requiremen extends User_Controller {
 
 	public function detail($id = null) {
 		if($id) {
-			$data	= get_by_id('id',$id,'tpemesanan');
+			$data = get_by_id('id',$id,'tpemesanan');
 			if($data) {
-				$data['kontak'] 			= get_by_id('id',$data['kontakid'],'mkontak');
-				$data['gudang'] 			= get_by_id('id',$data['gudangid'],'mgudang');
-				$data['pemesanandetail'] 	= $this->model->pemesanandetail($data['id']);
-				$data['title'] 				= lang('purchase_order');
-				$data['subtitle'] 			= lang('detail');
-				$data['content'] 			= 'Requiremen/detail';
-				$data['angsuran']			= $this->Pemesanan_pembelian_model->get_angsuran($data['id']);
-				$data 						= array_merge($data,path_info());
-				$this->parser->parse('default',$data);
+				$data['kontak']				    = get_by_id('id',$data['kontakid'],'mkontak');
+				$data['gudang']				    = get_by_id('id',$data['gudangid'],'mgudang');
+				$data['pemesanandetail']	= $this->pemesanan->pemesanandetail($data['id']);
+				$data['title']				    = 'Detail Pemesanan Pembelian';
+				$data['content']			    = 'Pemesanan_pembelian/detail_baru';
+				$data['angsuran']			    = $this->pemesanan->get_angsuran($data['id']);
+				$data['pajak']					= $this->mpajak->get();
+				$data                     = array_merge($data,path_info());
+				$this->parser->parse('template',$data);
 			} else {
 				show_404();
 			}

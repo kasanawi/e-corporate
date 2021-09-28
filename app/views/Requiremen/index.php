@@ -82,7 +82,7 @@
 			{
 				data: 'notrans',
 				render: function(data,type,row) {
-					var link = '{site_url}pemesanan_pembelian/detail/' + row.id;
+					var link = base_url + 'detail/' + row.id;
 					return '<a href="'+link+'" class="btn btn-sm btn-info">'+data+'</a>';
 				}
 			},
