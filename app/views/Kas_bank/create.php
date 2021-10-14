@@ -117,8 +117,10 @@
                                                 <th><?php echo lang('Tipe') ?></th>
                                                 <th><?php echo lang('date') ?></th>
                                                 <th><?php echo lang('Nomor Aktivitas') ?></th>
+                                                <th><?php echo lang('Nominal Aktivitas') ?></th>
                                                 <th><?php echo lang('Penerimaan') ?></th>
                                                 <th><?php echo lang('Pengeluaran') ?></th>
+                                                <th><?php echo lang('Sisa Aktivitas') ?></th>
                                                 <th><?php echo lang('Nomor Akun') ?></th>
                                                 <th><?php echo lang('Kode Unit') ?></th>
                                                 <th><?php echo lang('Nama Dapartemen') ?></th>
@@ -1156,7 +1158,7 @@
             }
             for (let i = 0; i < jumlah; i++) {
               tabelpenjualan.row.add([
-                `<input type="checkbox" id="checkbox_JUAL${response[index].idfaktur}" name="" data-id="${response[index].idfaktur}" data-tipe="Penjualan" data-tgl="${response[index].tanggal}" data-kwitansi="${response[index].notrans}" data-nominal="${nominalBayar[i]}" data-namaakun="${response[index].namaakun}" data-noakun="${response[index].akunno}" data-kodeperusahaan="${response[index].kode}" data-namadepartemen="${response[index].namaDepartemen}" data-namabank="${response[index].namaRekening}" data-norekening="${response[index].norek}" onchange="save_detail(this);" idRekening="${response[index].idRekening}" idAkun="${response[index].idakun}" cara_pembayaran="${response[index].cara_pembayaran}" tabulasi="penjualan">`,
+                `<input type="checkbox" id="checkbox_JUAL${response[index].idfaktur}" name="" data-id="${response[index].idfaktur}" data-tipe="Penjualan" data-tgl="${response[index].tanggal}" data-kwitansi="${response[index].notrans}" data-totfaktur="${response[index].total}" data-nominal="${nominalBayar[i]}" data-namaakun="${response[index].namaakun}" data-noakun="${response[index].akunno}" data-kodeperusahaan="${response[index].kode}" data-namadepartemen="${response[index].namaDepartemen}" data-namabank="${response[index].namaRekening}" data-norekening="${response[index].norek}" onchange="save_detail(this);" idRekening="${response[index].idRekening}" idAkun="${response[index].idakun}" cara_pembayaran="${response[index].cara_pembayaran}" tabulasi="penjualan">`,
                 formatRupiah(String(`${nominalBayar[i]}`)) + ',00',
                 keterangan[i],
                 response[index].notrans,
@@ -1234,7 +1236,7 @@
             }
             for (let i = 0; i < jumlah; i++) {
               tabelpembelian.row.add([
-                `<input type="checkbox" id="checkbox_BELI${element.idfaktur}" name="" data-id="${element.idfaktur}" data-tipe="Pembelian" data-tgl="${element.tanggal}" data-kwitansi="${element.notrans}" data-nominal="${nominalBayar[i]}" data-namaakun="${element.namaakun}" data-noakun="${element.akunno}" data-kodeperusahaan="${element.kode}" data-namadepartemen="${element.namaDepartemen}" data-namabank="${element.namaBank}" data-norekening="${element.norek}" onchange="save_detail(this);" idRekening="${response[index].idRekening}" idAkun="${element.idakun}" cara_pembayaran="${element.cara_pembayaran}" tabulasi="pembelian">`,
+                `<input type="checkbox" id="checkbox_BELI${element.idfaktur}" name="" data-id="${element.idfaktur}" data-tipe="Pembelian" data-tgl="${element.tanggal}" data-kwitansi="${element.notrans}" data-totfaktur="${element.total}" data-nominal="${nominalBayar[i]}" data-namaakun="${element.namaakun}" data-noakun="${element.akunno}" data-kodeperusahaan="${element.kode}" data-namadepartemen="${element.namaDepartemen}" data-namabank="${element.namaBank}" data-norekening="${element.norek}" onchange="save_detail(this);" idRekening="${response[index].idRekening}" idAkun="${element.idakun}" cara_pembayaran="${element.cara_pembayaran}" tabulasi="pembelian">`,
                 formatRupiah(String(`${nominalBayar[i]}`)) + ',00',
                 keterangan[i],
                 response[index].notrans,
@@ -1571,6 +1573,15 @@
       });
     }
 
+      function hitung_sisa()
+      {
+        var pengeluaran = $("#pengeluaran").val();
+        var tot_faktur = $(".tot_faktur").attr('data-totfaktur');
+        pengeluaran = pengeluaran.replace(".", "");
+        var hasil = parseInt(tot_faktur) - parseInt(pengeluaran);
+        $("#sisa").html((hasil));
+
+      }
     //save items
   function save_detail(elem) {
       console.log(elem, 'elem')
@@ -1578,6 +1589,7 @@
     const id                = $(elem).attr('data-id');
     const tgl               = $(elem).attr('data-tgl');
     const nokwitansi        = $(elem).attr('data-kwitansi');
+    const tot_faktur        = $(elem).attr('data-totfaktur');
     const nominal           = $(elem).attr('data-nominal');
     const namaakun          = $(elem).attr('data-namaakun');
     const noakun            = $(elem).attr('data-noakun');
@@ -1634,6 +1646,7 @@
           `${tipe}`,
           `${tgl}`,
           `${nokwitansi}`,
+          formatRupiah(String(tot_faktur)) + ',00',
           formatRupiah(String(nominal)) + ',00',
           formatRupiah(String('0')) + ',00',
           `<input type="hidden" name="idakun[]" value="${idAkun}">${namaakun}/${noakun}`,
@@ -1659,13 +1672,15 @@
           `${tipe}`,
           `${tgl}`,
           `${nokwitansi}`,
-          formatRupiah(String('0')) + ',00',
-          formatRupiah(String(nominal)) + ',00',
+          "<p class='tot_faktur' data-totfaktur='"+tot_faktur+"'>"+formatRupiah(String(tot_faktur)) + ',00'+"</p>",
+          "<input type='text' value='0'>",
+          "<input type='text' value='"+nominal+"' onkeyup='hitung_sisa()' id='pengeluaran'>",
+          "<p id='sisa'>"+formatRupiah(String(tot_faktur-nominal))+"</p>",
           `<input type="hidden" name="idakun[]" value="${idAkun}">${namaakun} ${noakun}`,
           `${kodeperusahaan}`,
           `${namadepartemen}`,
           `<input type="hidden" name="idRekening[]" value="${idRekening}">${namabank} ${norekening}`,
-          `<input type="hidden" name="caraPembayaran[]" value="${cara_pembayaran}">${cara_pembayaran}`,
+          `<select name="caraPembayaran[]" id="carapembayaran"><option value="credit">Credit</option><option value="cash">Cash</option></select>`,
           `<input type="hidden" name="setupJurnal[]" value="${idSetupJurnal}">${setupJurnal}`,
         ]).draw(false);
         pengeluaran = parseInt(data[3].toString().replace(/([\.]|,00)/g, '')*1) + parseInt(nominal);
@@ -1674,6 +1689,7 @@
         var rowindex=$('#button_BELI'+id).closest('tr').index();
         table_detail.row(rowindex).remove().draw();
       }
+      $("#carapembayaran").val(cara_pembayaran).change();
     } else if ( tipe == 'Budget Event'){
       const stat  = $(elem).is(":checked");
       const table = $('#isitabel');       
@@ -1705,6 +1721,7 @@
           tipe,
           tgl,
           nokwitansi,
+          formatRupiah(String(tot_faktur)) + ',00',
           formatRupiah(String('0')) + ',00',
           formatRupiahPengajuanKasKecil(String(nominal)),
           `<input type="hidden" name="idakun[]" value="${idAkun}">${namaakun} ${noakun}`,
@@ -1730,6 +1747,7 @@
           tipe,
           tgl,
           nokwitansi,
+          formatRupiah(String(tot_faktur)) + ',00',
           formatRupiah(String(nominal)) + ',00',
           formatRupiah(String('0')) + ',00',
           `<input type="hidden" name="idakun[]" value="${idAkun}">${namaakun} ${noakun}`,
@@ -1757,6 +1775,7 @@
           `${tipe}`,
           `${tgl}`,
           `${nokwitansi}`,
+          formatRupiah(String(tot_faktur)) + ',00',
           formatRupiah(String(nominal))  + ',00',
           formatRupiah(String('0'))  + ',00',
           `<input type="hidden" name="idakun[]" value="${idAkun}">${namaakun} ${noakun}`,
@@ -1786,6 +1805,7 @@
           `${tipe}`,
           `${tgl}`,
           `${nokwitansi}`,
+          formatRupiah(String(tot_faktur)) + ',00',
           formatRupiah(String('0'))  + ',00',
           formatRupiah(String(nominal))  + ',00',
           `<input type="hidden" name="idakun[]" value="${idAkun}">${namaakun} ${noakun}`,
