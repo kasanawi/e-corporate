@@ -258,7 +258,7 @@
             url         : '{site_url}pajak/select2_noakun'
         });
         getListPajak(String(data['index']) + String(data['no']));
-        total_total[data['no']] = data['total'];
+        total_total[data['no']] = '';//data['total'];
         console.log(data['no'], data['total']);
         data['no']++;
         var no_baru = data['no'];

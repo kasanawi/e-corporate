@@ -130,7 +130,7 @@
                                                 <th>ID</th>
                                                 <th colspan="1">&nbsp;</th>
                                                 <th class="text-right"><?php //echo lang('total') ?></th>
-                                                <th class="text-center" id="total_total"><?php // "Rp. " . number_format($edit['total'],2,',','.'); ?></th>
+                                                <th class="text-center" id="total_total2"><?php // "Rp. " . number_format($edit['total'],2,',','.'); ?></th>
                                                 <th></th>
                                                 <th></th>
                                             </tr>
