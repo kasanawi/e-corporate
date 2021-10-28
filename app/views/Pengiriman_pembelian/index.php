@@ -42,6 +42,7 @@
 											<th><?php echo lang('status') ?></th>
 											<th>Setup Jurnal</th>
 											<th><?php echo lang('action') ?></th>
+                                            <th>NE</th>
 										</tr>
 									</thead>
 									<tbody></tbody>
@@ -88,7 +89,9 @@
 				data: 'notrans',
 				render: function(data,type,row) {
 					var link = base_url + 'create/' + row.id;
-					console.log(row);
+					//console.log(link);
+					//console.log(row);
+					console.info(row);
 					return '<a href="'+link+'" class="btn btn-sm btn-info">'+data+'</a>';
 				}
 			},
@@ -142,10 +145,14 @@
 						tombol_validasi	= `
 						<a class="dropdown-item" href="`+base_url+`validasi/1/`+data.id+`"><i class="fas fa-times"></i> Hapus Validasi</a>`;
 					} else {
-						tombol_validasi	= `
-						<a class="dropdown-item" href="`+base_url+`validasi/0/`+data.id+`"><i class="fas fa-check"></i> Validasi</a>
-						<a href="` + base_url + `edit/` + data.id + `" class="dropdown-item"><i class="fas fa-pencil-alt"></i> <?php echo lang('edit') ?></a>
-						`;
+						if (data.jumlah == data.jumlahditerima)
+						{
+							tombol_validasi	= `
+							<a class="dropdown-item" href="`+base_url+`validasi/0/`+data.id+`"><i class="fas fa-check"></i> Validasi</a>
+							<a href="` + base_url + `edit/` + data.id + `" class="dropdown-item"><i class="fas fa-pencil-alt"></i> <?php echo lang('edit') ?></a>
+							`;
+						}
+						else tombol_validasi	= '';
 					}
 					
 					var aksi = `
@@ -160,7 +167,8 @@
 						</div>`;
 					return aksi;
 				}
-			}
+			},
+		{data: 'gudang'}
         ],
 		"footerCallback": function ( row, data, start, end, display ) {
 			var api = this.api(), data;

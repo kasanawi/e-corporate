@@ -103,8 +103,11 @@
                                     <?php
                                         $total_barang   = 0;
                                         $no             = 0;
+										$jumlah_sisa	= 0;
+										//print_r($pengiriman['log']);
                                         foreach ($pengiriman['detail'] as $key) { 
-                                            $total_barang   += $key['jumlah']; ?>
+                                            $total_barang   += $key['jumlah']; 
+											$jumlah_sisa 	+= $key['jumlahsisa']; ?>
                                             <tr>
                                                 <input type="hidden" name="no[]" value="<?= $no; ?>">
                                                 <input class="idpemesanan" type="hidden" name="idpemesanan" value="<?= $pengiriman['idpemesanan']; ?>">
@@ -115,13 +118,20 @@
                                                 <td><?= $key['nama_barang']; ?></td>
                                                 <td><?= $key['akunno']; ?></td>
                                                 <input type="hidden" name="jumlah_sisa[]" value="<?= $key['jumlahsisa']; ?>">
-                                                <td class="text-right" width="20%"><?= $key['jumlahsisa']; ?></td>
+                                                <td class="text-right" width="20%"><?= $key['jumlah'].'/'.$key['jumlahsisa']; ?></td>
                                                 <td class="text-right" width="20%">
-                                                    <input type="number" min="0" name="jumlah[]" class="form-control jumlah text-right" value="0">
+                                                <input type="number" min="0" name="jumlah[]" class="form-control jumlah text-right" value="0" min="<?= $key['jumlahsisa']; ?>" max="<?= $key['jumlahsisa']; ?>">
                                                 </td>
                                             </tr>
                                         <?php }
                                     ?>
+                                </tbody>
+                                <tbody>
+                                <tr class="table-active">
+                                        <td colspan="3" style="text-align:center;">Total Penyerahan Sebelumnya</td>
+                                        <td id="total_diterima" class="text-right"><?= $jumlah_sisa ; ?></td>
+                                        <td id="total_penerimaan" class="text-right">0</td>
+                                    </tr>
                                 </tbody>
                                 <tfoot>
                                     <tr class="table-active">
@@ -206,6 +216,7 @@
         var formData = new FormData(form);
 
         var sum = 0;
+		//ubah pengisian tidak boleh ada 0, setiap pesanan wajib ada nilai 1
         $('#table_detail .jumlah').each(function() {
             var value = numeral($(this).val()).value();
             if(!isNaN(value) && value.length != 0) {

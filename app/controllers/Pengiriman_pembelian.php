@@ -29,9 +29,10 @@ class Pengiriman_pembelian extends User_Controller {
 
 	public function index_datatable() {
 		$this->load->library('Datatables');
-		$this->datatables->select('tPenerimaan.idPenerimaan as id, tPenerimaan.notrans, tPenerimaan.catatan, mperusahaan.nama_perusahaan, tpemesanan.departemen, tpemesanan.tanggal, tpemesanan.total as nominal_pemesanan, mkontak.nama as supplier, tPenerimaan.total as nominal_penerimaan, mgudang.nama as gudang, tPenerimaan.status, tpemesanan.notrans as nopemesanan, tpemesanan.id as idpemesanan');
+		$this->datatables->select('tPenerimaan.idPenerimaan as id, tPenerimaan.notrans, tPenerimaan.catatan, mperusahaan.nama_perusahaan, tpemesanan.departemen, tpemesanan.tanggal, tpemesanan.total as nominal_pemesanan, mkontak.nama as supplier, tPenerimaan.total as nominal_penerimaan, mgudang.nama as gudang, tPenerimaan.status, tpemesanan.notrans as nopemesanan, tpemesanan.id as idpemesanan, tpemesanandetail.jumlah as jumlah,tpemesanandetail.jumlahditerima as jumlahditerima, tpemesanandetail.jumlahsisa as jumlahsisa');
 		$this->datatables->from('tPenerimaan');
 		$this->datatables->join('tpemesanan', 'tPenerimaan.pemesanan = tpemesanan.id');
+		$this->datatables->join('tpemesanandetail', 'tPemesanan.id = tPemesanandetail.idpemesanan');
 		$this->datatables->join('mkontak','tpemesanan.kontakid = mkontak.id', 'left');
 		$this->datatables->join('mgudang','tPenerimaan.gudang = mgudang.id', 'left');
 		$this->datatables->join('mperusahaan','tpemesanan.idperusahaan = mperusahaan.idperusahaan');
@@ -48,9 +49,11 @@ class Pengiriman_pembelian extends User_Controller {
 		$this->db->select('tpemesanandetail.*, mitem.nama as nama_barang, mitem.kode');
 		$this->db->join('tanggaranbelanjadetail', 'tpemesanandetail.itemid = tanggaranbelanjadetail.id');
 		$this->db->join('mitem', 'tanggaranbelanjadetail.uraian = mitem.id');
+		
 		$data['pengiriman']['detail']	= $this->db->get_where('tpemesanandetail', [
 			'idpemesanan'	=> $data['pengiriman']['idpemesanan']
 		])->result_array();
+		$data['pengiriman']['log'] = $this->db->last_query();
 		$data = array_merge($data,path_info());
 		$this->parser->parse('template',$data);
 	}

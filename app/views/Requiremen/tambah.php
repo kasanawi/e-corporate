@@ -655,6 +655,7 @@
             noakun          = $('#noakun'+index).val();
             sisapaguitem    = $('#sisapaguitem'+index).val();
             idakun          = $('#idakun'+index).val();
+			console.log('A914' + 'jenis:' + jenis + ' kode barang:'+ barang[index].value);
             $('#noakun'+index).remove();
             $('#sisapaguitem'+index).remove();
             table_detail.row.add([
@@ -1027,7 +1028,8 @@
         total_semua();
     })
 
-    function save() {
+    function save() { //simpan103
+		console.log('save103');
         var form = $('#form1')[0];
         var formData = new FormData(form);
         detail = formData.get('detail_array');
@@ -1044,16 +1046,18 @@
             processData: false,
             beforeSend: function() {
                 pageBlock();
+				console.log('save104');
             },
             afterSend: function() {
                 unpageBlock();
             },
             success: function(data) {
                 if(data.status == 'success') {
-                    swal("Berhasil!", "Berhasil Menambah Data", "success");
+                    swal("Berhasil!", "Berhasil Menambah Data" + base_url, "success");
                     redirect(base_url);
                 } else {
-                    swal("Gagal!", "Gagal Menambah Data", "error");
+                    swal("Gagal!", "Gagal Menambah Data"+ base_url, "error");
+					console.log(data.catat);
                 }
             },
             error: function() {

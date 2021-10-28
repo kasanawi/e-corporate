@@ -43,12 +43,12 @@ class Requiremen extends User_Controller {
 			if($data) {
 				$data['kontak']				    = get_by_id('id',$data['kontakid'],'mkontak');
 				$data['gudang']				    = get_by_id('id',$data['gudangid'],'mgudang');
-				$data['pemesanandetail']	= $this->pemesanan->pemesanandetail($data['id']);
+				$data['pemesanandetail']		= $this->pemesanan->pemesanandetail($data['id']);
 				$data['title']				    = 'Detail Pemesanan Pembelian';
 				$data['content']			    = 'Pemesanan_pembelian/detail_baru';
 				$data['angsuran']			    = $this->pemesanan->get_angsuran($data['id']);
 				$data['pajak']					= $this->mpajak->get();
-				$data                     = array_merge($data,path_info());
+				$data                     		= array_merge($data,path_info());
 				$this->parser->parse('template',$data);
 			} else {
 				show_404();
@@ -112,6 +112,13 @@ class Requiremen extends User_Controller {
 
 	public function save($id_pemesanan = null) {
 		$this->model->save($id_pemesanan);
+	}
+	
+	public function ganti($id_pemesanan = null) {
+		$this->model->ganti($id_pemesanan);
+	}
+	public function ganti2($id_pemesanan = null) {
+		$this->model->ganti($id_pemesanan);
 	}
 
 	public function delete() {
@@ -218,10 +225,10 @@ class Requiremen extends User_Controller {
 			$this->output->set_content_type('application/json')->set_output(json_encode($data));
 		} else {
 			$this->db->select('mdepartemen.id as id, mdepartemen.nama as text');
-      $this->db->where('mdepartemen.id_perusahaan', $id);
-      if ($term) $this->db->like('nama', $term);
-			$data = $this->db->get('mdepartemen')->result_array();
-			$this->output->set_content_type('application/json')->set_output(json_encode($data));
+			$this->db->where('mdepartemen.id_perusahaan', $id);
+			  if ($term) $this->db->like('nama', $term);
+					$data = $this->db->get('mdepartemen')->result_array();
+					$this->output->set_content_type('application/json')->set_output(json_encode($data));
 		}
 	}
 
@@ -258,11 +265,21 @@ class Requiremen extends User_Controller {
 	{
 		$data['title']		= lang('Permintaan Pembelian');
 		$data['subtitle']	= lang('Edit');
-		$data['content']	= 'Requiremen/edit';
+		$data['content']	= 'Requiremen/edit_fix';
 		$data['edit']		  = $this->model->get($id);
 		$data				      = array_merge($data,path_info());
 		$this->parser->parse('template',$data);
-  }
+	}
+	
+	public function ubah($id)
+	{
+		$data['title']		= lang('Permintaan Pembelian');
+		$data['subtitle']	= lang('Edit');
+		$data['content']	= 'Requiremen/requirement_edit';
+		$data['edit']		  = $this->model->get($id);
+		$data				      = array_merge($data,path_info());
+		$this->parser->parse('template',$data);
+	}
 
   public function penomoranOtomatis(Type $var = null)
   {

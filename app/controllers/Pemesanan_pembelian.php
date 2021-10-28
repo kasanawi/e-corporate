@@ -45,12 +45,12 @@ class Pemesanan_pembelian extends User_Controller {
 			if($data) {
 				$data['kontak']				    = get_by_id('id',$data['kontakid'],'mkontak');
 				$data['gudang']				    = get_by_id('id',$data['gudangid'],'mgudang');
-				$data['pemesanandetail']	= $this->model->pemesanandetail($data['id']);
+				$data['pemesanandetail']		= $this->model->pemesanandetail($data['id']);
 				$data['title']				    = 'Detail Pemesanan Pembelian';
 				$data['content']			    = 'Pemesanan_pembelian/detail_baru';
 				$data['angsuran']			    = $this->model->get_angsuran($data['id']);
 				$data['pajak']					= $this->mpajak->get();
-				$data                     = array_merge($data,path_info());
+				$data                     		= array_merge($data,path_info());
 				$this->parser->parse('template',$data);
 			} else {
 				show_404();
