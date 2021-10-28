@@ -129,9 +129,10 @@ class Requiremen extends User_Controller {
 	public function select2_item($id = null) {
 		$term = $this->input->get('q');
 		if($id) {
-			$this->db->select('tanggaranbelanjadetail.id as itemid, mitem.nama as text, tanggaranbelanjadetail.koderekening, tanggaranbelanja.*');
+			$this->db->select('tanggaranbelanjadetail.id as itemid, mitem.nama as text, tanggaranbelanjadetail.koderekening, tanggaranbelanja.*, mnoakun.akunno');
 			$this->db->join('tanggaranbelanja', 'tanggaranbelanjadetail.idanggaran=tanggaranbelanja.id');
 			$this->db->join('mitem', 'tanggaranbelanjadetail.uraian = mitem.id');
+			$this->db->join('mnoakun', 'tanggaranbelanjadetail.koderekening = mnnoakun.id');
 			$this->db->from('tanggaranbelanjadetail');
 			$this->db->where('tanggaranbelanjadetail.id', $id);
 			$data = $this->db->get()->row_array();

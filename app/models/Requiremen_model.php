@@ -392,9 +392,15 @@ class Requiremen_model extends CI_Model {
 		$data			= $this->db->get_where('tpemesanan', [
 			'id'	=> $id
 		])->row_array();
+		$this->db->select('tpemesanandetail.*, mnoakun.akunno AS akundet');
+		$this->db->join('mnoakun', 'tpemesanandetail.akunno = mnoakun.idakun', 'left');
+		//$this->db->from('tpemesanandetail');
+		//$data['detail'] = $this->db->get()->result_array();
+		
 		$data['detail']	= $this->db->get_where('tpemesanandetail', [
-			'idpemesanan'	=> $id
+			'tpemesanandetail.idpemesanan'	=> $id
 		])->result_array();
+		
 		return $data;
 	}
 

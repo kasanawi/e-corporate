@@ -216,6 +216,7 @@
                 data['diskon']          = '<?= $edit['detail'][$i]['diskon']; ?>';
                 data['ppn']             = '<?= $edit['detail'][$i]['ppn']; ?>';
                 data['noakun']          = '<?= $edit['detail'][$i]['akunno']; ?>';
+				data['akundet']          = '<?= $edit['detail'][$i]['akundet']; ?>';
                 data['total']           = '<?= $edit['detail'][$i]['total']; ?>';
                 data['subtotal']        = '<?= $edit['detail'][$i]['subtotal']; ?>';
                 data['sisapaguitem_a']  = sisapaguitem;
@@ -238,7 +239,7 @@
             data['nama'] + `<input type="hidden" name="xo[]" class="form-control" id="xo${data['index']}${data['no']}" value="` + data['xo'] + `">`,           
             `<input type="text" class="form-control" onkeyup="sum('${data['index']}${data['no']}', '${data['no']}', '${data['jenis']}');" name="jumlah[]" id="jumlah${data['index']}${data['no']}" value="${data['jumlah']}">
 			`,
-            data['noakun'] + `<input type="hidden" name="noAkun1[]" class="form-control" id="noAkun1${data['index']}${data['no']}" value="` + data['noakun'] + `">
+            data['akundet'] + `<input type="hidden" name="noAkun1[]" class="form-control" id="noAkun1${data['index']}${data['no']}" value="` + data['noakun'] + `">
 			<input type="hidden" name="noAkun2[]" class="form-control" id="noAkun2[]" value="` + data['noakun'] + `">`,
             sisapaguitem_tabel +`<input type="hidden" class="form-control" name="total[]" id="total${data['index']}${data['no']}" readonly value="${formatRupiah(data['total'], 'Rp. ')+',00'}">
 			<input type="hidden" class="form-control" onkeyup="sum('${data['index']}${data['no']}', '${data['no']}', '${data['jenis']}');" name="harga[]" id="harga${data['index']}${data['no']}" value="0${formatRupiah(data['harga'], 'Rp. ')}">
