@@ -441,7 +441,7 @@
                 `<a href="javascript:void(0)" class="edit_detail" id_barang="${barang[index].value}"><i class="fas fa-pencil-alt"></i></a>&nbsp;
                 <a href="javascript:void(0)" class="delete_detail text-danger"><i class="fas fa-trash"></i></a>
 				<input type="hidden" class="form-control" onkeyup="sum('${index}${no}', '${no}', '${jenis}');" name="harga[]" id="harga${index}${no}">
-				<input type="text" class="form-control" onkeyup="sum('${index}${no}', '${no}', '${jenis}');" name="jumlah[]" id="jumlah${index}${no}">
+				<input type="hidden" class="form-control" onkeyup="sum('${index}${no}', '${no}', '${jenis}');" name="jumlah[]" id="jumlah${index}${no}">
 				 <input type="hidden" name="sub_total[]" class="form-control" id="subtotal${index}${no}" readonly>
 				 <input type="hidden" name="noAkun1[]" class="form-control" id="noAkun1${index}${no}" value="`+ idakun +`">
 				 <input type="hidden" name="subtotal[]" id="subtotal_asli${index}${no}" readonly>
