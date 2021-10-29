@@ -266,9 +266,9 @@ class Requiremen extends User_Controller {
 	{
 		$data['title']		= lang('Permintaan Pembelian');
 		$data['subtitle']	= lang('Edit');
-		$data['content']	= 'Requiremen/edit_fix';
-		$data['edit']		  = $this->model->get($id);
-		$data				      = array_merge($data,path_info());
+		$data['content']	= 'Requiremen/requirement_edit';
+		$data['edit']		= $this->model->get($id);
+		$data				= array_merge($data,path_info());
 		$this->parser->parse('template',$data);
 	}
 	
@@ -277,7 +277,7 @@ class Requiremen extends User_Controller {
 		$data['title']		= lang('Permintaan Pembelian');
 		$data['subtitle']	= lang('Edit');
 		$data['content']	= 'Requiremen/requirement_edit';
-		$data['edit']		  = $this->model->get($id);
+		$data['edit']		= $this->model->get($id);
 		$data				      = array_merge($data,path_info());
 		$this->parser->parse('template',$data);
 	}

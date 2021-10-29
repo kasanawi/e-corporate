@@ -394,9 +394,7 @@ class Requiremen_model extends CI_Model {
 		])->row_array();
 		$this->db->select('tpemesanandetail.*, mnoakun.akunno AS akundet'); 
 		$this->db->join('mnoakun', 'tpemesanandetail.akunno = mnoakun.idakun', 'left');
-		//$this->db->from('tpemesanandetail');
-		//$data['detail'] = $this->db->get()->result_array();
-		
+				
 		$data['detail']	= $this->db->get_where('tpemesanandetail', [
 			'tpemesanandetail.idpemesanan'	=> $id
 		])->result_array();
@@ -458,7 +456,7 @@ class Requiremen_model extends CI_Model {
 		$no	= 0;
 		$this->load->helper('penomoran');
 		$penomoran  = penomoran('permintaanPembelian', $this->input->post('idperusahaan'), $this->input->post('dept'));
-		//echo json_encode('Enko');
+	
 			$log ='';//ubah tpemesanan	 
 			$data = array (
 				'tanggal'			=> $this->input->post('tanggal'),
@@ -540,7 +538,7 @@ class Requiremen_model extends CI_Model {
 	
 	function ganti2($id_pemesanan)
 	{
-		//cek array yg dikirim
+		//hanya untuk cek array yg dikirim ajax
 		$no = 0;
 		$detail_array 			= $this->input->post('detail_array');
 		$detail_array 			= json_decode($detail_array);

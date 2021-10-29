@@ -246,7 +246,7 @@
 			<input type="hidden" class="form-control" id="subtotal${data['index']}${data['no']}" readonly value="${formatRupiah(data['subtotal'], 'Rp. ')+',00'}"><input type="hidden" name="subtotal[]" id="subtotal_asli${data['index']}${data['no']}" readonly value="0${data['subtotal']}">
 			<input type="hidden" name="total_pajak[]" id="total_pajak${data['index']}${data['no']}" onchange="sum_total('${data['index']}${data['no']}', '${data['no']}', '${data['jenis']}');" value="0${data['ppn']}">
 			<input type="hidden" class="form-control" id="subtotal${data['index']}${data['no']}" readonly value="0${formatRupiah(data['subtotal'], 'Rp. ')+',00'}"><input type="hidden" name="subtotal[]" id="subtotal_asli${data['index']}${data['no']}" readonly value="${data['subtotal']}"><input type="hidden" class="form-control" onkeyup="sum_total('${data['index']}${data['no']}', '${data['no']}', '${data['jenis']}');" name="diskon[]" id="diskon${data['index']}${data['no']}" value="0${data['diskon']}">`,
-            `<a href="javascript:void(0)" class="edit_detail" id_barang="${data['itemid']}"><i class="fas fa-pencil-alt"></i></a>&nbsp;
+            `<!--a href="javascript:void(0)" class="edit_detail" id_barang="${data['itemid']}"><i class="fas fa-pencil-alt"></i></a-->&nbsp;
             <a href="javascript:void(0)" class="delete_detail text-danger"><i class="fas fa-trash"></i></a>`
         ]).draw( false );
         detail_array()
@@ -710,7 +710,7 @@ $(document).on('select2:select','.pilih_akun',function(e){
             return false;
         }
         $.ajax({
-            url         : base_url + 'ganti2/<?= $edit['id']; ?>',
+            url         : base_url + 'ganti/<?= $edit['id']; ?>',
             dataType    : 'json',
             method      : 'post',
             data        : formData,
@@ -728,8 +728,8 @@ $(document).on('select2:select','.pilih_akun',function(e){
             success: function(data) {
                 if(data.status == 'success') {
                     swal("Berhasil!", "Berhasil Menambah Data", "success");
-                    //redirect(base_url);
-					console.log(base_url + 'ganti2/<?= $edit['id']; ?>');
+                    redirect(base_url);
+					console.log(base_url + 'ganti/<?= $edit['id']; ?>');
 					console.log(data.pesan);
                 } else {
                     swal("Gagal!", "Gagal Menambah Data", "error");
@@ -737,7 +737,7 @@ $(document).on('select2:select','.pilih_akun',function(e){
             },
             error: function(textStatus) {
                 swal("Gagal!", "Internal Server Error", "error"+textStatus);
-				console.log(base_url + 'ganti2/<?= $edit['id']; ?>');//console.log(textStatus);
+				console.log(base_url + 'ganti/<?= $edit['id']; ?>');//console.log(textStatus);
             }
         })
     }
