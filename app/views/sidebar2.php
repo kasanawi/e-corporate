@@ -173,12 +173,12 @@
           <li class="nav-item">
           <a href="{site_url}anggaran_belanja" class="nav-link <?php echo menu_is_active('anggaran_belanja') ?>"><i class="far fa-circle nav-icon"></i><p>Anggaran Belanja</p></a>
           </li>
-          <li class="nav-item">
+          <!--li class="nav-item">
           <a href="{site_url}validasi_anggaran_pendapatan" class="nav-link <?php echo menu_is_active('validasi_anggaran_pendapatan') ?>"><i class="far fa-circle nav-icon"></i><p><?php echo lang('validasi_anggaran_pendapatan') ?></p></a>
           </li>            
           <li class="nav-item">
           <a href="{site_url}validasi_anggaran_belanja" class="nav-link <?php echo menu_is_active('validasi_anggaran_belanja') ?>"><i class="far fa-circle nav-icon"></i><p><?php echo lang('validasi_anggaran_belanja') ?></p></a>
-          </li>    
+          </li-->    
         </ul>
       </li>	
 
