@@ -18,7 +18,7 @@
             <div class="card">
                 <div class="card-body">
                     <div class="m-3">
-                        <form action="<?= base_url(); ?>outstanding_invoice" id="form1" method="get">
+                        <form target="_blank" action="<?= base_url(); ?>outstanding_invoice" id="form1" method="get">
                             <div class="row">
                                 <div class="col-md-4">
                                     <div class="form-group">

@@ -362,19 +362,19 @@
               <ul class="nav nav-treeview" data-submenu-title="Laporan Keuangan"> 
                 <li class="nav-item">
                   <a href="{site_url}laporan_kas_bank" class="nav-link <?php echo menu_is_active('laporan_kas_bank') ?>">
-                  <i class="far fa-circle nav-icon"></i><p>laporan Kas Bank</p></a>
+                  <i class="far fa fa-puzzle-piece nav-icon"></i><p>laporan Kas Bank</p></a>
                 </li>
                 <li class="nav-item">
                   <a href="{site_url}outstanding_invoice" class="nav-link <?php echo menu_is_active('outstanding_invoice') ?>">
-                  <i class="far fa-circle nav-icon"></i><p>Outstanding Invoice Report</p></a>
+                  <i class="far fa fa-puzzle-piece nav-icon"></i><p>Outstanding Invoice Report</p></a>
                 </li>
                 <li class="nav-item">
                   <a href="{site_url}outstanding_payable" class="nav-link <?php echo menu_is_active('outstanding_payable') ?>">
-                  <i class="far fa-circle nav-icon"></i><p>Outstanding Payable Report</p></a>
+                  <i class="far fa fa-puzzle-piece nav-icon"></i><p>Outstanding Payable Report</p></a>
                 </li>
                 <li class="nav-item">
                   <a href="{site_url}project_list" class="nav-link <?php echo menu_is_active('project_list') ?>">
-                  <i class="far fa-circle nav-icon"></i><p>Project List</p></a>
+                  <i class="far fa fa-puzzle-piece nav-icon"></i><p>Project List</p></a>
                 </li>
               </ul>
             </li>                      
@@ -385,19 +385,19 @@
               <ul class="nav nav-treeview" data-submenu-title="Laporan Keuangan"> 
                 <li class="nav-item">
                   <a href="{site_url}laporan_kas_bank" class="nav-link <?php echo menu_is_active('laporan_kas_bank') ?>">
-                  <i class="far fa-circle nav-icon"></i><p>laporan Kas Bank</p></a>
+                  <i class="far fa fa-tree nav-icon"></i><p>laporan Kas Bank</p></a>
                 </li>
                 <li class="nav-item">
                   <a href="" class="nav-link <?php echo menu_is_active('') ?>">
-                  <i class="far fa-circle nav-icon"></i><p>Outstanding Invoice Report</p></a>
+                  <i class="far fa fa-tree nav-icon"></i><p>Outstanding Invoice Report</p></a>
                 </li>
                 <li class="nav-item">
                   <a href="" class="nav-link <?php echo menu_is_active('') ?>">
-                  <i class="far fa-circle nav-icon"></i><p>Outstanding Payable Report</p></a>
+                  <i class="far fa fa-tree nav-icon"></i><p>Outstanding Payable Report</p></a>
                 </li>
                 <li class="nav-item">
                   <a href="" class="nav-link <?php echo menu_is_active('') ?>">
-                  <i class="far fa-circle nav-icon"></i><p>Project List</p></a>
+                  <i class="far fa fa-tree nav-icon"></i><p>Project List</p></a>
                 </li>
               </ul>
             </li>                      

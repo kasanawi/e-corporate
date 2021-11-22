@@ -72,7 +72,7 @@ class Faktur_pembelian extends User_Controller {
 			if($data) {
 				$data['title'] = lang('invoice');
 				$data['subtitle'] = lang('edit');
-				$data['content'] = 'Faktur_pembelian/edit';
+				$data['content'] = 'Faktur_pembelian/faktur_edit';
 				$data = array_merge($data,path_info());
 				$this->parser->parse('default',$data);
 			} else {

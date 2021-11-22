@@ -45,13 +45,13 @@
                   </thead>
                   <tbody></tbody>
                   <tfoot>
-										<tr>
+										<!--tr>
 											<th colspan="6" style="text-align:right">Total:</th>
 											<th style="text-align:right"></th>
 											<th></th>
 											<th></th>
 											<th></th>
-										</tr>
+										</tr-->
 									</tfoot>
                 </table>
             </div>
@@ -174,8 +174,7 @@
 
 			// Update footer
 			$( api.column( 6 ).footer() ).html(
-			formatRupiah(String(pageTotal))+',00'
-			);
+			formatRupiah(String(pageTotal))+',00');
 		}
 	});
 
