@@ -29,7 +29,7 @@
             </div>
         </div>
         <div class="m-3">
-            <form action="{site_url}laporan_retur_pembelian/index" id="form1" method="get">
+            <form target="_blank" action="{site_url}laporan_retur_pembelian/index" id="form1" method="get">
 			<div class="row">
 				<div class="col-md-3">
 					<div class="form-group">
