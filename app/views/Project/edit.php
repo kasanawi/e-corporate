@@ -330,8 +330,7 @@
                 <div class="modal-body">
                     <div class="form-group">
                         <label>No. Akun : </label>
-                        <select class="form-control noakunHPP" name="noakunHPP" style="width: 100%;" id="noakunHPP" required></select>
-						
+                        <select class="form-control noakunHPP" name="noakunHPP" style="width: 100%;" id="noakunHPP" required></select>		
                     </div>  
                     <div class="form-group">
                         <label>Harga : </label>
@@ -403,7 +402,7 @@
             {
                 data    : 'idakun',
                 render  : function (data, type, row) {
-                    return `<input type="checkbox" onchange="save_detail('TambahPendapatan', this);" idAkun="${data}" noAkun="${row.akunno}" namaAkun="${row.namaakun}">`;
+                    return `<input name="idakun" type="checkbox" onchange="save_detail('TambahPendapatan', this);" idAkun="${data}" noAkun="${row.akunno}" namaAkun="${row.namaakun}">`;
                 }, 
                 width   : '20%'
             },
@@ -592,7 +591,7 @@
     function save_detail(tipe, elemen) {
 		alert($(elemen).toString());
 		
-        var idakun      = 1;//$(elemen).attr('idakun');
+        var idakun      = document.getElementById("noakunHPP").value;;//$(elemen).attr('idakun');
         var akunno      = 2;//$(elemen).attr('noAkun') + ' - ' + $(elemen).attr('namaAkun');
         var formNoAkun  = `<input type="hidden" name="noAkun[]" value="${idakun}">`;
 		console.log(tipe + idakun + akunno  );
