@@ -234,7 +234,7 @@
         <form action="javascript:save_detail()" id="form2">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title"><?php echo lang('add_new') ?>GC201</h5>
+                    <h5 class="modal-title"><?php echo lang('add_new') ?>  GC201</h5>
                 </div>
 
                 <div class="modal-body">
@@ -601,8 +601,8 @@
     $(document).on('change', '.kontakid', function () {
         ajax_select({ 
             id          : '.nopenerimaan', 
-            url         : '{site_url}Pengiriman_pembelian/select2/' + $('.kontakid').val()
+            url         : '{site_url}Pengiriman_pembelian/select4/' + $('.kontakid').val()
         });
-		console.log('{site_url}Pengiriman_pembelian/select2/' + $('.kontakid').val());
+		console.log('{site_url}Pengiriman_pembelian/select4/' + $('.kontakid').val());
     })
 </script>

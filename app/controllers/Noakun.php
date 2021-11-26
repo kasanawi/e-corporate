@@ -268,7 +268,9 @@ class Noakun extends User_Controller {
 
 	public function select2_hpp()
 	{
-		$data	= $this->model->select2_hpp();
+		$id = $this->input->get('q');
+		$data	= $this->model->select2_hpp($id);
+		//$data['pesan'] = $this->db->last_query();
 		$this->output->set_content_type('application/json')->set_output(json_encode($data));
 	}
 

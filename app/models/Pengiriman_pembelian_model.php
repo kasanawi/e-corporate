@@ -15,6 +15,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class Pengiriman_pembelian_model extends CI_Model {
 
 	public function save() {
+		
 		$this->db->select('total');
 		$total	= $this->db->get_where('tPenerimaan', [
 			'idPenerimaan'	=> $this->input->post('idPenerimaan')
@@ -27,6 +28,7 @@ class Pengiriman_pembelian_model extends CI_Model {
 			'tanggal'		=> $this->input->post('tanggal'),
 			'catatan'		=> $this->input->post('catatan'),
 			'tipe'			=> 1,
+			'status'			=> 2,
 			'total'			=> $total['total'],
 			'suratJalan'	=> $this->input->post('suratJalan')
 		]);
@@ -50,6 +52,11 @@ class Pengiriman_pembelian_model extends CI_Model {
 					'jumlahsisa'		=> (integer) $this->input->post('jumlah_sisa')[$i] - (integer) $this->input->post('jumlah')[$i],
 					'jumlahditerima'	=> (integer) $this->input->post('jumlah')[$i] + (integer) $jumlah_diterima['jumlahditerima']
 				]);
+				// cek input barang apakah ada sisa
+				$_sisa = $this->input->post('jumlah_sisa')[$i] - (integer) $this->input->post('jumlah')[$i];
+				$_diterima = (integer) $this->input->post('jumlah')[$i] + (integer) $jumlah_diterima['jumlahditerima'];
+				// jika ada sisa maka set status partial/diterima sebagian = 2 
+				// jika lengkap maka set status 3 siap validasi
 			}
 			$data['status'] = 'success';
 			$data['message'] = lang('save_success_message');
@@ -59,13 +66,14 @@ class Pengiriman_pembelian_model extends CI_Model {
 
 	public function cekjumlahinput() {
 		$itemid = $this->input->post('itemid', TRUE);
-		$idpemesanan = $this->input->post('idpemesanan', TRUE);
+		$idpemesanan = $this->input->post('idpemesanan', TRUE); //echo "asas";
 		if($itemid && $idpemesanan) {
-			$this->db->select('jumlahsisa');
+			$this->db->select('jumlahsisa,jumlah');
 			$this->db->where('idpemesanan', $idpemesanan);
 			$this->db->where('itemid', $itemid);
 			$row = $this->db->get('tpemesanandetail', 1)->row_array();
 			$data['jumlahsisa'] = $row['jumlahsisa'];
+			$data['pesan'] = $this->db->last_query();
 			$this->output->set_content_type('application/json')->set_output(json_encode($data));
 		}
 	}
@@ -159,9 +167,9 @@ class Pengiriman_pembelian_model extends CI_Model {
 		if ($kontak !== null) {
 			$this->db->where('mkontak.id', $kontak);
 		}
-	    echo 'ee'.$id;
+	    //echo 'ee'.$id;
 		if ($id !== null) {
-			echo "A1";
+			//echo "A1";
 			$this->db->where('tPenerimaan.idPenerimaan', $id);
 			$this->db->where('tPenerimaan.status', 1);
 			$data	= $this->db->get('tPenerimaan')->row_array();

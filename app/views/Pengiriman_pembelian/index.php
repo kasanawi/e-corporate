@@ -123,9 +123,10 @@
 			{
 				data: 'status',
 				render: function(data) {
-					if(data == '3') return '<span class="badge badge-success"><?php echo lang('done') ?></span>';
-					else if(data == '2') return '<span class="badge badge-warning"><?php echo lang('partial') ?></span>';
+					if(data == '3') return '<span class="badge badge-success"><?php echo lang('partial') ?></span>';
+					else if(data == '2') return '<span class="badge badge-warning"><?php echo lang('pending') ?></span>';
 					else if(data == '1') return '<span class="badge badge-danger"><?php echo lang('pending') ?></span>';
+					else if(data == '9') return '<span class="badge badge-primary"><?php echo lang('done') ?></span>';
 				}
 			},
 			{

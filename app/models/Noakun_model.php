@@ -151,13 +151,14 @@ class Noakun_model extends CI_Model {
 		return $this->db->get('mnoakun')->result_array();
 	}
 
-	public function select2_hpp()
+	public function select2_hpp($id='')
 	{
 		$this->db->select('mnoakun.idakun as id, concat(mnoakun.akunno, " - ", mnoakun.namaakun) as text');
-		$this->db->like('akunno', '1', 'after');
-		$this->db->or_like('akunno', '5', 'after');
-		$this->db->or_like('akunno', '6', 'after');
-		$this->db->or_like('akunno', '8', 'after');
+		//$this->db->like('akunno', '1', 'after');
+		//$this->db->or_like('akunno', '5', 'after');
+		//$this->db->or_like('akunno', '6', 'after');
+		//$this->db->or_like('akunno', '8', 'after');
+		$this->db->like('namaakun', $id);
 		return $this->db->get('mnoakun')->result_array();
 	}
 

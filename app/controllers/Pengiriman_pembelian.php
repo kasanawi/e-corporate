@@ -174,7 +174,7 @@ class Pengiriman_pembelian extends User_Controller {
 	{
 		switch ($status) {
 			case '0':
-				$this->db->set('status','3');
+				$this->db->set('status','9');
 				break;
 			case '1':
 				$this->db->set('status','1');
@@ -200,7 +200,7 @@ class Pengiriman_pembelian extends User_Controller {
 		$no		= 0;
 		foreach ($data as $key) {
 			$data0[$no]['id']	= $key['id'];
-			$data0[$no]['text']	= $key['notrans'] . ' - ' . $key['tanggal_pengiriman'] . ' -N ' . $key['supplier'] . ' - ' . number_format($key['nominal_penerimaan'],2,',','.');
+			$data0[$no]['text']	= $key['notrans'] . ' - ' . $key['tanggal_pengiriman'] . ' -A ' . $key['supplier'] . ' - ' . number_format($key['nominal_penerimaan'],2,',','.');
 			$no++;
 		}	
 		$this->output->set_content_type('application/json')->set_output(json_encode($data0));
@@ -212,13 +212,13 @@ class Pengiriman_pembelian extends User_Controller {
 		$no		= 0;
 		foreach ($data as $key) {
 			$data0[$no]['id']	= $key['id'];
-			$data0[$no]['text']	= $key['notrans'] . ' - ' . $key['tanggal_pengiriman'] . ' -N ' . $key['supplier'] . ' - ' . number_format($key['nominal_penerimaan'],2,',','.');
+			$data0[$no]['text']	= $key['notrans'] . ' - ' . $key['tanggal_pengiriman'] . ' -N- ' . $key['supplier'] . ' - ' . number_format($key['nominal_penerimaan'],2,',','.');
 			//$data0[$no]['ebax']	= $key['ebax'];
 			$no++;
 		}
-		echo "<pre>";
-		print_r($data);
-		//$this->output->set_content_type('application/json')->set_output(json_encode($data0));
+		//echo "<pre>";
+		//print_r($data);
+		$this->output->set_content_type('application/json')->set_output(json_encode($data0));
 	}
 
 	public function get_detail_item()

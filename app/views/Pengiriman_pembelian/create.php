@@ -178,6 +178,7 @@
         row.find('input.itemid').each(function() { itemid = this.value });
         row.find('input.jumlah').each(function() { jumlah = this.value });
         row.find('input.idpemesanan').each(function() { idpemesanan = this.value });
+		console.log(base_url + 'cekjumlahinput');
         $.ajax({
             url: base_url + 'cekjumlahinput',
             dataType: 'json',
@@ -192,6 +193,8 @@
                     swal("Gagal!", "Kesalahan mengisi jumlah", "error");
                     row.find('input.jumlah').val( data.jumlahsisa );
                     $('#total_penerimaan').html(data.jumlahsisa);
+					console.log(data.jumlahsisa);
+					console.log(data.pesan);
                 }
                 if(jumlah < 0) {
                     location.reload()

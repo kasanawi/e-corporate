@@ -206,7 +206,7 @@
                                         </div>
                                     </div>
                                     <div class="tab-pane fade" id="HPP" role="tabpanel" aria-labelledby="profile-tab">
-                                        <button type="button" class="btn btn-primary m-3" data-toggle="modal" data-target="#modalTambahHPP">Tambah</button>
+                                        <button type="button" class="btn btn-primary m-3" data-toggle="modal" data-target="#modalTambahHPP">Tambah  (A104)</button>
                                         <div class="table-responsive">
                                             <table class="table table-xs table-striped table-borderless table-hover" id="tabelHPP">
                                                 <thead>
@@ -322,7 +322,7 @@
         <div class="modal-content">
             <form action="javascript:save_detail('TambahHPP')">
                 <div class="modal-header">
-                    <h5 class="modal-title">Tambah HPP</h5>
+                    <h5 class="modal-title">Tambah HPP (A103)</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -331,6 +331,7 @@
                     <div class="form-group">
                         <label>No. Akun : </label>
                         <select class="form-control noakunHPP" name="noakunHPP" style="width: 100%;" id="noakunHPP" required></select>
+						
                     </div>  
                     <div class="form-group">
                         <label>Harga : </label>
@@ -363,7 +364,7 @@
         <div class="modal-content">
             <form action="javascript:save_detail('TambahHPP')">
                 <div class="modal-header">
-                    <h5 class="modal-title">Tambah HPP</h5>
+                    <h5 class="modal-title">Tambah HPP (A104)</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -444,6 +445,9 @@
             {width  : '50%', target : 0}
         ]
     });
+		$.each(tabelTambahHPP, function(index, val) {
+			console.log('CA = ' + val.category);
+		});
     var tabelPendapatan         = $('#tabelPendapatan').DataTable();
     var tabelHPP                = $('#tabelHPP').DataTable();
 
@@ -475,9 +479,15 @@
         ajax_select({ 
             id          : '.noakunHPP', 
             url         : '{site_url}noakun/select2_hpp',
+			selected    : {
+                id  : '{noakunHPP}'
+            }
         });
+		console.log('{site_url}noakun/select2_hpp');
+		
     })
 
+	
     $('.perusahaan').change(function (e) {
         perusahaan  = $('.perusahaan').val();
         $('#noEvent').val('IHT.2020.' + perusahaan + '.{noEvent}');
@@ -580,9 +590,12 @@
     }
 
     function save_detail(tipe, elemen) {
-        var idakun      = $(elemen).attr('idakun');
-        var akunno      = $(elemen).attr('noAkun') + ' - ' + $(elemen).attr('namaAkun');
+		alert($(elemen).toString());
+		
+        var idakun      = 1;//$(elemen).attr('idakun');
+        var akunno      = 2;//$(elemen).attr('noAkun') + ' - ' + $(elemen).attr('namaAkun');
         var formNoAkun  = `<input type="hidden" name="noAkun[]" value="${idakun}">`;
+		console.log(tipe + idakun + akunno  );
         switch (tipe) {
             case 'TambahHPP':
                 tabelHPP.row.add([
@@ -645,4 +658,7 @@
             }
         })
     }
+	
+	
 </script>
+
