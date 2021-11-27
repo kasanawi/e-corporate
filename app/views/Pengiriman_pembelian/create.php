@@ -95,7 +95,9 @@
                                         <th>Kode Barang</th>
                                         <th>Nama Barang</th>
                                         <th>Nomor Akun</th>
-                                        <th class="text-right"><?php echo lang('qty_residual') ?></th>
+                                        <th class="text-right">Jumlah Barang</th>
+                                        <!--th class="text-right"><?php echo lang('qty_residual') ?></th-->
+                                        <th class="text-right"><?php echo lang('qty_received').' sebelumnya' ?></th>
                                         <th class="text-right"><?php echo lang('qty_received') ?></th>
                                     </tr>
                                 </thead>
@@ -104,10 +106,12 @@
                                         $total_barang   = 0;
                                         $no             = 0;
 										$jumlah_sisa	= 0;
+										$jumlah_diterima	= 0;
 										//print_r($pengiriman['log']);
                                         foreach ($pengiriman['detail'] as $key) { 
                                             $total_barang   += $key['jumlah']; 
-											$jumlah_sisa 	+= $key['jumlahsisa']; ?>
+											$jumlah_sisa 	+= $key['jumlahsisa']; 
+											$jumlah_diterima += $key['jumlahditerima']?>
                                             <tr>
                                                 <input type="hidden" name="no[]" value="<?= $no; ?>">
                                                 <input class="idpemesanan" type="hidden" name="idpemesanan" value="<?= $pengiriman['idpemesanan']; ?>">
@@ -118,9 +122,9 @@
                                                 <td><?= $key['nama_barang']; ?></td>
                                                 <td><?= $key['akunno']; ?></td>
                                                 <input type="hidden" name="jumlah_sisa[]" value="<?= $key['jumlahsisa']; ?>">
-                                                <td class="text-right" width="20%"><?= $key['jumlah'].'/'.$key['jumlahsisa']; ?></td>
+                                                <td class="text-right" width="20%"><?= $key['jumlah']; ?></td>													<td  class="text-right"><?= $key['jumlahditerima'] ?></td>	
                                                 <td class="text-right" width="20%">
-                                                <input type="number" min="0" name="jumlah[]" class="form-control jumlah text-right" value="0" min="<?= $key['jumlahsisa']; ?>" max="<?= $key['jumlahsisa']; ?>">
+                                                <input type="number"  name="jumlah[]" class="form-control jumlah text-right" value="0" min="1" max="<?= $key['jumlahsisa']; ?>">
                                                 </td>
                                             </tr>
                                         <?php }
@@ -128,14 +132,14 @@
                                 </tbody>
                                 <tbody>
                                 <tr class="table-active">
-                                        <td colspan="3" style="text-align:center;">Total Penyerahan Sebelumnya</td>
-                                        <td id="total_diterima" class="text-right"><?= $jumlah_sisa ; ?></td>
+                                        <td colspan="4" style="text-align:center;">Total Penyerahan Sebelumnya</td>
+                                        <td id="total_diterima" class="text-right"><?= $jumlah_diterima ; ?></td>
                                         <td id="total_penerimaan" class="text-right">0</td>
                                     </tr>
                                 </tbody>
                                 <tfoot>
                                     <tr class="table-active">
-                                        <td colspan="3" style="text-align:center;">Total Barang</td>
+                                        <td colspan="4" style="text-align:center;">Total Barang</td>
                                         <td id="total_barang" class="text-right"><?= $total_barang; ?></td>
                                         <td id="total_penerimaan" class="text-right">0</td>
                                     </tr>
@@ -189,8 +193,16 @@
             },
             success: function(data) {
                 jumlah = parseInt(jumlah);
+				
                 if(jumlah > data.jumlahsisa) {
-                    swal("Gagal!", "Kesalahan mengisi jumlah", "error");
+					if(data.jumlahsisa == 0) 
+						{
+							swal("Gagal!", "Barang sudah diterima semua", "error");
+						}
+					else if(data.diterima == jumlah) 
+						swal("Gagal!", "Barang sudah diterima semua", "error");
+					else
+                    	swal("Gagal!", "Kesalahan mengisi jumlah" + jumlah  + data.jumlahsisa, "error");
                     row.find('input.jumlah').val( data.jumlahsisa );
                     $('#total_penerimaan').html(data.jumlahsisa);
 					console.log(data.jumlahsisa);
@@ -220,6 +232,7 @@
 
         var sum = 0;
 		//ubah pengisian tidak boleh ada 0, setiap pesanan wajib ada nilai 1
+		console.log('save');
         $('#table_detail .jumlah').each(function() {
             var value = numeral($(this).val()).value();
             if(!isNaN(value) && value.length != 0) {

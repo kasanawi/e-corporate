@@ -402,7 +402,7 @@
             {
                 data    : 'idakun',
                 render  : function (data, type, row) {
-                    return `<input name="idakun" type="checkbox" onchange="save_detail('TambahPendapatan', this);" idAkun="${data}" noAkun="${row.akunno}" namaAkun="${row.namaakun}">`;
+                    return `<input id="idakun" name="idakun" type="checkbox" onchange="save_detail('TambahPendapatan', this);" idAkun="${data}" noAkun="${row.akunno}" namaAkun="${row.namaakun}">`;
                 }, 
                 width   : '20%'
             },
@@ -589,12 +589,12 @@
     }
 
     function save_detail(tipe, elemen) {
-		alert($(elemen).toString());
-		
-        var idakun      = document.getElementById("noakunHPP").value;;//$(elemen).attr('idakun');
-        var akunno      = 2;//$(elemen).attr('noAkun') + ' - ' + $(elemen).attr('namaAkun');
-        var formNoAkun  = `<input type="hidden" name="noAkun[]" value="${idakun}">`;
+		//alert($(elemen).toString());
+		var idakun      = document.getElementById("noakunHPP").value;;//$(elemen).attr('idakun');
+        var akunno      = document.getElementById("noakunHPP").value;;//$(elemen).attr('noAkun') + ' - ' + $(elemen).attr('namaAkun');
 		console.log(tipe + idakun + akunno  );
+        var formNoAkun  = `<input type="hidden" name="noAkun[]" value="${idakun}">`;
+		console.log(formNoAkun );
         switch (tipe) {
             case 'TambahHPP':
                 tabelHPP.row.add([

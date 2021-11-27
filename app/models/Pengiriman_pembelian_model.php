@@ -68,11 +68,12 @@ class Pengiriman_pembelian_model extends CI_Model {
 		$itemid = $this->input->post('itemid', TRUE);
 		$idpemesanan = $this->input->post('idpemesanan', TRUE); //echo "asas";
 		if($itemid && $idpemesanan) {
-			$this->db->select('jumlahsisa,jumlah');
+			$this->db->select('jumlahsisa,jumlah,jumlahditerima');
 			$this->db->where('idpemesanan', $idpemesanan);
 			$this->db->where('itemid', $itemid);
 			$row = $this->db->get('tpemesanandetail', 1)->row_array();
 			$data['jumlahsisa'] = $row['jumlahsisa'];
+			$data['jumlahditerima'] = $row['jumlahditerima'];
 			$data['pesan'] = $this->db->last_query();
 			$this->output->set_content_type('application/json')->set_output(json_encode($data));
 		}
