@@ -68,7 +68,8 @@
     </section>
 </div>
 <script type="text/javascript">
-	var base_url = '{site_url}pengiriman_pembelian/';
+	
+	var base_url = '{site_url}pengiriman_pembelian/';console.log(base_url + 'index_datatable');
 	var table = $('.index_datatable').DataTable({
 		ajax: {
 			url: base_url + 'index_datatable',

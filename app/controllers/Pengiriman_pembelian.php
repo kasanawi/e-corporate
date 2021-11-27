@@ -31,7 +31,7 @@ class Pengiriman_pembelian extends User_Controller {
 		$this->load->library('Datatables');
 		$this->datatables->select('tPenerimaan.idPenerimaan as id, tPenerimaan.notrans, tPenerimaan.catatan, mperusahaan.nama_perusahaan, tpemesanan.departemen, tpemesanan.tanggal, tpemesanan.total as nominal_pemesanan, mkontak.nama as supplier, tPenerimaan.total as nominal_penerimaan, mgudang.nama as gudang, tPenerimaan.status, tpemesanan.notrans as nopemesanan, tpemesanan.id as idpemesanan, tpemesanandetail.jumlah as jumlah,tpemesanandetail.jumlahditerima as jumlahditerima, tpemesanandetail.jumlahsisa as jumlahsisa');
 		$this->datatables->from('tPenerimaan');
-		$this->datatables->join('tpemesanan', 'tpenerimaan.pemesanan = tpemesanan.id','left');
+		$this->datatables->join('tpemesanan', 'tPenerimaan.pemesanan = tpemesanan.id','left');
 		$this->datatables->join('tpemesanandetail', 'tpemesanan.id = tpemesanandetail.idpemesanan','left');
 		$this->datatables->join('mkontak','tpemesanan.kontakid = mkontak.id', 'left');
 		$this->datatables->join('mgudang','tPenerimaan.gudang = mgudang.id', 'left');
@@ -98,7 +98,7 @@ class Pengiriman_pembelian extends User_Controller {
 
 	public function edit($id = null) {
 		if($id) {
-			$data = get_by_id('id',$id,'tpengiriman');
+			$data = get_by_id('id',$id,'tPenerimaan');
 			if($data) {
 				$data['title'] = lang('goods_receipt');
 				$data['subtitle'] = lang('edit');

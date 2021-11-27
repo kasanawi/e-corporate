@@ -206,7 +206,7 @@
                                         </div>
                                     </div>
                                     <div class="tab-pane fade" id="HPP" role="tabpanel" aria-labelledby="profile-tab">
-                                        <button type="button" class="btn btn-primary m-3" data-toggle="modal" data-target="#modalTambahHPP">Tambah  (A104)</button>
+                                        <button tag="A104" type="button" class="btn btn-primary m-3" data-toggle="modal" data-target="#modalTambahHPP">Tambah Akun</button>
                                         <div class="table-responsive">
                                             <table class="table table-xs table-striped table-borderless table-hover" id="tabelHPP">
                                                 <thead>
@@ -322,7 +322,7 @@
         <div class="modal-content">
             <form action="javascript:save_detail('TambahHPP')">
                 <div class="modal-header">
-                    <h5 class="modal-title">Tambah HPP (A103)</h5>
+                    <h5 class="modal-title">Tambah HPP </h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -363,7 +363,7 @@
         <div class="modal-content">
             <form action="javascript:save_detail('TambahHPP')">
                 <div class="modal-header">
-                    <h5 class="modal-title">Tambah HPP (A104)</h5>
+                    <h5 class="modal-title">Tambah Akun HPP </h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>

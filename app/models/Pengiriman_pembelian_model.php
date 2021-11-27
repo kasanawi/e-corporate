@@ -24,7 +24,7 @@ class Pengiriman_pembelian_model extends CI_Model {
 			$total['total']	+= (integer) $this->input->post('jumlah')[$i] * (integer) $this->input->post('harga')[$i];
 		}
 		$this->db->where('idPenerimaan', $this->input->post('idPenerimaan'));
-		$insertHead = $this->db->update('tPenerimaan', [
+		$insertHead = $this->db->replace('tPenerimaan', [
 			'tanggal'		=> $this->input->post('tanggal'),
 			'catatan'		=> $this->input->post('catatan'),
 			'tipe'			=> 1,

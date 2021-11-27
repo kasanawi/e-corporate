@@ -14,7 +14,7 @@ function get_by_id($key, $val, $tbl)
 {
     $CI = &get_instance();
     $CI->db->where($key, $val);
-    $query = $CI->db->get($tbl);
+    $query = $CI->db->get($tbl);//echo $CI->db->last_query();
     return $query->row_array();
 }
 
