@@ -65,6 +65,10 @@
                     <td><?php echo lang('note') ?></td>
                     <td class="font-weight-bold">{catatan}</td>
                   </tr>
+                   <tr>
+                    <td>Cabang</td>
+                    <td class="font-weight-bold"><?php echo $cabang['nama'] ?></td>
+                  </tr>
                 </tbody>
               </table>
             </div>

@@ -84,6 +84,7 @@ function formatnumberakunting($number)
 
 function lang($kode)
 {
+	//echo $kode;
     $ci = &get_instance();
     $ci->db->select('mbahasadetail.kode, mbahasadetail.deskripsi');
     $ci->db->where('mbahasadetail.kode', $kode);

@@ -1,59 +1,240 @@
-<div class="page-header page-header-light">
-    <div class="page-header-content header-elements-md-inline">
-        <div class="page-title d-flex">
-            <h4><i class="icon-info22 mr-2"></i> <span class="font-weight-semibold">{title}</span></h4>
-            <a href="#" class="header-elements-toggle text-default d-md-none"><i class="icon-more"></i></a>
-        </div>
-    </div>
-</div>
-<div class="content">
-    <div class="card">
-        <div class="card-header {bg_header}">
-            <div class="header-elements-inline">
-                <h5 class="card-title">{subtitle}</h5>
-            </div>
-        </div>
-        <div class="card-body">
-            <div class="row">
-                <div class="col-md-6">
-                    <form action="javascript:save()" id="form1">
-                        <div class="form-group">
-                            <label><?php echo lang('name') ?>:</label>
-                            <input type="text" class="form-control" name="nama" required value="{nama}">
-                        </div>
-                        <div class="form-group">
-                            <label><?php echo lang('select') ?>:</label>
-                            <select class="form-control selectid" name="selectid" required></select>
-                        </div>
-                        <div class="text-right">
-                            <a href="{site_url}pengiriman_pembelian" class="btn bg-danger"><?php echo lang('cancel') ?></a>
-                            <button type="submit" class="btn bg-success"><?php echo lang('save') ?></button>
-                        </div>
-                    </form>
+
+<!-- Content Wrapper. Contains page content -->
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1>{title}</h1>
+                </div>
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="{base_url}">Home</a></li>
+                        <li class="breadcrumb-item"><a href="{base_url}pengiriman_barang">{title}</a></li>
+                        <li class="breadcrumb-item active">{subtitle}</li>
+                    </ol>
                 </div>
             </div>
+        </div><!-- /.container-fluid -->
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+        <div class="container-fluid">
+            <!-- SELECT2 EXAMPLE -->
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">{subtitle} {title}</h3>
+                </div>
+                <!-- /.card-header -->
+                <div class="card-body">
+                    <form method="post" action="javascript:save_edit()" id="form1" enctype="multipart/form-data">
+                     <!--form method="post" action="<?= base_url().'pengiriman_pembelian/save_edit' ?>" id="form1" enctype="multipart/form-data"-->
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label><?php echo lang('date') ?>:</label>
+                                    <div class="input-group"> 
+                                        <input type="hidden" name="idPenerimaan" value="<?= $this->uri->segment(3); ?>">
+                                        <input type="date" class="form-control" name="tanggal" required value="<?= $pengiriman['tanggal']; ?>">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label>No. Pemesanan :</label>
+                                            <input type="text" class="form-control" id="nopemesanan" disabled value="<?= $pengiriman['nopemesanan']; ?>">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label>No. Pengiriman :</label>
+                                            <input type="text" class="form-control" id="nopengiriman" disabled value="<?= $pengiriman['notrans']; ?>">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label><?php echo lang('supplier') ?>:</label>
+                                    <input type="text" class="form-control" id="kontakid" disabled value="<?= $pengiriman['supplier']; ?>">
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label><?php echo lang('warehouse') ?>:</label>
+                                    <input type="text" class="form-control" id="gudangid" disabled value="<?= $pengiriman['gudang']; ?>">
+                                </div>
+                            </div>
+
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>Setup Jurnal : </label>
+                                    <input type="text" class="form-control" name="setupJurnal" value=" <?= $pengiriman['setupJurnal']; ?> "> 
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>Surat Jalan : </label>
+                                    <input type="text" class="form-control" name="suratJalan" value="<?= $pengiriman['suratJalan']; ?>">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label><?php echo lang('note') ?>:</label>
+                                    <textarea class="form-control catatan" name="catatan" rows="6"><?= $pengiriman['catatan']; ?></textarea>
+                                </div>
+                            </div>
+                             <div class="col-md-3">
+                                <div class="form-group">
+                                    <!--a href="{site_url}pemesanan_pembelian" class="btn bg-danger">Reset Jumlah Penerimaan</a--></div>
+                            </div>
+                        </div>
+                        <div class="mb-3 mt-3 table-responsive">
+                            <table class="table table-xs table-striped table-borderless table-hover" id="table_detail">
+                                <thead>
+                                    <tr class="table-active">
+                                        <th>Kode Barang</th>
+                                        <th>Nama Barang</th>
+                                        <th>Nomor Akun</th>
+                                        <th class="text-right">Jumlah Barang</th>
+                                        <!--th class="text-right"><?php echo lang('qty_residual') ?></th-->
+                                        <th class="text-right"><?php echo lang('qty_residual').' ' ?></th>
+                                        <th class="text-right"><?php echo lang('qty_received') ?></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php
+                                        $total_barang   = 0;
+                                        $no             = 0;
+										$jumlah_sisa	= 0;
+										$jumlah_diterima	= 0;
+										//print_r($pengiriman['log']);
+                                        foreach ($pengiriman['detail'] as $key) { 
+                                            $total_barang   += $key['jumlah']; 
+											$jumlah_sisa 	+= $key['jumlahsisa']; 
+											$jumlah_diterima += $key['jumlahditerima']?>
+                                            <tr>
+                                                <input type="hidden" name="no[]" value="<?= $no; ?>">
+                                                <input class="idpemesanan" type="hidden" name="idpemesanan" value="<?= $pengiriman['idpemesanan']; ?>">
+                                                <input type="hidden" name="pemdet[]" value="<?= $key['id']; ?>">
+                                                <input class="itemid" type="hidden" name="itemid[]" value="<?= $key['itemid']; ?>">
+                                                <input type="hidden" name="harga[]" value="<?= $key['harga']; ?>">
+                                                <td><?= $key['kode']; ?></td>
+                                                <td><?= $key['nama_barang']; ?></td>
+                                                <td><?= $key['akunno']; ?></td>
+                                                <input type="hidden" name="jumlah_sisabl[]" value="<?= $key['jumlahsisa']; ?>">
+                                                <td class="text-right" width="20%"><?= $key['jumlah']; ?></td>													<td  class="text-right">
+                                                <input type="number"  name="jumlah_sisa[]" class="form-control jumlah text-right" value="<?= $key['jumlahsisa']; ?>" ></td>	
+                                                <td class="text-right" width="20%">
+                                                <input type="number"  name="jumlah[]" class="form-control jumlah text-right" value="<?= $key['jumlahditerima'] ?>" >
+                                                </td>
+                                            </tr>
+                                        <?php }
+                                    ?>
+                                </tbody>
+                                <tbody>
+                                <tr class="table-active">
+                                        <td colspan="4" style="text-align:center;">Total Penyerahan Sebelumnya</td>
+                                        <td id="total_diterima" class="text-right"><?= $jumlah_diterima ; ?></td>
+                                        <td id="total_penerimaan" class="text-right"></td>
+                                    </tr>
+                                </tbody>
+                                <tfoot>
+                                    <tr class="table-active">
+                                        <td colspan="4" style="text-align:center;">Total Barang</td>
+                                        <td id="total_barang" class="text-right"><?= $total_barang; ?></td>
+                                        <td id="total_penerimaan" class="text-right"></td>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+                <div class="card-footer">
+                        <div class="text-left">
+                            <div class="btn-group">
+                                <a href="{site_url}pemesanan_pembelian" class="btn bg-danger"><?php echo lang('cancel') ?></a>
+                                <button type="submit" class="btn bg-success"><?php echo lang('save') ?></button>
+                            </div>
+                        </div>
+                    </form>     
+                </div>
+                    <!-- /.col -->
+            </div>
+                    <!-- /.row -->
         </div>
+            <!-- /.card-body -->
     </div>
 </div>
-<script src="{assets_path}global/js/plugins/notifications/pnotify.min.js"></script>
-<script src="{assets_path}global/js/plugins/forms/selects/select2.full.min.js"></script>
+
 <script type="text/javascript">
     var base_url = '{site_url}pengiriman_pembelian/';
+
     $(document).ready(function(){
-    	ajax_select({ id: '.idhakakses', url: base_url + 'select2_mpegawaihakakses', selected: { id: null } });
-        $('.jenkel').select2({
-            placeholder: 'Select an Option',
-            data: [
-                {id: 'LAKI-LAKI', text: 'LAKI-LAKI'},
-                {id: 'PEREMPUAN', text: 'PEREMPUAN'},
-            ]
-        }).val(null).trigger('change');
-    })    
-    function save() {
-        var form = $('#form1')[0];
-        var formData = new FormData(form);
+        ajax_select({ 
+            id: '#idpemesanan', 
+            url: base_url + 'select2_pemesanan'
+        });
+    })
+
+    $('#table_detail').on('change','.jumlah',function(){
+        var itemid      = null;
+        var jumlah      = null;
+        var idpemesanan = null;
+        var row = $(this).closest('tr');
+        row.find('input.itemid').each(function() { itemid = this.value });
+        row.find('input.jumlah').each(function() { jumlah = this.value });
+        row.find('input.idpemesanan').each(function() { idpemesanan = this.value });
+		console.log(base_url + 'cekjumlahinput');
         $.ajax({
-            url: base_url + 'save/{id}',
+            url: base_url + 'cekjumlahinput',
+            dataType: 'json',
+            method: 'post',
+            data: { 
+                itemid      : itemid,
+                idpemesanan : idpemesanan
+            },
+            success: function(data) {
+                jumlah = parseInt(jumlah);
+                hitungPenerimaan();
+            }
+        })
+    })
+
+    function hitungPenerimaan() {
+        formData            = new FormData($('#form1')[0]);
+        total_penerimaan    = 0;
+        penerimaan          = formData.getAll('jumlah[]');
+        penerimaan.forEach(function callback(element, index, array) {
+            total_penerimaan    += parseInt(element);
+        });
+        $('#total_penerimaan').html(total_penerimaan);
+    }
+	
+	function save_edit() {
+		console.log('edit');
+		 var form = $('#form1')[0];
+        var formData = new FormData(form);
+
+        var sum = 0;
+		//ubah pengisian tidak boleh ada 0, setiap pesanan wajib ada nilai 1
+		
+        $('#table_detail .jumlah').each(function() {
+            var value = numeral($(this).val()).value();
+            if(!isNaN(value) && value.length != 0) {
+                sum += parseFloat(value);
+            }
+        });
+        if(sum <= 0) {
+            swal("Gagal!", "Silahkan Isi Jumlah Penerimaan", "error");
+            return false;
+        }
+        console.log(base_url + 'save_edit');
+        $.ajax({
+            url: base_url + 'save_edit',
             dataType: 'json',
             method: 'post',
             data: formData,
@@ -67,15 +248,63 @@
             },
             success: function(data) {
                 if(data.status == 'success') {
-                    NotifySuccess(data.message)
-                    redirect(base_url)
+                    swal("Berhasil!", data.message, "success");
+                    redirect(base_url);
                 } else {
-                    NotifyError(data.message)
+                    swal("Gagal!", data.message, "error");
                 }
             },
             error: function() {
-                NotifyError('<?php echo lang('internal_server_error') ?>');
+                swal("Gagal!", "Interval Server Error", "error");
+            }
+        })
+	}
+    function save() {
+		console.log('save');
+        var form = $('#form1')[0];
+        var formData = new FormData(form);
+
+        var sum = 0;
+		//ubah pengisian tidak boleh ada 0, setiap pesanan wajib ada nilai 1
+		console.log('save');
+        $('#table_detail .jumlah').each(function() {
+            var value = numeral($(this).val()).value();
+            if(!isNaN(value) && value.length != 0) {
+                sum += parseFloat(value);
+            }
+        });
+        if(sum <= 0) {
+            swal("Gagal!", "Silahkan Isi Jumlah Penerimaan", "error");
+            return false;
+        }
+        
+        $.ajax({
+            url: base_url + 'save',
+            dataType: 'json',
+            method: 'post',
+            data: formData,
+            contentType: false,
+            processData: false,
+            beforeSend: function() {
+                pageBlock();
+            },
+            afterSend: function() {
+                unpageBlock();
+            },
+            success: function(data) {
+                if(data.status == 'success') {
+                    swal("Berhasil!", data.message, "success");
+                    redirect(base_url);
+                } else {
+                    swal("Gagal!", data.message, "error");
+                }
+            },
+            error: function() {
+                swal("Gagal!", "Interval Server Error", "error");
             }
         })
     }
+
 </script>
+
+<?php //  print_r ($pengiriman)?>

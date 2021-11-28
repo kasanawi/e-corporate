@@ -73,11 +73,13 @@
     <script src="<?= base_url('adminlte'); ?>/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
     <script src="<?= base_url('adminlte'); ?>/plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
     <script src="{assets_path}js/numeral.min.js"></script>
-    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <!--script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script-->
+    <script src="<?= base_url('adminlte'); ?>/red_alert.js"></script>
     <script src="{assets_path}global/js/plugins/loaders/blockui.min.js"></script>
     <script src="<?= base_url('adminlte')?>/plugins/toastr/toastr.min.js"></script>
     
-    <script src="https://unpkg.com/currency.js@~2.0.0/dist/currency.min.js"></script>
+    <!--script src="https://unpkg.com/currency.js@~2.0.0/dist/currency.min.js"></script-->
+    <script src="<?= base_url('adminlte'); ?>/matauang.js"></script>
     <script>
       function formatRupiah(angka, prefix){
         var number_string = angka.replace(/[.,]/g, '').toString(),

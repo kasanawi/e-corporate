@@ -137,6 +137,7 @@
         <section class="content">
             <div class="container-fluid">
                 <div class="row">
+                <!-- A100 -->
                     <div class="col-md-12">
                         <div class="card">
                             <div class="card-body">
@@ -211,7 +212,7 @@
                                             <table class="table table-xs table-striped table-borderless table-hover" id="tabelHPP">
                                                 <thead>
                                                     <tr class="table-active">
-                                                        <th>No. Akun</th>
+                                                        <th>No. Akun Hpp</th>
                                                         <th>Harga</th>
                                                         <th>Jumlah</th>
                                                         <th>Subtotal</th>
@@ -591,10 +592,11 @@
     function save_detail(tipe, elemen) {
 		//alert($(elemen).toString());
 		var idakun      = document.getElementById("noakunHPP").value;;//$(elemen).attr('idakun');
-        var akunno      = document.getElementById("noakunHPP").value;;//$(elemen).attr('noAkun') + ' - ' + $(elemen).attr('namaAkun');
+        var akunno      = $("#noakunHPP option:selected").text();//document.getElementById("noakunHPP").value;;//$(elemen).attr('noAkun') + ' - ' + $(elemen).attr('namaAkun');
 		console.log(tipe + idakun + akunno  );
         var formNoAkun  = `<input type="hidden" name="noAkun[]" value="${idakun}">`;
-		console.log(formNoAkun );
+		//console.log($("#noakunHPP").attr('noAkun'));
+		console.log($("#noakunHPP option:selected").text());
         switch (tipe) {
             case 'TambahHPP':
                 tabelHPP.row.add([

@@ -89,10 +89,11 @@
 			{
 				data: 'notrans',
 				render: function(data,type,row) {
+					
 					var link = base_url + 'create/' + row.id;
 					//console.log(link);
 					//console.log(row);
-					console.info(row);
+					//console.info(row);
 					return '<a href="'+link+'" class="btn btn-sm btn-info">'+data+'</a>';
 				}
 			},
@@ -105,7 +106,7 @@
 			},
 			{data: 'catatan', orderable: false, width: '200px'},
 			{data: 'nama_perusahaan'},
-			{data: 'departemen'},
+			{data: 'nama_departemen'},
 			{data: 'tanggal'},
 			{
 				data: 'nominal_pemesanan',
@@ -126,8 +127,12 @@
 				render: function(data) {
 					if(data == '3') return '<span class="badge badge-success"><?php echo lang('partial') ?></span>';
 					else if(data == '2') return '<span class="badge badge-warning"><?php echo lang('pending') ?></span>';
-					else if(data == '1') return '<span class="badge badge-danger"><?php echo lang('pending') ?></span>';
-					else if(data == '9') return '<span class="badge badge-primary"><?php echo lang('done') ?></span>';
+					else if(data == '1') return '<span class="badge badge-danger">Belum Diterima</span>';
+					else if(data == '9') return '<span class="badge badge-primary"><?php echo lang('completed') ?></span>';
+					else if(data == '0') return '<span class="badge badge-primary"><?php echo lang('done') ?></span>';
+					else if(data == '4') return '<span class="badge badge-secondary">Direvisi</span>';
+					else if(data == '5') return '<span class="badge badge-primary"><?php echo lang('done') ?></span>';
+					else if(data == '6') return '<span class="badge badge-primary"><?php echo lang('done') ?></span>';
 				}
 			},
 			{
@@ -154,7 +159,18 @@
 							<a href="` + base_url + `edit/` + data.id + `" class="dropdown-item"><i class="fas fa-pencil-alt"></i> <?php echo lang('edit') ?></a>
 							`;
 						}
+						if (data.jumlahditerima > 0)
+						{
+							tombol_validasi	= `
+							<a class="dropdown-item" href="`+base_url+`validasi/0/`+data.id+`"><i class="fas fa-check"></i> Validasi</a>
+							<a href="` + base_url + `edit/` + data.id + `" class="dropdown-item"><i class="fas fa-pencil-alt"></i> <?php echo lang('edit') ?></a>
+							`;
+						}
 						else tombol_validasi	= '';
+						if (data.status == 9)
+						{
+							tombol_validasi	= `<a class="dropdown-item" href="`+base_url+`batal_validasi/9/`+data.id+`"><i class="fas fa-check"></i> Batal Validasi</a>`;
+						}
 					}
 					
 					var aksi = `

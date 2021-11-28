@@ -43,6 +43,7 @@ class Requiremen extends User_Controller {
 			if($data) {
 				$data['kontak']				    = get_by_id('id',$data['kontakid'],'mkontak');
 				$data['gudang']				    = get_by_id('id',$data['gudangid'],'mgudang');
+				$data['cabang']				    = get_by_id('id',$data['cabang'],'mcabang');
 				$data['pemesanandetail']		= $this->pemesanan->pemesanandetail($data['id']);
 				$data['title']				    = 'Detail Pemesanan Pembelian';
 				$data['content']			    = 'Pemesanan_pembelian/detail_baru';
@@ -211,6 +212,19 @@ class Requiremen extends User_Controller {
 			$this->db->select('mperusahaan.idperusahaan as id, mperusahaan.nama_perusahaan as text');
 			$this->db->limit(10);
 			$data = $this->db->get('mperusahaan')->result_array();
+			$this->output->set_content_type('application/json')->set_output(json_encode($data));
+		}
+	}
+	public function select2_mcabang($id = null)
+	{	//concat(mcabang.id, "-", mcabang.nama)
+		if ($id) {
+			$this->db->select(' mcabang.id as id, concat(mcabang.id, "-", mcabang.nama) as text');
+			$data = $this->db->where('id', $id)->get('mcabang')->row_array();
+			$this->output->set_content_type('application/json')->set_output(json_encode($data));
+		} else {
+			$this->db->select('mcabang.id as id, concat(mcabang.id, "--", mcabang.nama) as text');
+			$this->db->limit(20);
+			$data = $this->db->get('mcabang')->result_array();
 			$this->output->set_content_type('application/json')->set_output(json_encode($data));
 		}
 	}

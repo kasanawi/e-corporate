@@ -24,13 +24,14 @@ class Pengiriman_pembelian_model extends CI_Model {
 			$total['total']	+= (integer) $this->input->post('jumlah')[$i] * (integer) $this->input->post('harga')[$i];
 		}
 		$this->db->where('idPenerimaan', $this->input->post('idPenerimaan'));
-		$insertHead = $this->db->replace('tPenerimaan', [
+		$insertHead = $this->db->update('tPenerimaan', [
 			'tanggal'		=> $this->input->post('tanggal'),
 			'catatan'		=> $this->input->post('catatan'),
 			'tipe'			=> 1,
 			'status'			=> 2,
 			'total'			=> $total['total'],
-			'suratJalan'	=> $this->input->post('suratJalan')
+			'suratJalan'	=> $this->input->post('suratJalan'),
+			'setupJurnal'	=> $this->input->post('setupJurnal')
 		]);
 		if($insertHead) {
 			for ($i=0; $i < count($this->input->post('no', TRUE)); $i++) {
@@ -51,6 +52,60 @@ class Pengiriman_pembelian_model extends CI_Model {
 				$this->db->update('tpemesanandetail', [
 					'jumlahsisa'		=> (integer) $this->input->post('jumlah_sisa')[$i] - (integer) $this->input->post('jumlah')[$i],
 					'jumlahditerima'	=> (integer) $this->input->post('jumlah')[$i] + (integer) $jumlah_diterima['jumlahditerima']
+				]);
+				// cek input barang apakah ada sisa
+				$_sisa = $this->input->post('jumlah_sisa')[$i] - (integer) $this->input->post('jumlah')[$i];
+				$_diterima = (integer) $this->input->post('jumlah')[$i] + (integer) $jumlah_diterima['jumlahditerima'];
+				// jika ada sisa maka set status partial/diterima sebagian = 2 
+				// jika lengkap maka set status 3 siap validasi
+			}
+			$data['status'] = 'success';
+			$data['message'] = lang('save_success_message');
+		}
+		return $this->output->set_content_type('application/json')->set_output(json_encode($data));
+	}
+	
+	public function save_edit() {
+		//print_r($this->input->post());
+		$this->db->select('total');
+		$total	= $this->db->get_where('tPenerimaan', [
+			'idPenerimaan'	=> $this->input->post('idPenerimaan')
+		])->row_array();
+		for ($i=0; $i < count($this->input->post('itemid')); $i++) { 
+			$total['total']	+= (integer) $this->input->post('jumlah')[$i] * (integer) $this->input->post('harga')[$i];
+		}
+		$this->db->where('idPenerimaan', $this->input->post('idPenerimaan'));
+		$insertHead = $this->db->update('tPenerimaan', [
+			'tanggal'		=> $this->input->post('tanggal'),
+			'catatan'		=> $this->input->post('catatan'),
+			'tipe'			=> 1,
+			'status'			=> 4,
+			'total'			=> $total['total'],
+			'suratJalan'	=> $this->input->post('suratJalan'),
+			'setupJurnal'	=> $this->input->post('setupJurnal')
+		]);
+		if($insertHead) {
+			for ($i=0; $i < count($this->input->post('no', TRUE)); $i++) {
+				if ($this->input->post('jumlah', TRUE)[$i] > 0) {
+					$this->db->where('idPenerimaan', $this->input->post('idPenerimaan'));
+					$this->db->update('tPenerimaanDetail', [
+						//'idPenerimaan'		=> $this->input->post('idPenerimaan'),
+						'idPemesananDetail'	=> $this->input->post('pemdet', TRUE)[$i],
+						'jumlah'			=> $this->input->post('jumlah', TRUE)[$i]
+					]);
+				}
+				
+				$this->db->select('jumlahditerima');
+				$jumlah_diterima	= $this->db->get_where('tpemesanandetail', [
+					'id'	=> $this->input->post('pemdet')[$i]
+				])->row_array();
+
+				$this->db->where('id', $this->input->post('pemdet')[$i]);
+				$this->db->update('tpemesanandetail', [
+					//'jumlahsisa'		=> (integer) $this->input->post('jumlah_sisa')[$i] - (integer) $this->input->post('jumlah')[$i],
+					//'jumlahditerima'	=> (integer) $this->input->post('jumlah')[$i] + (integer) $jumlah_diterima['jumlahditerima']
+					'jumlahsisa'		=> (integer) $this->input->post('jumlah_sisa')[$i],
+					'jumlahditerima'	=> (integer) $this->input->post('jumlah')[$i]
 				]);
 				// cek input barang apakah ada sisa
 				$_sisa = $this->input->post('jumlah_sisa')[$i] - (integer) $this->input->post('jumlah')[$i];
@@ -109,7 +164,11 @@ class Pengiriman_pembelian_model extends CI_Model {
 
 	public function get($id, $kontak = null)
 	{
-		$this->db->select('tPenerimaan.idPenerimaan as id, tPenerimaan.notrans, tPenerimaan.catatan, mperusahaan.nama_perusahaan, tpemesanan.departemen, tpemesanan.tanggal, tpemesanan.total as nominal_pemesanan, mkontak.nama as supplier, tPenerimaan.total as nominal_penerimaan, mgudang.nama as gudang, tPenerimaan.status, tpemesanan.notrans as nopemesanan, tpemesanan.id as idpemesanan, tPenerimaan.tanggal as tanggal_pengiriman, tpemesanan.cara_pembayaran');
+		$this->db->select('tPenerimaan.idPenerimaan as id, tPenerimaan.notrans, tPenerimaan.catatan, 
+							tPenerimaan.suratJalan, 
+							tPenerimaan.setupJurnal, 
+ 
+							mperusahaan.nama_perusahaan, tpemesanan.departemen, tpemesanan.tanggal, tpemesanan.total as nominal_pemesanan, mkontak.nama as supplier, tPenerimaan.total as nominal_penerimaan, mgudang.nama as gudang, tPenerimaan.status, tpemesanan.notrans as nopemesanan, tpemesanan.id as idpemesanan, tPenerimaan.tanggal as tanggal_pengiriman, tpemesanan.cara_pembayaran');
 		$this->db->join('tpemesanan', 'tPenerimaan.pemesanan = tpemesanan.id');
 		$this->db->join('mkontak','tpemesanan.kontakid = mkontak.id', 'left');
 		$this->db->join('mgudang','tpemesanan.gudangid = mgudang.id', 'left');

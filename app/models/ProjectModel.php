@@ -121,9 +121,10 @@ class ProjectModel extends CI_Model {
         'id' => $data['rekanan']
     ])->row_array();
 
-    $data['cabang'] = $this->db->get_where('mcabang', [
+    $data['mcabang'] = $this->db->get_where('mcabang', [
         'id' => $data['cabang']
     ])->row_array();
+	$data['pesan'] = $this->db->last_query().$data['cabang'];
 
     $data['gudang'] = $this->db->get_where('mgudang', [
         'id' => $data['gudang']

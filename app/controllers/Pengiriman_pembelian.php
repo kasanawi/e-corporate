@@ -29,13 +29,14 @@ class Pengiriman_pembelian extends User_Controller {
 
 	public function index_datatable() {
 		$this->load->library('Datatables');
-		$this->datatables->select('tPenerimaan.idPenerimaan as id, tPenerimaan.notrans, tPenerimaan.catatan, mperusahaan.nama_perusahaan, tpemesanan.departemen, tpemesanan.tanggal, tpemesanan.total as nominal_pemesanan, mkontak.nama as supplier, tPenerimaan.total as nominal_penerimaan, mgudang.nama as gudang, tPenerimaan.status, tpemesanan.notrans as nopemesanan, tpemesanan.id as idpemesanan, tpemesanandetail.jumlah as jumlah,tpemesanandetail.jumlahditerima as jumlahditerima, tpemesanandetail.jumlahsisa as jumlahsisa');
+		$this->datatables->select('tPenerimaan.idPenerimaan as id, tPenerimaan.notrans, tPenerimaan.catatan, mperusahaan.nama_perusahaan, tpemesanan.departemen, mdepartemen.nama as nama_departemen, tpemesanan.tanggal, tpemesanan.total as nominal_pemesanan, mkontak.nama as supplier, tPenerimaan.total as nominal_penerimaan, mgudang.nama as gudang, tPenerimaan.status, tpemesanan.notrans as nopemesanan, tpemesanan.id as idpemesanan, tpemesanandetail.jumlah as jumlah,tpemesanandetail.jumlahditerima as jumlahditerima, tpemesanandetail.jumlahsisa as jumlahsisa');
 		$this->datatables->from('tPenerimaan');
 		$this->datatables->join('tpemesanan', 'tPenerimaan.pemesanan = tpemesanan.id','left');
 		$this->datatables->join('tpemesanandetail', 'tpemesanan.id = tpemesanandetail.idpemesanan','left');
 		$this->datatables->join('mkontak','tpemesanan.kontakid = mkontak.id', 'left');
 		$this->datatables->join('mgudang','tPenerimaan.gudang = mgudang.id', 'left');
 		$this->datatables->join('mperusahaan','tpemesanan.idperusahaan = mperusahaan.idperusahaan','left');
+		$this->datatables->join('mdepartemen','mdepartemen.id = tpemesanan.departemen', 'left');
 		$this->datatables->where('tpemesanan.status', '6');
 		$this->datatables->group_by('idpemesanan');
 		return print_r($this->datatables->generate());
@@ -98,13 +99,23 @@ class Pengiriman_pembelian extends User_Controller {
 
 	public function edit($id = null) {
 		if($id) {
-			$data = get_by_id('id',$id,'tPenerimaan');
+			$data = get_by_id('idPenerimaan',$id,'tPenerimaan');
 			if($data) {
-				$data['title'] = lang('goods_receipt');
-				$data['subtitle'] = lang('edit');
-				$data['content'] = 'Pengiriman_pembelian/edit';
+				$data['title'] 					= lang('goods_receipt');
+				$data['subtitle'] 				= lang('detail');
+				$data['tanggal'] 				= date('Y-m-d');
+				$data['content']				= 'Pengiriman_pembelian/edit';
+				$data['pengiriman']				= $this->model->get($id);
+				$this->db->select('tpemesanandetail.*, mitem.nama as nama_barang, mitem.kode');
+				$this->db->join('tanggaranbelanjadetail', 'tpemesanandetail.itemid = tanggaranbelanjadetail.id');
+				$this->db->join('mitem', 'tanggaranbelanjadetail.uraian = mitem.id');
+				
+				$data['pengiriman']['detail']	= $this->db->get_where('tpemesanandetail', [
+					'idpemesanan'	=> $data['pengiriman']['idpemesanan']
+				])->result_array();
+				$data['pengiriman']['log'] = $this->db->last_query();
 				$data = array_merge($data,path_info());
-				$this->parser->parse('default',$data);
+				$this->parser->parse('template',$data);
 			} else {
 				show_404();
 			}
@@ -115,6 +126,10 @@ class Pengiriman_pembelian extends User_Controller {
 
 	public function save() {
 		$this->model->save();
+	}
+	
+	public function save_edit() {
+		$this->model->save_edit();
 	}
 
 	public function delete() {
@@ -175,6 +190,31 @@ class Pengiriman_pembelian extends User_Controller {
 		switch ($status) {
 			case '0':
 				$this->db->set('status','9');
+				break;
+			case '1':
+				$this->db->set('status','1');
+				break;
+				# code...
+				break;
+		}
+		$this->db->where('idPenerimaan', $id);
+		$update = $this->db->update('tPenerimaan');
+		if($update) {
+			$data['status'] = 'success';
+			$data['message'] = lang('update_success_message');
+		} else {
+			$data['status'] = 'error';
+			$data['message'] = lang('update_error_message');
+		}
+		redirect(base_url('pengiriman_pembelian'));	
+	}
+	
+	public function batal_validasi($status= null, $id = null)
+	{
+		echo "<script>alert('anda akan membatalkan validasi?!')</script>";
+		switch ($status) {
+			case '9':
+				$this->db->set('status','2');
 				break;
 			case '1':
 				$this->db->set('status','1');

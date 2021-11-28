@@ -134,14 +134,14 @@
                                 <tr class="table-active">
                                         <td colspan="4" style="text-align:center;">Total Penyerahan Sebelumnya</td>
                                         <td id="total_diterima" class="text-right"><?= $jumlah_diterima ; ?></td>
-                                        <td id="total_penerimaan" class="text-right">0</td>
+                                        <td id="total_penerimaan" class="text-right"></td>
                                     </tr>
                                 </tbody>
                                 <tfoot>
                                     <tr class="table-active">
                                         <td colspan="4" style="text-align:center;">Total Barang</td>
                                         <td id="total_barang" class="text-right"><?= $total_barang; ?></td>
-                                        <td id="total_penerimaan" class="text-right">0</td>
+                                        <td id="total_penerimaan" class="text-right"></td>
                                     </tr>
                                 </tfoot>
                             </table>
@@ -151,7 +151,7 @@
                         <div class="text-left">
                             <div class="btn-group">
                                 <a href="{site_url}pemesanan_pembelian" class="btn bg-danger"><?php echo lang('cancel') ?></a>
-                                <button type="submit" class="btn bg-success"><?php echo lang('save') ?></button>
+                                <button id="simpan" type="submit" class="btn bg-success"><?php echo lang('save') ?></button>
                             </div>
                         </div>
                     </form>     
@@ -197,7 +197,7 @@
                 if(jumlah > data.jumlahsisa) {
 					if(data.jumlahsisa == 0) 
 						{
-							swal("Gagal!", "Barang sudah diterima semua", "error");
+							swal("Gagal!", "Barang sudah diterima semua", "error");document.getElementById("simpan").disabled = true;
 						}
 					else if(data.diterima == jumlah) 
 						swal("Gagal!", "Barang sudah diterima semua", "error");
@@ -232,7 +232,7 @@
 
         var sum = 0;
 		//ubah pengisian tidak boleh ada 0, setiap pesanan wajib ada nilai 1
-		console.log('save');
+		console.log('save');  console.log(base_url + 'save');
         $('#table_detail .jumlah').each(function() {
             var value = numeral($(this).val()).value();
             if(!isNaN(value) && value.length != 0) {
@@ -243,7 +243,7 @@
             swal("Gagal!", "Silahkan Isi Jumlah Penerimaan", "error");
             return false;
         }
-        
+        console.log(base_url + 'save');
         $.ajax({
             url: base_url + 'save',
             dataType: 'json',

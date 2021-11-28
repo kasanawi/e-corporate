@@ -41,8 +41,8 @@ class Pemesanan_pembelian_model extends CI_Model {
 			$data['status'] = 'success';
 			$data['message'] = lang('update_success_message').'X';
 		}
-		echo $this->db->last_query();
-		//return $this->output->set_content_type('application/json')->set_output(json_encode($data));
+		//echo $this->db->last_query();
+		return $this->output->set_content_type('application/json')->set_output(json_encode($data));
 	}
 
 	public function pemesanandetail($idpemesanan) {

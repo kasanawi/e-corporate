@@ -43,6 +43,10 @@
                       <label>Pelanggan:</label>
                       <select class="form-control kontakid" name="kontakid" disabled></select>
                     </div>
+                    <div class="form-group" id="grcabang">
+                      <label>Cabang:</label>
+                      <select class="form-control cabang" name="cabang" id="cabangid" ></select>
+                    </div>
                   </div>
                   <div class="col-md-3">
                     <div class="form-group">
@@ -443,39 +447,45 @@
     });
 
     if ('<?= $this->session->userid; ?>' == '1') {
-      ajax_select({
-        id        : '#perusahaan',	
-        url       : base_url + 'select2_mperusahaan', 
-        selected  : { 
-          id  : null 
-        } 
-      });
-      
-      $('#perusahaan').change(function(e) {
-        var perusahaanId  = $('#perusahaan').children('option:selected').val();
-        var num           = perusahaanId.toString().padStart(3, "0")
-
-        $('#corpCode').val(num);
-
-        ajax_select({
-          id: '#department',
-          url: base_url + 'select2_mdepartemen/' + perusahaanId,
-        });
-        
-        ajax_select({
-            id: '.project',
-            url: '{site_url}Project/select2/' + perusahaanId,
-        });
-      })
+		  ajax_select({
+			id        : '#perusahaan',	
+			url       : base_url + 'select2_mperusahaan', 
+			selected  : { 
+			  id  : null 
+			} 
+		  });
+		 ajax_select({
+			id        : '#cabangid',	
+			url       : base_url + 'select2_mcabang' , 
+			selected  : { 
+			  id  : null 
+			} 
+		  });
+		  $('#perusahaan').change(function(e) {
+			var perusahaanId  = $('#perusahaan').children('option:selected').val();
+			var num           = perusahaanId.toString().padStart(3, "0")
+	
+			$('#corpCode').val(num);
+	
+			ajax_select({
+			  id: '#department',
+			  url: base_url + 'select2_mdepartemen/' + perusahaanId,
+			});
+			
+			ajax_select({
+				id: '.project',
+				url: '{site_url}Project/select2/' + perusahaanId,
+			});
+		  })
       } else {
-          ajax_select({
-              id: '#department',
-              url: base_url + 'select2_mdepartemen/<?= $this->session->idperusahaan; ?>',
-          });
-          ajax_select({
-              id: '.project',
-              url: '{site_url}project/select2/<?= $this->session->idperusahaan; ?>',
-          });
+			  ajax_select({
+				  id: '#department',
+				  url: base_url + 'select2_mdepartemen/<?= $this->session->idperusahaan; ?>',
+			  });
+			  ajax_select({
+				  id: '.project',
+				  url: '{site_url}project/select2/<?= $this->session->idperusahaan; ?>',
+			  });
       }
 
 		$('#department').change(function(e) {
@@ -491,10 +501,11 @@
 
         getListPajak();
     })
-
+	var cabID = '';
     // Automate change select data when project field is changed
     $('select[name=project]').on('change', function() {
         const projectID = $(this).val();
+		
         // Request ajax to get project JSON
         $.ajax({
             url: `{site_url}project/getById/`,
@@ -504,17 +515,33 @@
             },
             dataType: 'json',
             success: function(data) {
+				console.log('Goten');
                 $('select[name=gudangid]').html(`<option value="${data.gudang.id}" selected>${data.gudang.nama}</option>`);
                 $('select[name=dept]').html(`<option value="${data.departemen.id}">${data.departemen.nama}</option>`);
                 $('select[name=kontakid]').html(`<option value="${data.rekanan.id}">${data.rekanan.nama}</option>`);
+				$('select[name=cabang]').html(`<option value="${data.mcabang.id}">${data.mcabang.nama}</option>`);
                 $('input[name=totalhpp]').val(data.totalHPP);
                 $('#department').trigger('change');
                 updateSisaHpp(projectID, data.totalHPP);
+				cabID = data.mcabang.id;
+				
+				console.log('idcab=' + cabID);
+				console.log(base_url + 'select2_mcabang/' + cabID + '/1');
             },
             erro: function(data) {
                 alert('Maaf, terjadi masalah dalam pengambilan data');
             }
         });
+		console.log(base_url + 'select2_mcabang/' +  cabID + '/2');
+		//ubah cabang
+		ajax_select({
+			id        : '#cabangid',	
+			url       : base_url + 'select2_mcabang/' + cabID, 
+			selected  : { 
+			  id  : cabID
+			} 
+		  });
+		
     });
 
     $(document).on('change','.jenis_pembelian',function(){
