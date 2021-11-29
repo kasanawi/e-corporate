@@ -131,7 +131,7 @@
 							<div class="dropdown"> 
 								<a href="#" class="list-icons-item" data-toggle="dropdown"> <i class="fas fa-bars"></i> </a> 
 								<div class="dropdown-menu dropdown-menu-right">
-									<a href="`+base_url+`printpdf/`+data+`" class="dropdown-item"><i class="fas fa-print"></i> <?php echo lang('print') ?></a>`+tombol_validasi+
+									<a href="`+base_url+`printpdf/` + data.id + `" class="dropdown-item"><i class="fas fa-print"></i> <?php echo lang('print') ?></a>`+tombol_validasi+
 									// <a href="` + base_url + `edit/` + data + `" class="dropdown-item"><i class="fas fa-pencil-alt"></i> <?php echo lang('edit') ?></a>
 									`<a href="javascript:deleteData('` + data + `')" class="dropdown-item delete"><i class="fas fa-trash"></i> <?php echo lang('delete') ?></a>
 								</div> 

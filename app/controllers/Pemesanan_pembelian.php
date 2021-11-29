@@ -45,6 +45,7 @@ class Pemesanan_pembelian extends User_Controller {
 			if($data) {
 				$data['kontak']				    = get_by_id('id',$data['kontakid'],'mkontak');
 				$data['gudang']				    = get_by_id('id',$data['gudangid'],'mgudang');
+				$data['cabang']				    = get_by_id('id',$data['cabang'],'mcabang');
 				$data['pemesanandetail']		= $this->model->pemesanandetail($data['id']);
 				$data['title']				    = 'Detail Pemesanan Pembelian';
 				$data['content']			    = 'Pemesanan_pembelian/detail_baru';
@@ -66,6 +67,7 @@ class Pemesanan_pembelian extends User_Controller {
 		$data = get_by_id('id',$id,'tpemesanan');
 		$data['kontak'] = get_by_id('id',$data['kontakid'],'mkontak');
 		$data['gudang'] = get_by_id('id',$data['gudangid'],'mgudang');
+		$data['cabang'] = get_by_id('id',$data['cabang'],'mcabang');
 		$data['pemesanandetail'] = $this->model->pemesanandetail($data['id']);
 		$data['title'] = lang('purchase_order');
 		$data['css'] = file_get_contents(FCPATH.'assets/css/print.min.css');

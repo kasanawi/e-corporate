@@ -135,21 +135,35 @@ class Pengiriman_pembelian_model extends CI_Model {
 	}
 
 	public function getpengiriman($id) {
+		$this->db->select('tPenerimaan.*, tpemesanan.kontakid, tpemesanan.gudangid, mkontak.nama as kontak, mkontak.alamat, mkontak.cp');
+		$this->db->where('tPenerimaan.idPenerimaan', $id);
+		$this->db->join('tpemesanan', 'tPenerimaan.pemesanan = tpemesanan.id', 'left');
+		$this->db->join('mkontak', 'tpemesanan.kontakid = mkontak.id', 'left');
+		$get = $this->db->get('tPenerimaan',1);
+		//echo $this->db->last_query();
+		/*
 		$this->db->select('tpengiriman.*, tpemesanan.kontakid, tpemesanan.gudangid, mkontak.nama as kontak, mkontak.alamat, mkontak.cp');
 		$this->db->where('tpengiriman.id', $id);
 		$this->db->join('tpemesanan', 'tpengiriman.pemesananid = tpemesanan.id', 'left');
 		$this->db->join('mkontak', 'tpengiriman.kontakid = mkontak.id', 'left');
-		$get = $this->db->get('tpengiriman',1);
+		$get = $this->db->get('tpengiriman',1);*/
 		return $get->row_array();
 	}
 
 	public function pengirimandetail($idpengirman) {
+		$this->db->select('tPenerimaanDetail.*, mitem.nama as item, msatuan.nama as satuan');
+		$this->db->join('mitem', 'tPenerimaanDetail.itemid = mitem.id', 'left');
+		$this->db->join('msatuan', 'mitem.satuanid = msatuan.id', 'left');
+		$this->db->join('tPenerimaan', 'tPenerimaanDetail.idPenerimaaan = tpengiriman.id');
+		$this->db->where('tPenerimaanDetail.idPenerimaaan', $idpengirman);
+		$get = $this->db->get('tPenerimaanDetail');
+		/*
 		$this->db->select('tpengirimandetail.*, mitem.nama as item, msatuan.nama as satuan');
 		$this->db->join('mitem', 'tpengirimandetail.itemid = mitem.id', 'left');
 		$this->db->join('msatuan', 'mitem.satuanid = msatuan.id', 'left');
 		$this->db->join('tpengiriman', 'tpengirimandetail.idpengiriman = tpengiriman.id');
 		$this->db->where('tpengirimandetail.idpengiriman', $idpengirman);
-		$get = $this->db->get('tpengirimandetail');
+		$get = $this->db->get('tpengirimandetail');*/
 		return $get->result_array();
 	}
 
