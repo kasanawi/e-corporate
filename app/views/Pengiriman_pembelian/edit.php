@@ -126,11 +126,11 @@
                                                 <td><?= $key['kode']; ?></td>
                                                 <td><?= $key['nama_barang']; ?></td>
                                                 <td><?= $key['akunno']; ?></td>
-                                                <input type="hidden" name="jumlah_sisabl[]" value="<?= $key['jumlahsisa']; ?>">
+                                                <input type="hidden" name="jumlah_pesanan[]" value="<?= $key['jumlah']; ?>">
                                                 <td class="text-right" width="20%"><?= $key['jumlah']; ?></td>													<td  class="text-right">
-                                                <input type="number"  name="jumlah_sisa[]" class="form-control jumlah text-right" value="<?= $key['jumlahsisa']; ?>" ></td>	
+                                                <input type="number"  name="jumlah_sisa[]" class="form-control jumlah text-right" readonly value="<?= $key['jumlahsisa']; ?>" ></td>	
                                                 <td class="text-right" width="20%">
-                                                <input type="number"  name="jumlah[]" class="form-control jumlah text-right" value="<?= $key['jumlahditerima'] ?>" >
+                                                <input type="number"  name="jumlah[]" class="form-control jumlah text-right" value="<?= $key['jumlahditerima'] ?>" max="<?= $key['jumlahsisa']; ?>">
                                                 </td>
                                             </tr>
                                         <?php }
@@ -199,6 +199,20 @@
             },
             success: function(data) {
                 jumlah = parseInt(jumlah);
+				if(jumlah > data.jumlahsisa) {
+					if(data.jumlahsisa == 0) 
+						{
+							swal("Gagal!", "Barang sudah diterima semua", "error");document.getElementById("simpan").disabled = true;
+						}
+					else if(data.diterima == jumlah) 
+						swal("Gagal!", "Barang sudah diterima semua", "error");
+					else
+                    	swal("Gagal!", "Kesalahan mengisi jumlah" + jumlah  + data.jumlahsisa, "error");
+                    row.find('input.jumlah').val( data.jumlahsisa );
+                    $('#total_penerimaan').html(data.jumlahsisa);
+					console.log(data.jumlahsisa);
+					console.log(data.pesan);
+                }
                 hitungPenerimaan();
             }
         })

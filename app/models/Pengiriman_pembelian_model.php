@@ -102,9 +102,9 @@ class Pengiriman_pembelian_model extends CI_Model {
 
 				$this->db->where('id', $this->input->post('pemdet')[$i]);
 				$this->db->update('tpemesanandetail', [
-					//'jumlahsisa'		=> (integer) $this->input->post('jumlah_sisa')[$i] - (integer) $this->input->post('jumlah')[$i],
+					//jumlahsisa'		=> (integer) $this->input->post('jumlah_sisa')[$i] - (integer) $this->input->post('jumlah')[$i],
 					//'jumlahditerima'	=> (integer) $this->input->post('jumlah')[$i] + (integer) $jumlah_diterima['jumlahditerima']
-					'jumlahsisa'		=> (integer) $this->input->post('jumlah_sisa')[$i],
+					'jumlahsisa'		=> (integer) $this->input->post('jumlah_pesanan')[$i] - (integer) $this->input->post('jumlah')[$i],
 					'jumlahditerima'	=> (integer) $this->input->post('jumlah')[$i]
 				]);
 				// cek input barang apakah ada sisa

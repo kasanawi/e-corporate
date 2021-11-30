@@ -88,12 +88,12 @@
                                             </select>
                                         </div>
                                     </div>
-                                    <div class="col-3">
+                                    <!--div class="col-3">
                                         <div class="form-group">
                                             <label>Kelompok Umur : </label>
                                             <input type="text" class="form-control" name="kelompokUmur" required value="{kelompokUmur}">
                                         </div>
-                                    </div>
+                                    </div-->
                                 </div>
                                 <div class="row">
                                     <div class="col-3">
@@ -101,7 +101,7 @@
                                             <label>Cabang : </label>
                                             <input type="hidden" name="idProject" value="{idProject}">
                                             <select class="form-control cabang" name="cabang" style="width: 100%;" id="cabang" required>
-                                                <option value="<?= $cabang['id'] ?>"><?= $cabang['nama'] ?></option>
+                                                <option value="<?= $mcabang['id'] ?>"><?= $mcabang['nama'] ?></option>
                                             </select>
                                         </div>
                                     </div>
@@ -341,10 +341,10 @@
                         <label>Jumlah : </label>
                         <input type="text" name="jumlahHPP" id="jumlahHPP" required class="form-control" onkeyup="hitung('HPP')">
                     </div>  
-                    <div class="form-group">
+                    <!--div class="form-group">
                         <label>Subtotal : </label>
                         <input type="text" name="subtotalHPP" id="subtotalHPP" required class="form-control" disabled>
-                    </div>      
+                    </div-->      
                     <div class="form-group">
                         <label>Total : </label>
                         <input type="text" name="totalHPP" id="totalHPP" required class="form-control" disabled>
@@ -592,7 +592,9 @@
     function save_detail(tipe, elemen) {
 		//alert($(elemen).toString());
 		var idakun      = document.getElementById("noakunHPP").value;;//$(elemen).attr('idakun');
-        var akunno      = $("#noakunHPP option:selected").text();//document.getElementById("noakunHPP").value;;//$(elemen).attr('noAkun') + ' - ' + $(elemen).attr('namaAkun');
+        var akunno      = $("#noakunHPP option:selected").text();
+		var rego     	= document.getElementById("hargaHPP").value;;//$(elemen).attr('idakun');
+		var wilangan    = document.getElementById("jumlahHPP").value;;//$(elemen).attr('idakun');//document.getElementById("noakunHPP").value;;//$(elemen).attr('noAkun') + ' - ' + $(elemen).attr('namaAkun');
 		console.log(tipe + idakun + akunno  );
         var formNoAkun  = `<input type="hidden" name="noAkun[]" value="${idakun}">`;
 		//console.log($("#noakunHPP").attr('noAkun'));
@@ -601,8 +603,8 @@
             case 'TambahHPP':
                 tabelHPP.row.add([
                     formNoAkun + akunno,
-                    `<input type="text" onkeyup="nominal(this), hitung('${idakun}')" name="harga[]" class="form-control" id="harga${idakun}">`,
-                    `<input type="text" onkeyup="nominal(this), hitung('${idakun}')" name="jumlah[]" class="form-control" id="jumlah${idakun}">`,
+                    `<input type="text" onkeyup="nominal(this), hitung('${idakun}')" name="harga[]" class="form-control" id="harga${idakun}" value="` + rego + `">`,
+                    `<input type="text" onclick="nominal(this), hitung('${idakun}')" onkeyup="nominal(this), hitung('${idakun}')" name="jumlah[]" class="form-control" id="jumlah${idakun}" value="` + wilangan + `">`,
                     `<input type="hidden" name="subtotal[]" id="subtotal${idakun}">
                     <input type="text" name="subtotal" required class="form-control subtotal${idakun}" disabled>`,
                     `<input type="hidden" name="tipe[]" value="HPP">
@@ -610,6 +612,7 @@
                     <input type="text" name="totalHPP1" class="form-control total${idakun}" readonly>`,
                     `<a href="javascript:hapusDetail(this)" class="text-danger"><i class="fas fa-trash"></i></a>`
                 ]).draw();
+				
                 break;
             case 'TambahPendapatan':
                 tabelPendapatan.row.add([

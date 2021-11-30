@@ -152,6 +152,7 @@
 						tombol_validasi	= `
 						<a class="dropdown-item" href="`+base_url+`validasi/1/`+data.id+`"><i class="fas fa-times"></i> Hapus Validasi</a>`;
 					} else {
+						console.log(data.id + ' Jumlah: ' + data.jumlah + '' + data.jumlahditerima);
 						if (data.jumlah == data.jumlahditerima)
 						{
 							tombol_validasi	= `
@@ -166,7 +167,11 @@
 							<a href="` + base_url + `edit/` + data.id + `" class="dropdown-item"><i class="fas fa-pencil-alt"></i> <?php echo lang('edit') ?></a>
 							`;
 						}
-						else tombol_validasi	= '';
+						if (data.jumlahditerima == 0)
+						{
+							tombol_validasi	= `<a href="` + base_url + `edit/` + data.id + `" class="dropdown-item"><i class="fas fa-plus"></i> <?php echo lang('add') ?></a>`;
+						}
+						else tombol_validasi	= `<a href="` + base_url + `edit/` + data.id + `" class="dropdown-item"><i class="fas fa-pencil-alt"></i> <?php echo lang('edit') ?></a>`;
 						if (data.status == 9)
 						{
 							tombol_validasi	= `<a class="dropdown-item" href="`+base_url+`batal_validasi/9/`+data.id+`"><i class="fas fa-check"></i> Batal Validasi</a>`;
